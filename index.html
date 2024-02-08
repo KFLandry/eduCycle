@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script type="module" scr="src\router.js" defer></script>
-</head>
-<body>
-    <a href="src/template/login.html">connexion</a>
-</body>
+<html>
+    <head>
+        <title>Vanilla SPA Router</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="src/output.css" />
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet" />
+        <link href="./output.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div id="root">
+            <nav id="main-nav" class="bg-sky-400">
+                <a href="/" id="home" class="">Home</a>
+                <a href="/login" id="login">login</a>
+                <a href="/signup" id="signup">signup</a>
+            </nav>
+            <div id="main-page"></div>
+        </div>
+
+        <script src="/src/public/router.js"></script>
+    </body>
 </html>

@@ -62,7 +62,7 @@ html,
 */
 
 body {
-  margin: auto;
+  margin: 0;
   /* 1 */
   line-height: inherit;
   /* 2 */
@@ -237,10 +237,9 @@ button,
 [type='button'],
 [type='reset'],
 [type='submit'] {
-  margin: auto;
+  -webkit-appearance: button;
   /* 1 */
-  border-color: blue;
-  border-radius: 5%;
+  background-color: transparent;
   /* 2 */
   background-image: none;
   /* 2 */
@@ -543,4 +542,14 @@ video {
   --tw-backdrop-opacity:  ;
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
+}
+
+.bg-red-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
+}
+
+.bg-sky-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(56 189 248 / var(--tw-bg-opacity));
 }
