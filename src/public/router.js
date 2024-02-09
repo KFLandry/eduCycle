@@ -7,6 +7,7 @@ function route(event) {
         window.history.pushState({}, "", href); // Modifier l'URL sans recharger la page
         handleLocation(); // Appeler la fonction pour gérer la nouvelle URL
     }
+    fileItems();
 }
 
 // Définir les routes de l'application
@@ -32,8 +33,27 @@ document.addEventListener('click', function(event) {
         route(event); // Appeler la fonction de routage lorsqu'un lien est cliqué
     }
 });
-
 // Gérer le changement d'état de navigation
 window.onpopstate = handleLocation;
 //Changement de la page principale 
 handleLocation();
+
+function fileItems(){
+    debugger
+    var z, i, elmnt, file, xhttp;
+    /* Loop through a collection of all HTML elements: */
+    z = document.getElementsByTagName("*");
+    for (i = 0; i < z.length; i++) {
+      elmnt = z[i];
+      /*search for elements with a certain atrribute:*/
+      file = elmnt.getAttribute("w3-include-html");
+      if (file) {
+        /* Make an HTTP request using the attribute value as the file name: */
+        fetch(file)
+        .then(response =>  elmnt.innerHTML = response.responseText)
+        .catch(error => console.log(error))
+        }
+        /* Exit the function: */
+        return;
+      }
+    }
