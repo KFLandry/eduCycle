@@ -24,8 +24,9 @@ const routes = {
 async function handleLocation() {
     const path = window.location.pathname;
     // On force la redirection vers la page de connexion
+    debugger
     if (!User.isAuthenticated){
-        path =  "\login"
+        path =  "/login"
     }
     const routePath = routes[path] || routes["404"];
     // Récupérer le chemin correspondant à l'URL ou la route 404
