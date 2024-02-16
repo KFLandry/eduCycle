@@ -1,12 +1,13 @@
 import Signup from "../controller/Signup.js";
-import Main from "../controller/main.js";
+import Main from "../controller/Main.js";
 import Login from "../controller/Login.js";
 import File from "../controller/File.js";
 import User from "../model/Factory/User.js";
-import Notification from "../controller/notification.js"
+import Notification from "../controller/Notification.js"
 import Account from "../controller/Account.js";
 import Favoris from "../controller/Favoris.js";
-// On definie la fonction de routage
+// On definie la fonction de routage et on creer l'unique instance de l'utilisateur
+new User()
 function route(event) {
     event.preventDefault();
     const target = event.target || event.srcElement;
@@ -17,15 +18,17 @@ function route(event) {
     }
 }
 // Définir les routes de l'application
+const AuthRequiredRoutes = {
+    "/file": "/src/template/file.html",
+    "/notification": "/src/template/notification.html",
+    "/don" : "/src/template/don.html",
+}
 const routes = {
     "/": "/src/template/index.html",
     "/index.html":"/src/template/index.html",
     "/login": "/src/template/login.html",
     "/signup": "/src/template/signup.html",
-    "/file": "/src/template/file.html",
     "/item" : "/src/template/item.html",
-    "/don" : "/src/template/don.html",
-    "/notification": "/src/template/notification.html",
     "/favoris": "/src/template/favoris.html",
     "/account" : "/src/template/account.html",
     "404": "/src/template/error.html"
@@ -35,11 +38,11 @@ async function handleLocation() {
     const path = window.location.pathname;
     // On force la redirection vers la page de connexion si pas connecté
     let routePath;
-    if (routes[path]){
-        if (!new  User().connected){
-            routePath =  routes[path] ||  routes["/login"]
-        }else{
-            routePath = routePath[path]
+    if (routes[path] || AuthRequiredRoutes[path]){        
+        if (!User.isAuthenticated() && path in AuthRequiredRoutes){
+            routePath =routes["/login"]
+        }else if (!User.isAuthenticated() || path in routes){
+            routePath = routes[path]
         }
     }else{
         routePath = routes["404"]
@@ -51,7 +54,8 @@ async function handleLocation() {
     // Les controllers
     let controller;
     switch (path){
-        case "/" :s
+        case "/index.html":
+        case "/" :
             controller = new Main()
             break;
         case "/login" :    
@@ -64,7 +68,7 @@ async function handleLocation() {
             controller = new File()
             break
         case "/notification" :
-            controller =  new notification()
+            controller =  new Notification()
             break
         case "/account" :
             controller =  new Account()

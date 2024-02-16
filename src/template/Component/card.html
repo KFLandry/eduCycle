@@ -1,23 +1,17 @@
-<div class="flex">
-    <img src="../../public/ressource/image/1086048702.avif" alt="" class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden">
-    </div>
-    <div class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-      <div class="mb-8">
-        <p class="text-sm text-gray-600 flex items-center">
-          <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-            <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
-          </svg>
-          Members only
-        </p>
-        <div class="text-gray-900 font-bold text-xl mb-2">Can coffee make you a better developer?</div>
-        <p class="text-gray-700 text-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.</p>
+<li id="item"  class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
+  <img id="itemPhoto"  class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
+  <div class="font-semibold flex-1 "> 
+      <a id="itemName" href="/item" onclick="router()">Ti 83 Premium</a>
+      <p>Valeur estimer à <span id="itemWorth">40€</span></p>
+      <p id="ItemState" class="text-green-600">Fonctionne encore</p>
+  <p>Publié le <span id="ItemPublisherDate"></span> 2 Septembre 2023 par <a class="text-blue-400"  id="Account" href="\account" onclick="route()"> Pierre </a></p>
+      <div class="flex items-center space-x-1 hover:bg-gray-50">
+          <div id="ItemLocation"  class="">Residence Jean medecin</div>
+          <i class="fa-solid fa-location-dot"></i>
       </div>
-      <div class="flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>
-        <div class="text-sm">
-          <p class="text-gray-900 leading-none">Jonathan Reinink</p>
-          <p class="text-gray-600">Aug 18</p>
-        </div>
-      </div>
-    </div>
   </div>
+  <!--  -->
+  <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+      <i id="iconStar" class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
+  </div>
+</li>

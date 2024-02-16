@@ -8,107 +8,59 @@
     </div>
     <!-- La gride contenant les repetitions -->
     <div class="shadow-md rounded-md  border p-2 flex flex-col items-start w-full">
-        <div class="flex flex-row space-x-2 items-center">
-            <i class="fa-solid fa-arrow-down-wide-short"></i>       
-            <p>Tous les fitres</p>
+        <div class="w-full flex flex-row justify-between items-center ">
+            <div class="flex flex-row space-x-2 ">
+                <i class="fa-solid fa-arrow-down-wide-short"></i>       
+                <p>Tous les fitres</p>
+           </div>
+            <button id="deleteFilters" class="rounded-md p-2 border hover:bg-slate-100">Suppprimer les filtres</button>
         </div>
         <div id="filter"  class="px-5 size-full overflow-visible flex flex-row justify-between pt-1">
-            <select title="location" name="location">
-                <option value="paris">Paris</option>
-                <option value="new_york">New York</option>
-                <option value="london">London</option>
-                <option value="tokyo">Tokyo</option>
-            </select>
-            <select title="Serie" name="serie">
-                <option value="Scientifique">Scientifique</option>
-                <option value="Litteraire">Litteraire</option>
-                <option value="Artistique">Artistique</option>
-                <option value="Electronique">Electronique</option>
-            </select>
-            <select title="value" name="value">
-                <option value="10€">Moins de 10€</option>
-                <option value="40€">Moins de 40€</option>
-                <option value="70€">Moins de 70€</option>
-            </select>
-            <select title="value" name="value">
-                <option value="40€">Filtre</option>
-                <option value="40€">De A à Z</option>
-                <option value="40€">Croissant</option>
-                <option value="10€">Deccroissant</option>
-            </select>
+            <div class="flex flex-row space-x-2">
+                <label for="Residence">Residence
+                <select title="Residence" name="Residence">
+                    <option value=""></option>
+                    <option value="Residence Jean Medecin">Residence Jean Medecin</option>
+                    <option value="Residence  Vauban">Residence Vauban</option>
+                    <option value="Residence Carlone">Residence Carlone</option>
+                    <option value="Residence Saint Jean Angely">Residence Saint Jean Angely</option>
+                </select>
+                </label>
+             
+            </div class="flex flex-row space-x-2">
+            <div class="flex flex-row space-x-2">
+                <label for="Serie">Serie</label>
+                <select title="Serie" name="serie">
+                    <option value=""></option>
+                    <option value="Scientifique">Scientifique</option>
+                    <option value="Litteraire">Litteraire</option>
+                    <option value="Artistique">Artistique</option>
+                    <option value="Electronique">Electronique</option>
+                </select>
+            </div class="flex flex-row space-x-2">
+            <div class="flex flex-row space-x-2">
+                <label for="worth">Valeur</label>
+                <select title="value" name="worth">
+                    <option value=""></option>
+                    <option value="10€">Moins de 10€</option>
+                    <option value="40€">Moins de 40€</option>
+                    <option value="70€">Moins de 70€</option>
+                </select>
+            </div class="flex flex-row space-x-2">
+            <div class="flex flex-row space-x-2">
+                <label for="sort">Rangement</label>
+                <select title="value" name="sort">
+                    <option value="40€"></option>
+                    <option value="De A à Z">De A à Z</option>
+                    <option value="De Z à A">De Z à A</option>
+                    <option value="Croissant">Croissant</option>
+                    <option value="Deccroissant">Deccroissant</option>
+                </select>
+            </div>
         </div>
     </div>
+    <!-- La liste -->
     <ul id="listItems" role="list"  class="overflow-y-scroll px-4 shadow flex flex-col space-y-1 min-h-screen">
-        <!--  -->
-        <li id="item" class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
-            <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
-            <div class="font-semibold flex-1 "> 
-                <a href="/item" onclick="router()">Ti 83 Premium</a>
-                <p>Valeur estimer à 40€</p>
-                <p class="text-green-600">Fonctionne encore</p>
-            <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
-                <div class="flex items-center space-x-1 hover:bg-gray-50">
-                    <div  class="">Residence Jean medecin</div>
-                    <i class="fa-solid fa-location-dot"></i>
-                </div>
-            </div>
-            <!--  -->
-            <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-                <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
-            </div>
-        </li>
-        <li class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
-            <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
-            <div class="font-semibold flex-1 "> 
-                <a href="/item" onclick="router()">Ti 83 Premium</a>
-                <p>Valeur estimer à 40€</p>
-                <p class="text-green-600">Fonctionne encore</p>
-            <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
-                <div class="flex items-center space-x-1 hover:bg-gray-50">
-                    <div  class="">Residence Jean medecin</div>
-                    <i class="fa-solid fa-location-dot"></i>
-                </div>
-            </div>
-            <!--  -->
-            <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-                <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
-            </div>
-        </li>
-        <li class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
-            <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
-            <div class="font-semibold flex-1 "> 
-                <a href="/item" onclick="router()">Ti 83 Premium</a>
-                <p>Valeur estimer à 40€</p>
-                <p class="text-green-600">Fonctionne encore</p>
-            <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
-                <div class="flex items-center space-x-1 hover:bg-gray-50">
-                    <div  class="">Residence Jean medecin</div>
-                    <i class="fa-solid fa-location-dot"></i>
-                </div>
-            </div>
-            <!--  -->
-            <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-                <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
-            </div>
-        </li>
-        <li class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
-            <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
-            <div class="font-semibold flex-1 "> 
-                <a href="/item" onclick="router()">Ti 83 Premium</a>
-                <p>Valeur estimer à 40€</p>
-                <p class="text-green-600">Fonctionne encore</p>
-            <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
-                <div class="flex items-center space-x-1 hover:bg-gray-50">
-                    <div  class="">Residence Jean medecin</div>
-                    <i class="fa-solid fa-location-dot"></i>
-                </div>
-            </div>
-            <!--  -->
-            <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-                <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
-            </div>
-        </li>
-
     </ul>
     <a href="/don" class="fixed flex justify-center items-center size-20 rounded-full bg-sky-500 bottom-3 sm:left-[80%] md:left-[76%] transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110" >
         <i class="fa-solid fa-plus"></i>

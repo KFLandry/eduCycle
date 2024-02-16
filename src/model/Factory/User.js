@@ -2,21 +2,21 @@
 class User {
   // On implemente le singleton pattern
   constructor() {
-    if (User.exist){
+    if (User.exists){
        return User.uniqueInstance
     }
-    User.data;
-    User.media;
-    User.connected =  false;
+    this.data ={}
+    this.media = {}
+    this.connected =  false;
+    this.token =""
+    this.headers = {}
+    this.port = "62015";
+    User.exists =  true;
     User.uniqueInstance = this;
-    User.token;
-    User.headers;
-    User.port = "62015";
-    User.exist =  true;
   }
   
   async login(data){
-      const req  =  await fetch(`http://localhost:${User.port}/login`,{
+      const req  =  await fetch(`http://localhost:${this.port}/login`,{
         method :'POST',
         headers :  this.headers,
         body : JSON.stringify(data),
@@ -24,11 +24,11 @@ class User {
       const response =  await req.json()
       debugger
       if(response.statut === 1){
-        User.connected = true;
-        User.token =  response.token
-        User.data =  response.data
-        User.headers ={
-          'Authorization' : `Bearer ${User.token}`,
+        this.connected = true;
+        this.token =  response.token
+        this.data =  response.data
+        this.headers ={
+          'Authorization' : `Bearer ${this.token}`,
           'content-type' :  "application/JSON"
         }
         await this.loadMedia()
@@ -36,17 +36,17 @@ class User {
       return response
   }
   async signup(data){
-    let result  = await fetch(`http://localhost:${User.port}/signup`,{
+    let result  = await fetch(`http://localhost:${this.port}/signup`,{
       method :'POST',
       body : JSON.stringify(data)
     })
     const response =  await result.json()
     //Si la connexion reussi on set l'utilisateur à "connected" avec ses données et on recupere son token d'autorisation
     if(response.statut === 1){
-      User.connected = true;
-      User.token =  response.token
-      User.data =  response.data
-      User.headers ={
+      this.connected = true;
+      this.token =  response.token
+      this.data =  response.data
+      this.headers ={
         'Authorization' : `Bearer ${User.token}`,
         'content-type' :  "application/JSON"
       }
@@ -55,27 +55,27 @@ class User {
     return response
   }
   async loadMedia(){
-    let result  = await fetch(`http://localhost:${User.port}/media/${User.data.id}`,{
+    let result  = await fetch(`http://localhost:${this.port}/media/${this.data.id}`,{
       method :'POST',
-      headers : User.headers,
+      headers : this.headers,
       body : JSON.stringify({"table_ass":"ed_user"})
     })
     const response =  await result.json()
     debugger
     // S'il le serveur retourne une erreur....
     if (response.statut === 1){
-      User.media =  response.data
+      this.media =  response.data
     } 
     console.log(response)
   }
   static isAuthenticated(){
-    return User.connected
+    return this.connected
   }
   medias(){
-    return User.media;
+    return this.media;
   }
   datas(){
-    return User.data;
+    return this.data;
   }
 }
 export default User;
