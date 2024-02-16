@@ -1,55 +1,116 @@
-<section class="relative flex flex-col justify-center">
+<section class="m-2 relative flex flex-col space-y-2">
     <!-- Breve presentation de l'application -->
-    <div class="size-full border">
+    <div class="shadow-md rounded-md p-2  size-full border">
         <h2 class="text-center font-bold">Bienvenue sur le site étudiant de la révolution solidaire</h2>
     </div>
     <div class ="basis-3/4 shadow-md rounded-md p-6 border text-justify font-semibold">
         <p>EduCycle est une application web qui permet de donner et de recevoir des fournitures scolaires entre étudiants. Que vous ayez besoin de cahiers, de stylos, de livres ou de matériel informatique, vous pouvez trouver ce qu'il vous faut sur EduCycle. Vous pouvez aussi faire un geste solidaire en offrant les fournitures dont vous n'avez plus l'usage à d'autres étudiants qui en ont besoin. EduCycle est une plateforme simple, rapide et sécurisée qui vous met en relation avec les membres de votre communauté éducative. Rejoignez EduCycle et participez à une économie circulaire et responsable !</p>
     </div>
     <!-- La gride contenant les repetitions -->
-    <div class="px-5 border h-fit overflow-visible flex flex-row justify-between pt-1">
-        <select name="location">
-            <option value="paris">Paris</option>
-            <option value="new_york">New York</option>
-            <option value="london">London</option>
-            <option value="tokyo">Tokyo</option>
-        </select>
-        <select name="Serie">
-            <option value="">Scientifique</option>
-            <option value="">Litteraire</option>
-            <option value="">Artistique</option>
-            <option value="">Electronique</option>
-        </select>
-        <select name="value">
-            <option value="">Moins de 10€</option>
-            <option value="">Moins de 40€</option>
-            <option value="">Moins de 70€</option>
-        </select>
-        <div class="rounded-md flex flex-col items-center hover:bg-gray-50 cursor-pointer">
-            <svg class="px-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M151.6 469.6C145.5 476.2 137 480 128 480s-17.5-3.8-23.6-10.4l-88-96c-11.9-13-11.1-33.3 2-45.2s33.3-11.1 45.2 2L96 365.7V64c0-17.7 14.3-32 32-32s32 14.3 32 32V365.7l32.4-35.4c11.9-13 32.2-13.9 45.2-2s13.9 32.2 2 45.2l-88 96zM320 480c-17.7 0-32-14.3-32-32s14.3-32 32-32h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H320zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H320zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H320zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32s-14.3 32-32 32H320z"/></svg>
-            <p class="text-center">Tous les filtres</p>
+    <div class="shadow-md rounded-md  border p-2 flex flex-col items-start w-full">
+        <div class="flex flex-row space-x-2 items-center">
+            <i class="fa-solid fa-arrow-down-wide-short"></i>       
+            <p>Tous les fitres</p>
+        </div>
+        <div id="filter"  class="px-5 size-full overflow-visible flex flex-row justify-between pt-1">
+            <select title="location" name="location">
+                <option value="paris">Paris</option>
+                <option value="new_york">New York</option>
+                <option value="london">London</option>
+                <option value="tokyo">Tokyo</option>
+            </select>
+            <select title="Serie" name="serie">
+                <option value="Scientifique">Scientifique</option>
+                <option value="Litteraire">Litteraire</option>
+                <option value="Artistique">Artistique</option>
+                <option value="Electronique">Electronique</option>
+            </select>
+            <select title="value" name="value">
+                <option value="10€">Moins de 10€</option>
+                <option value="40€">Moins de 40€</option>
+                <option value="70€">Moins de 70€</option>
+            </select>
+            <select title="value" name="value">
+                <option value="40€">Filtre</option>
+                <option value="40€">De A à Z</option>
+                <option value="40€">Croissant</option>
+                <option value="10€">Deccroissant</option>
+            </select>
         </div>
     </div>
-    <div class="p-2 overflow-visible px-4 shadow grid xl:grid-cols-4 gap-2 min-h-screen">
+    <ul id="listItems" role="list"  class="overflow-y-scroll px-4 shadow flex flex-col space-y-1 min-h-screen">
         <!--  -->
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-        <div  w3-include-html="Component/card.html" class="cursor-pointer hover:shadow-md"></div>
-    </div>
-    <div class="fixed  flex justify-center size-20 rounded-full bg-sky-300 bottom-3 sm:left-[80%] md:left-[76%] transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110" >
-        <button>
-            <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-        </button>
-    </div>
+        <li id="item" class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
+            <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
+            <div class="font-semibold flex-1 "> 
+                <a href="/item" onclick="router()">Ti 83 Premium</a>
+                <p>Valeur estimer à 40€</p>
+                <p class="text-green-600">Fonctionne encore</p>
+            <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
+                <div class="flex items-center space-x-1 hover:bg-gray-50">
+                    <div  class="">Residence Jean medecin</div>
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+            </div>
+            <!--  -->
+            <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+                <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
+            </div>
+        </li>
+        <li class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
+            <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
+            <div class="font-semibold flex-1 "> 
+                <a href="/item" onclick="router()">Ti 83 Premium</a>
+                <p>Valeur estimer à 40€</p>
+                <p class="text-green-600">Fonctionne encore</p>
+            <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
+                <div class="flex items-center space-x-1 hover:bg-gray-50">
+                    <div  class="">Residence Jean medecin</div>
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+            </div>
+            <!--  -->
+            <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+                <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
+            </div>
+        </li>
+        <li class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
+            <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
+            <div class="font-semibold flex-1 "> 
+                <a href="/item" onclick="router()">Ti 83 Premium</a>
+                <p>Valeur estimer à 40€</p>
+                <p class="text-green-600">Fonctionne encore</p>
+            <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
+                <div class="flex items-center space-x-1 hover:bg-gray-50">
+                    <div  class="">Residence Jean medecin</div>
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+            </div>
+            <!--  -->
+            <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+                <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
+            </div>
+        </li>
+        <li class="p-2 group/item rounded-md h-fit border hover:bg-slate-100 flex flex-row justify-between space-x-16">
+            <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
+            <div class="font-semibold flex-1 "> 
+                <a href="/item" onclick="router()">Ti 83 Premium</a>
+                <p>Valeur estimer à 40€</p>
+                <p class="text-green-600">Fonctionne encore</p>
+            <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
+                <div class="flex items-center space-x-1 hover:bg-gray-50">
+                    <div  class="">Residence Jean medecin</div>
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+            </div>
+            <!--  -->
+            <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+                <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
+            </div>
+        </li>
+
+    </ul>
+    <a href="/don" class="fixed flex justify-center items-center size-20 rounded-full bg-sky-500 bottom-3 sm:left-[80%] md:left-[76%] transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110" >
+        <i class="fa-solid fa-plus"></i>
+    </a>
 </section>

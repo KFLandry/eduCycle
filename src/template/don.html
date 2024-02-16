@@ -1,0 +1,98 @@
+<section class="p-2 size-full flex flex-col space-y-2  ">
+    <div class=" shadow-md rounded-md p-2 border text-center font-semibold">Je remplie les informations de mon don</div>
+    <div class="w-full h-fit border">
+        <form class="shadow-md rounded-md p-3 h-fit">
+            <div class="flex flex-col justify-start">
+                <!--  -->
+                <div class="flex flex-col w-full ">
+                    <label for="name">Nom de la fourniture à donner</label>
+                    <input class="rounded-md border w-full" type="text" name="name" id="name">
+                </div> 
+                <!--  -->
+                <div class="flex flex-col">
+                    <label for="series">Selctionnée la ou les serie(s) concerné par la fourniture</label>
+                    <div class="rounded-md border p-2 flex flex-col justify-between">
+                        <div class=""><input type="checkbox" name="Serie" id="series" value="Science"> Science <br></div>
+                        <div class=""><input type="checkbox" name="Serie" id="series" value="Litterature"> Litterature <br></div>
+                        <div class=""><input type="checkbox" name="Serie" id="series" value="Arts Plastique"> Arts Plastique <br></div>
+                        <div class=""><input type="checkbox" name="Serie" id="series" value="Informatique"> Informatique <br></div>
+                        <div class=""><input type="checkbox" name="Serie" id="series" value="Commnunication"> Commnunication <br></div>
+                        <div class=""><input type="checkbox" name="Serie" id="series" value="Management"> Management <br></div>
+                        <div class=""><input type="checkbox" name="Autre" id="series"> Autre<br></div>
+                        <input type="text" id="series" class="rounded-md border w-full ">
+                    </div>
+                </div>
+
+                <!--  -->
+                <div class="flex flex-col">
+                    <label for="address">Selectionner la residence</label>
+                    <!-- Address Via l'api de Google -->
+                    <select title="Residences" name="residence" id="address" class="rounded-md border p-2">
+                        <option value="Residences Jean Medecin">Residences Jean Medecin</option>
+                        <option value="Residences Valrose">Residences Valrose </option>
+                        <option value="Residences Saint Jean Angely">Residences Saint Jean Angely</option>
+                        <option value="Residences Valbon">Residences Valbon</option>
+                        <option value="Residences Hôpital Pasteur">Residences Hôpital Pasteur</option>
+                    </select>
+                        <p>Si la trouver pas,rechercher ici :</p>
+                        <label for="address" class="rounded-md border h-10 flex flex-row items-center space-x-1">
+                            <i class="fa-solid fa-street-view px-2"></i>
+                            <input type="text" class="size-full" name="address" id="address" class="h-full"/>
+                        </label>
+                </div>
+                <!--  -->
+                <div class="flex flex-col">
+                    <label for="valeur">Valeur estimer de la fourniture</label>
+                    <input class="rounded-md border" type="number" name="valeur" id="valeur">
+                </div>
+                <!--  -->
+                <div class="flex flex-col">
+                    <label for="description">Description detaillé de fourniture</label>
+                    <textarea class="rounded-md border" name="description" id="description" cols="30" rows="10"></textarea>
+                </div>
+                <!--  -->
+                <div class="rounded-md py-1 flex flex-col">
+                    <label for="photos" class="rounded-md p-2 w-full flex flex-row justify-center items-center space-x-2 bg-green-600">
+                        <i class="fa-solid fa-upload"></i>
+                        <p>Selectionner les photos</p>
+                        <input type="file" name="photos" id="photos" hidden/>
+                    </label>
+                    <div class="rounded-md overflow-x-scroll border h-52 p-2">
+                        <div class="size-full flex flex-row space-x-2">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                        </div>
+                    </div>
+                </div>
+                <label for="available" class="p-2 border rounded-md">
+                    <p>Quand le deposeras-tu à l'acceuil de ta residence</p>
+                    <div class="rounded-md border p-2 flex flex-row justify-between">
+                        <input id="available" type="date">
+                        <select name="period" id="available" title="period">
+                            <option value="Matin">Matin</option>
+                            <option value="Soir">Soir</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!--  -->
+                <div class="rounded mt-1 p-4 flex flex-row justify-end items-end border">
+                    <button type="submit" class="rounded p-2 flex flex-row space-x-2 border bg-sky-300 bottom-3 sm:left-[80%] md:left-[76%] transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110" >
+                        <p>Publier mon annonce</p>  
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                    </button>
+                </div>
+        </form>    
+    </div>    
+    </div>
+</section>

@@ -1,7 +1,11 @@
 import Signup from "../controller/Signup.js";
-import Login from "../controller/login.js";
 import Main from "../controller/main.js";
+import Login from "../controller/Login.js";
+import File from "../controller/File.js";
 import User from "../model/Factory/User.js";
+import Notification from "../controller/notification.js"
+import Account from "../controller/Account.js";
+import Favoris from "../controller/Favoris.js";
 // On definie la fonction de routage
 function route(event) {
     event.preventDefault();
@@ -18,33 +22,55 @@ const routes = {
     "/index.html":"/src/template/index.html",
     "/login": "/src/template/login.html",
     "/signup": "/src/template/signup.html",
+    "/file": "/src/template/file.html",
+    "/item" : "/src/template/item.html",
+    "/don" : "/src/template/don.html",
+    "/notification": "/src/template/notification.html",
+    "/favoris": "/src/template/favoris.html",
+    "/account" : "/src/template/account.html",
     "404": "/src/template/error.html"
 };
 // Fonction pour gérer la localisation actuelle et initialiser les controlleurs correspondants
 async function handleLocation() {
     const path = window.location.pathname;
-    // On force la redirection vers la page de connexion
-    debugger
-    if (!User.isAuthenticated){
-        path =  "/login"
+    // On force la redirection vers la page de connexion si pas connecté
+    let routePath;
+    if (routes[path]){
+        if (!new  User().connected){
+            routePath =  routes[path] ||  routes["/login"]
+        }else{
+            routePath = routePath[path]
+        }
+    }else{
+        routePath = routes["404"]
     }
-    const routePath = routes[path] || routes["404"];
     // Récupérer le chemin correspondant à l'URL ou la route 404
     const html = await fetch(routePath).then(response => response.text());
     document.getElementById("main-page").innerHTML = html;
-    // Les controllers/
+
+    // Les controllers
     let controller;
     switch (path){
-        case "/" :
-                controller = new Main()
-                break;
-        case "/file" :    
-                controller = new Login()
-                break;
-        case "/message": 
-                controller =  new Signup()
-                break;
-        case "favoris" : 
+        case "/" :s
+            controller = new Main()
+            break;
+        case "/login" :    
+            controller = new Login()
+            break;
+        case "/signup": 
+            controller =  new Signup()
+            break;
+        case "/file" :
+            controller = new File()
+            break
+        case "/notification" :
+            controller =  new notification()
+            break
+        case "/account" :
+            controller =  new Account()
+            break    
+        case "favoris": 
+            controller =  new Favoris()
             break;
         }
     controller.initialisePage();
@@ -55,8 +81,33 @@ document.addEventListener('click', function(event) {
         route(event); // Appeler la fonction de routage lorsqu'un lien est cliqué
     }
 });
+// Fonction qui cache et affiche le menu
+function hidden(){
+    let labelHam =  document.querySelector("#labelHam")
+    labelHam.addEventListener("click", ()=>{
+        let menu =  document.querySelector("#menu")
+        if(menu.style.display=== "none" ){
+            menu.style.display = "block"
+            menu.focus()
+        }else{
+            menu.style.display = "none"
+        }
+    })
+// 
+    labelHam =  document.querySelector("#btnMenu")
+    labelHam.addEventListener("click", ()=>{
+        let menu =  document.querySelector("#sMenu")
+        if(menu.style.display=== "none" ){
+            menu.style.display = "block"
+            menu.focus()
+        }else{
+            menu.style.display = "none"
+        }
+    })
+}
 
 // Gérer le changement d'état de navigation
 window.onpopstate = handleLocation;
 //Changement de la page principale
 handleLocation();
+hidden()

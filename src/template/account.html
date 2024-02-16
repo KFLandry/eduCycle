@@ -1,0 +1,91 @@
+<section class="size-full h-screen flex flex-col">
+    <div class="rounded-md shadow-md h-fit m-3 p-3 border flex flex-row space-x-4">
+        <div class="rounded-full bg-cover h-36 w-44 relative border " style="background-image: url('src/public/ressource/image/pexels-rodolfo-clix-1615776.jpg');">
+            <i class="absolute bottom-0 right-0 fa-solid fa-circle-plus hover:scale-110"></i>
+        </div>
+        <div class="rounded w-full flex-col px-2 border h-fit">
+            <div class="w-full border-b-2 "><p class="font-semibold text-center" id="labelName">Arthur Gael</p>
+            </div>
+            <div class="px-4 flex flex-col items-start">
+                <div class="flex space-x-2 items-center">
+                    <i class="fa-regular fa-envelope"></i>
+                    <p id="labelEmaiL">a@a.a <span class="rounded bg-yellow-400">Non verifiée</span></p></div>
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <p id="labelPhone">+33 623432343</p></div>
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-people-line"></i>
+                    <p >Membre depuis <span id="labelSince" class="font-semibold"> Septembre 2023 </span></p></div>
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <p id="labelAdress" class="font-semibold">Residence Jean Medecin</p></div>
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-recycle"></i>
+                    <p ><span id="nbAnnonces" class="font-semibold"> 3 </span> dons et <span id="ndRecuperatio" class="font-semibold">14</span> Récupérations</p></div>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-cols-3 grid-row-2 gap-1 border p-1">
+        <a href="/don" class="p-1 rounded-md hover:bg-slate-300 border-b-2 col-span-3 text-center ">Je fais un don</a>
+        <button class="p-2 size-full rounded-md hover:bg-slate-300">Modifier mon profile</button>
+        <button class="p-2 size-full rounded-md hover:bg-slate-300">Verifié mon address mail</button>
+        <button class="p-2 size-full rounded-md hover:bg-slate-300">Deconnexion</button>
+    </div>
+    <div class="flex-1 flex flex-col">
+        <h3 class="font-semibold">Mes annonces</h3>
+        <div class="overflow-y-scroll h-1/2 flex flex-col space-y-2 ">
+            <ul role="list" class="py-1 space-y-1">
+                <li  class="p-2 group/item shadow-md rounded-md hover:bg-slate-100 flex flex-row justify-between space-x-5">
+                   <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
+                   <div class="font-semibold flex-1 "> 
+                       <div class="flex flex-row items-center justify-between">
+                           <a href="/item" onclick="router()">Ti 83 Premium</a>
+                           <div class="flex flex-row items-center space-x-2">
+                               <p id="labelStatut">En attente de validation</p>
+                               <i id="statut" class="rounded-full fa-regular fa-circle bg-yellow-300"></i>
+                           </div>
+                       </div>
+                       <p>Valeur estimer à 40€</p>
+                       <p class="text-green-600">Fonctionne encore</p>
+                       <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
+                       <div class="flex items-center space-x-1 hover:bg-gray-50">
+                           <div  class="">Residence Jean medecin</div>
+                           <i class="fa-solid fa-location-dot"></i>
+                       </div>
+                   </div>
+                   <!--  -->
+                   <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+                       <i class="cursor-pointer rounded-md p-2   hover:shadow-md  fa-regular fa-pen-to-square"></i>
+                       <i class="cursor-pointer rounded-md p-2   hover:bg-red-600 fa-regular fa-trash-can"></i>
+                   </div>
+               </li>
+           </ul>
+        </div>
+        <h3 class="pt-5 w-full  font-semibold">Mes Recupations</h3>
+        <div class="overflow-y-scroll h-1/2 flex flex-col border">
+            <ul role="list" class="py-1 space-y-1">
+                <li  class="p-2 group/item shadow-md rounded-md hover:bg-slate-100 flex flex-row justify-between space-x-5">
+                   <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
+                   <div class="font-semibold flex-1 "> 
+                       <div class="flex flex-row items-center justify-between">
+                           <a href="/item" onclick="router()">Ti 83 Premium</a>
+                           <div class="flex flex-row items-center space-x-2">
+                               <p id="labelStatut">Validé</p>
+                               <i id="statut" class="rounded-full fa-regular fa-circle bg-green-600"></i>
+                           </div>
+                       </div>
+                       <p>Valeur estimer à 40€</p>
+                       <p class="text-green-600">Fonctionne encore</p>
+                       <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
+                       <div class="flex items-center space-x-1 hover:bg-gray-50">
+                           <div  class="">Residence Jean medecin</div>
+                           <i class="fa-solid fa-location-dot"></i>
+                       </div>
+                   <!-- </div> -->
+                   <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+                   </div>
+               </li>
+           </ul>
+        </div>
+    </div>
+</section>
