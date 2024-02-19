@@ -10,19 +10,18 @@
                 </div> 
                 <!--  -->
                 <div class="flex flex-col">
-                    <label for="series">Selctionnée la ou les serie(s) concerné par la fourniture</label>
+                    <label for="series">Selctionner la ou les serie(s) concernées par la fourniture</label>
                     <div class="rounded-md border p-2 flex flex-col justify-between">
-                        <div class=""><input type="checkbox" name="Serie" id="series" value="Science"> Science <br></div>
-                        <div class=""><input type="checkbox" name="Serie" id="series" value="Litterature"> Litterature <br></div>
-                        <div class=""><input type="checkbox" name="Serie" id="series" value="Arts Plastique"> Arts Plastique <br></div>
-                        <div class=""><input type="checkbox" name="Serie" id="series" value="Informatique"> Informatique <br></div>
-                        <div class=""><input type="checkbox" name="Serie" id="series" value="Commnunication"> Commnunication <br></div>
-                        <div class=""><input type="checkbox" name="Serie" id="series" value="Management"> Management <br></div>
-                        <div class=""><input type="checkbox" name="Autre" id="series"> Autre<br></div>
-                        <input type="text" id="series" class="rounded-md border w-full ">
+                        <div class=""><input title="serie" type="checkbox" name="series" value="Science"> Science <br></div>
+                        <div class=""><input title="serie" type="checkbox" name="series" value="Litterature"> Litterature <br></div>
+                        <div class=""><input title="serie" type="checkbox" name="series" value="Arts Plastique"> Arts Plastique <br></div>
+                        <div class=""><input title="serie" type="checkbox" name="series" value="Informatique"> Informatique <br></div>
+                        <div class=""><input title="serie" type="checkbox" name="series" value="Commnunication"> Commnunication <br></div>
+                        <div class=""><input title="serie" type="checkbox" name="series" value="Management"> Management <br></div>
+                        <div class=""><input title="serie" type="checkbox" name="Autre" id="other"> Autre<br></div>
+                        <input id="otherSerie" type="text" class="rounded-md border w-full" hidden required>
                     </div>
                 </div>
-
                 <!--  -->
                 <div class="flex flex-col">
                     <label for="address">Selectionner la residence</label>
@@ -34,20 +33,28 @@
                         <option value="Residences Valbon">Residences Valbon</option>
                         <option value="Residences Hôpital Pasteur">Residences Hôpital Pasteur</option>
                     </select>
-                        <p>Si la trouver pas,rechercher ici :</p>
+                        <p>Si vous la trouvez dans le combo,recherchez ici :</p>
                         <label for="address" class="rounded-md border h-10 flex flex-row items-center space-x-1">
                             <i class="fa-solid fa-street-view px-2"></i>
-                            <input type="text" class="size-full" name="address" id="address" class="h-full"/>
+                            <input type="text" class="size-full" name="findResidence" id="address" class="h-full"/>
                         </label>
-                </div>
-                <!--  -->
+                    </div>
+                    <!--  -->
+                    <div class="flex flex-col">
+                        <label for="valeur">Valeur estimée de la fourniture</label>
+                        <input class="rounded-md border" type="number" name="valeur" id="valeur">
+                    </div>
+                    <!--  -->
+                    <div class="rounded-md border p-2 flex justify-between">
+                        <label for="state">Sur une echelle de 1 à 3 Dans quelle etat est votre bien</label>
+                        <select name="state" id="" title="state">
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
                 <div class="flex flex-col">
-                    <label for="valeur">Valeur estimer de la fourniture</label>
-                    <input class="rounded-md border" type="number" name="valeur" id="valeur">
-                </div>
-                <!--  -->
-                <div class="flex flex-col">
-                    <label for="description">Description detaillé de fourniture</label>
+                    <label for="description">Description detaillée de la fourniture</label>
                     <textarea class="rounded-md border" name="description" id="description" cols="30" rows="10"></textarea>
                 </div>
                 <!--  -->
@@ -55,39 +62,35 @@
                     <label for="photos" class="rounded-md p-2 w-full flex flex-row justify-center items-center space-x-2 bg-green-600">
                         <i class="fa-solid fa-upload"></i>
                         <p>Selectionner les photos</p>
-                        <input type="file" name="photos" id="photos" hidden/>
+                        <input type="file" name="photos" id="photos" accept="image*/" hidden multiple/>
                     </label>
                     <div class="rounded-md overflow-x-scroll border h-52 p-2">
-                        <div class="size-full flex flex-row space-x-2">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                            <img src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
-                        </div>
+                        <ul id="listPhotos" role="list"  class="size-full flex flex-row space-x-2">
+                            <li  class="group/item">
+                                <img class="" src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            </li>
+                            <li  class="group/item">
+                                <img class="" src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            </li>
+                            <li  class="group/item">
+                                <img class="" src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <label for="available" class="p-2 border rounded-md">
-                    <p>Quand le deposeras-tu à l'acceuil de ta residence</p>
-                    <div class="rounded-md border p-2 flex flex-row justify-between">
-                        <input id="available" type="date">
-                        <select name="period" id="available" title="period">
-                            <option value="Matin">Matin</option>
-                            <option value="Soir">Soir</option>
-                        </select>
-                    </div>
+                <p>Quand le deposeras-tu à l'acceuil de ta residence</p>
+                <div class="rounded-md border p-2 flex flex-row justify-between">
+                    <label for="available">Date</label>
+                    <input id="available" type="date" name="available"/>
+                    <label for="period"></label>
+                    <select name="period" title="period">
+                        <option value="Matin">Matin</option>
+                        <option value="Soir">Soir</option>
+                    </select>
                 </div>
-                
                 <!--  -->
                 <div class="rounded mt-1 p-4 flex flex-row justify-end items-end border">
-                    <button type="submit" class="rounded p-2 flex flex-row space-x-2 border bg-sky-300 bottom-3 sm:left-[80%] md:left-[76%] transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110" >
+                    <button type="submit" name="submit" class="rounded p-2 flex flex-row space-x-2 border bg-sky-500 bottom-3 sm:left-[80%] md:left-[76%] transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110" >
                         <p>Publier mon annonce</p>  
                         <i class="fa-solid fa-hand-holding-dollar"></i>
                     </button>

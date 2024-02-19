@@ -35,13 +35,9 @@ class Signup extends Controller{
 
             let response =  await  this.User.signup(secureData)
             if (response.statut === 1){
-                // Si connexion reussie,On maj l'affichage
-                let profile = document.querySelector("#profile")
-                let userName =  document.querySelector("#userName")  
-                if (this.User.medias().lenght()>0){
-                    profile.className = `bg-[url(${this.User.medias()["location"]})]`
-                }              
-                userName =  `${this.user.data.firstName} ${this.user.data.firstName}` 
+                // Si connexion reussie,On maj l'affichage et on stocke le token dans le localStorage            
+                localStorage.setItem('token',response.token)
+                this.updateDisplay()
                 window.location.href ="/"
             }else{
                let txtErreur =  document.querySelector('#erreur')
@@ -49,6 +45,14 @@ class Signup extends Controller{
             }
         }
     } 
+    updateDisplay(){
+        let profile = document.querySelector("#profile")
+        let userName =  document.querySelector("#userName")  
+        if (this.User.medias().lenght()>0){
+            profile.className = `bg-[url(${this.User.medias()["location"]})]`
+            userName =  `${this.user.data.firstName} ${this.user.data.firstName}` 
+        }  
+    }
 
     saveCredentials(){
         // LOGIN = this.formData.get("email")

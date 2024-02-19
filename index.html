@@ -35,40 +35,33 @@
                         <a href="/notification" onclick="route()">Notifications</a>
                     </li>
                     <li id="btnMenu" class="rounded h-full px-4 flex flex-col justify-between align-middle items-center cursor-pointer hover:bg-sky-400">
-                        <i class="fa-regular fa-user p-3"></i>
+                        <div id="profile" class="rounded-full h-5 w-5 p-5 flex justify-center items-center">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
                         <div>
-                            kflandry
+                            <p id="labelName">KFlandry</p>
                             <div id="sMenu"  class="absolute hidden w-fit right-0 border bg-white">
-                                <div class="p-2 flex flex-col">
-                                    <a href="/login" onclick="route()" class="w-full flex flex-row items-center justify-between ">
-                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                        <p> Login </p>
-                                    </a>
-                                    <a href="/signup" onclick="route()" class="w-full flex flex-row items-center justify-between">
-                                        <i class="fa-solid fa-user-plus"></i>
-                                        <p>S'inscrire</p>
-                                    </a>
-                                    <a href="/item" onclick="route()" class="w-full flex flex-row items-center justify-between">
-                                        <i class="fa-solid fa-user-plus"></i>
-                                        <p>Item</p>
-                                    </a>
-                                    <a href="/account" onclick="route()" class="w-full flex flex-row items-center justify-between">
-                                        <i class="fa-solid fa-user-plus"></i>
-                                        <p>Account</p>
-                                    </a>
-                                    <button type="submit" onclick="route()" class="w-full flex flex-row items-center justify-between">
-                                        <i class="fa-solid fa-user-plus"></i>
-                                        <p>Me déconnecter</p>
-                                    </button>
+                                <div class="p-2 flex flex-col size-fit">
                                     <a href="/don" onclick="route()" class="w-full flex flex-row items-center justify-between">
                                         <i class="fa-solid fa-user-plus"></i>
                                         <p>Faire un don</p>
                                     </a>
-                                    <a href="/error" onclick="route()" class="w-full flex flex-row items-center justify-between">
-                                        <i class="fa-solid fa-user-plus"></i>
-                                        <p>Error</p>
+                                    <a name="unauthorize" href="/login" onclick="route()" class="w-full flex flex-row items-center justify-between ">
+                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                        <p> Login </p>
                                     </a>
-
+                                    <a name="unauthorize"href="/signup" onclick="route()" class="w-full flex flex-row items-center justify-between">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                        <p>S'inscrire</p>
+                                    </a>
+                                    <a name="authorize" href="/account" onclick="route()" class="w-full flex flex-row items-center justify-between">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                        <p>Account</p>
+                                    </a>
+                                    <button name="authorize" type="submit" onclick="route()" class="w-full flex flex-row items-center justify-between">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                        <p>Me déconnecter</p>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +73,7 @@
                 <label id="labelHam" class="md:hidden size-fit focus:outline-none flex flex-col items-center cursor-pointer">
                     <i class="mx-2 size-10 fa-solid fa-burger"></i>
                     <div id="menu" class="hidden absolute mt-10 top-0 right-0 w-3/4 h-screen  bg-white border">
-                        <ul class="pl-2 flex-col items-center space-x-3 space-y-4">
+                        <ul id="listeMenu"  class="pl-2 flex-col items-center space-x-3 space-y-4">
                             <li class="p-3 rounded-md flex flex-row justify-center items-center space-x-2 hover:bg-gray-50 cursor-pointer">
                                 <i class="fa-solid fa-plus"></i>
                                 <a href="/don" onclick="route()">Je dépose une annonce</a>
@@ -97,17 +90,21 @@
                                 <i class="fa-regular fa-envelope"></i>
                                 <a href="/notifications" onclick="route()">notifications</a>
                             </li>
-                            <li class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
+                            <li name="unauthorize"  class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
                                 <i class="fa-regular fa-user"></i>                                
                                 <a id="userName"href="/login" onclick="route()">Login</a>
                             </li>
-                            <li class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
+                            <li name="unauthorise" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
                                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
                                 <a id="signup" href="/signup" onclick="route()">S'inscrire</a>
                             </li>
-                            <li class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
+                            <li name="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
                                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                <button id="account" onclick="route()">Me deconnecter </button>
+                                <a href="/account">Account</a>
+                            </li>
+                            <li name="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                <button onclick="" >Deconnexion</button>
                             </li>
                         </ul>
                     </div>

@@ -1,6 +1,7 @@
 <section class="size-full h-screen flex flex-col">
     <div class="rounded-md shadow-md h-fit m-3 p-3 border flex flex-row space-x-4">
-        <div id="profile"  class="rounded-full bg-cover h-36 w-44 relative border " style="background-image: url('src/public/ressource/image/pexels-rodolfo-clix-1615776.jpg');">
+        <div  class="relative" >
+            <img  class="rounded-full object-cover h-36 w-44 " id="profile" src="src/public/ressource/image/pexels-rodolfo-clix-1615776.jpg" alt="">
             <i id="changeImage"  class="absolute bottom-0 right-0 fa-solid fa-circle-plus hover:scale-110"></i>
         </div>
         <div class="rounded w-full flex-col px-2 border h-fit">
@@ -25,15 +26,16 @@
             </div>
         </div>
     </div>
-    <div class="grid grid-cols-3 grid-row-2 gap-1 border p-1">
-        <a href="/don" class="p-1 rounded-md hover:bg-slate-300 border-b-2 col-span-3 text-center ">Je fais un don</a>
-        <button class="p-2 size-full rounded-md hover:bg-slate-300">Modifier mon profile</button>
-        <button class="p-2 size-full rounded-md hover:bg-slate-300">Verifié mon address mail</button>
-        <button class="p-2 size-full rounded-md hover:bg-slate-300">Deconnexion</button>
+    <div class="grid grid-cols-4 grid-row-2 gap-1 border p-1">
+        <a href="/don" class="p-1 rounded-md hover:bg-slate-300 border-b-2 col-span-4 text-center ">Je fais un don</a>
+        <a id="updateProfile" href=""  class="p-2 text-center size-full rounded-md hover:bg-slate-300">Modifier mon profile</a>
+        <button id="emailVerification"  class="p-2 size-full rounded-md hover:bg-slate-300">Verifier mon address mail</button>
+        <button id="delete"  class="p-2 size-full rounded-md hover:bg-slate-300">Supprimer mon compte</button>
+        <button id="deconnexion"  class="p-2 size-full rounded-md hover:bg-slate-300">Deconnexion</button>
     </div>
     <div class="flex-1 flex flex-col">
         <h3 class="font-semibold">Mes annonces</h3>
-        <div class="overflow-y-scroll h-1/2 flex flex-col space-y-2 ">
+        <div class="overflow-y-scroll flex-1 flex flex-col space-y-2 ">
             <ul role="list" class="py-1 space-y-1">
                 <li  class="p-2 group/item shadow-md rounded-md hover:bg-slate-100 flex flex-row justify-between space-x-5">
                    <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
@@ -41,7 +43,7 @@
                        <div class="flex flex-row items-center justify-between">
                            <a href="/item" onclick="router()">Ti 83 Premium</a>
                            <div class="flex flex-row items-center space-x-2">
-                               <p id="labelStatut">En attente de validation</p>
+                               <p id="statut">En attente de validation</p>
                                <i id="statut" class="rounded-full fa-regular fa-circle bg-yellow-300"></i>
                            </div>
                        </div>
@@ -54,38 +56,40 @@
                        </div>
                    </div>
                    <!--  -->
-                   <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+                   <div id="controls" class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
                        <i class="cursor-pointer rounded-md p-2   hover:shadow-md  fa-regular fa-pen-to-square"></i>
                        <i class="cursor-pointer rounded-md p-2   hover:bg-red-600 fa-regular fa-trash-can"></i>
                    </div>
                </li>
            </ul>
         </div>
-        <h3 class="pt-5 w-full  font-semibold">Mes Recupations</h3>
-        <div class="overflow-y-scroll h-1/2 flex flex-col border">
-            <ul role="list" class="py-1 space-y-1">
-                <li  class="p-2 group/item shadow-md rounded-md hover:bg-slate-100 flex flex-row justify-between space-x-5">
-                   <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
-                   <div class="font-semibold flex-1 "> 
-                       <div class="flex flex-row items-center justify-between">
-                           <a href="/item" onclick="router()">Ti 83 Premium</a>
-                           <div class="flex flex-row items-center space-x-2">
-                               <p id="labelStatut">Validé</p>
-                               <i id="statut" class="rounded-full fa-regular fa-circle bg-green-600"></i>
+        <div id="recuperations">
+            <h3 class="pt-5 w-full  font-semibold">Mes Recupations</h3>
+            <div  class="overflow-y-scroll flex-1 flex flex-col border">
+                <ul role="list" class="py-1 space-y-1">
+                    <li  class="p-2 group/item shadow-md rounded-md hover:bg-slate-100 flex flex-row justify-between space-x-5">
+                       <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
+                       <div class="font-semibold flex-1 "> 
+                           <div class="flex flex-row items-center justify-between">
+                               <a href="/item" onclick="router()">Ti 83 Premium</a>
+                               <div class="flex flex-row items-center space-x-2">
+                                   <p id="labelStatut">Validé</p>
+                                   <i id="statut" class="rounded-full fa-regular fa-circle bg-green-600"></i>
+                               </div>
                            </div>
+                           <p>Valeur estimer à 40€</p>
+                           <p class="text-green-600">Fonctionne encore</p>
+                           <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
+                           <div class="flex items-center space-x-1 hover:bg-gray-50">
+                               <div  class="">Residence Jean medecin</div>
+                               <i class="fa-solid fa-location-dot"></i>
+                           </div>
+                       <!-- </div> -->
+                       <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
                        </div>
-                       <p>Valeur estimer à 40€</p>
-                       <p class="text-green-600">Fonctionne encore</p>
-                       <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
-                       <div class="flex items-center space-x-1 hover:bg-gray-50">
-                           <div  class="">Residence Jean medecin</div>
-                           <i class="fa-solid fa-location-dot"></i>
-                       </div>
-                   <!-- </div> -->
-                   <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-                   </div>
-               </li>
-           </ul>
+                   </li>
+               </ul>
+            </div>
         </div>
     </div>
 </section>

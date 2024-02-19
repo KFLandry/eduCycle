@@ -6,6 +6,7 @@ import User from "../model/Factory/User.js";
 import Notification from "../controller/Notification.js"
 import Account from "../controller/Account.js";
 import Favoris from "../controller/Favoris.js";
+import Don from "../controller/Don.js";
 // On definie la fonction de routage et on creer l'unique instance de l'utilisateur
 new User()
 function route(event) {
@@ -30,18 +31,28 @@ const routes = {
     "/signup": "/src/template/signup.html",
     "/item" : "/src/template/item.html",
     "/favoris": "/src/template/favoris.html",
-    "/account" : "/src/template/account.html",
+    "/account" : "/src/template/account.html", 
+    "/file": "/src/template/file.html",
+    "/notification": "/src/template/notification.html",
+    "/don" : "/src/template/don.html",
     "404": "/src/template/error.html"
 };
 // Fonction pour gérer la localisation actuelle et initialiser les controlleurs correspondants
-async function handleLocation() {
-    const path = window.location.pathname;
+ export async function handleLocation() {
+    let path = window.location.pathname;
     // On force la redirection vers la page de connexion si pas connecté
+    
     let routePath;
+    debugger
+    let uniqueUser = User.getUniqueInstance()
     if (routes[path] || AuthRequiredRoutes[path]){        
-        if (!User.isAuthenticated() && path in AuthRequiredRoutes){
+        if (!uniqueUser.isAuthenticated() && path in AuthRequiredRoutes){
+            // Pour test ON Retire             
             routePath =routes["/login"]
-        }else if (!User.isAuthenticated() || path in routes){
+            path = "/login"
+        }else if (!uniqueUser.isAuthenticated() || path in routes){
+            routePath = routes[path]
+        }else if (uniqueUser.isAuthenticated()) {
             routePath = routes[path]
         }
     }else{
@@ -66,6 +77,9 @@ async function handleLocation() {
             break;
         case "/file" :
             controller = new File()
+            break
+        case "/don" :
+            controller = new Don()
             break
         case "/notification" :
             controller =  new Notification()
@@ -112,6 +126,7 @@ function hidden(){
 
 // Gérer le changement d'état de navigation
 window.onpopstate = handleLocation;
+// window.route =  route()
 //Changement de la page principale
 handleLocation();
 hidden()

@@ -1,5 +1,8 @@
+
 import UserFactory from "../model/Factory/UserFactory.js"
+import { handleLocation } from "../public/router.js"
 import Controller from "./Controller.js"
+
 class Login extends Controller{
     constructor(){
         super()
@@ -17,30 +20,48 @@ class Login extends Controller{
         }
     }
     async login(){
+        let txtErreur =  document.querySelector('#erreur')
+        txtErreur.textContent = ""
         let login =  document.querySelector("#email")
         let password =  document.querySelector("#password")
         let data = {"login" : encodeURIComponent(login.value), "password" : encodeURIComponent(password.value)}
         let response =  await  this.User.login(data)    
         // Si connexion réussie on met à jour l'affichage et redirection vers la page principale
         if (response.statut === 1){
-            let profile = document.querySelector("#profile")
-            let userName =  document.querySelector("#userName") 
-            // On recupere les données du model
-            let media  = this.User.medias()
-            let data =  this.User.datas()
-            debugger
-            if (media){
-                profile.className = `object-cover bg-[url(${media["location"]})]`
-            }
-            userName.innerHTML =  `${data.firstName} ${data.lastName}`
+            // Si connexion reussie,On maj l'affichage et on stocke le token dans le localStorage            
+            this.updateDisplay()
             // Redirection
-            window.location.href = "/"
+            window.history.pushState({}, "", "/"); // Modifier l'URL sans recharger la page
+            handleLocation()
         }else{
-           let txtErreur =  document.querySelector('#erreur')
-           txtErreur.innerHTML = response.message;
+           txtErreur.textContent = response.message;
         }
     }
-    logout(){
+    logout(){}
+    updateDisplay(){
+        debugger
+        const authorizeControls =  document.querySelectorAll('[name="authorize"]')
+        const unauthorizeControls =  document.querySelectorAll('[name="unauthorize"]')
+        let profile = document.querySelector("#profile")
+        let userName =  document.querySelector("p#labelName") 
+        // On recupere les données du model
+        const media  = this.User.medias()
+        const data =  this.User.datas()
+        if (media){
+            const image=  document.createElement('img')
+            image.src =  media.location
+            image.alt =  'profile'
+            image.className = "rounded-full border objet-cover size-full"
+            profile.appendChild(image)
+        }
+        userName.textContent = `${data.firstName}`
+        // On active les controls
+        for(const control of authorizeControls){
+            control.display = 'block'
+        }
+        for(const control of unauthorizeControls){
+            control.display = 'none'
+        }
     }
 }
 export default Login;
