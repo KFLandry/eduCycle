@@ -59,8 +59,8 @@ class Account extends Controller{
     }
     deconnexion(){
         if(confirm("Etes-vous sûr de vouloir nous quitter???")){
-            this.User = null
-            window.location.href =  "/"
+            
+            this.User = null            
         }
     }
     fillUser(){

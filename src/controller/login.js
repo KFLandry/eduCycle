@@ -10,7 +10,7 @@ class Login extends Controller{
     initialisePage(){
         this.User = new UserFactory("USER")
         if(this.User.connected){
-
+            // 
         }else{
             this.btnSubmit =  document.querySelector("#submit")
             this.btnSubmit.addEventListener('click',(event) => {
@@ -39,28 +39,24 @@ class Login extends Controller{
     }
     logout(){}
     updateDisplay(){
-        debugger
         const authorizeControls =  document.querySelectorAll('[name="authorize"]')
         const unauthorizeControls =  document.querySelectorAll('[name="unauthorize"]')
         let profile = document.querySelector("#profile")
         let userName =  document.querySelector("p#labelName") 
         // On recupere les données du model
-        const media  = this.User.medias()
         const data =  this.User.datas()
-        if (media){
-            const image=  document.createElement('img')
-            image.src =  media.location
-            image.alt =  'profile'
-            image.className = "rounded-full border objet-cover size-full"
-            profile.appendChild(image)
+        if (data.media){
+            profile.style.backgroundImage= data.media.location  
         }
         userName.textContent = `${data.firstName}`
         // On active les controls
         for(const control of authorizeControls){
-            control.display = 'block'
+            control.classList.remove('hidden')
+            control.classList.add('flex')
         }
         for(const control of unauthorizeControls){
-            control.display = 'none'
+            control.classList.add('hidden')
+            control.classList.remove('flex')
         }
     }
 }

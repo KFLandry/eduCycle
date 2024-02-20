@@ -5,7 +5,6 @@ import User from "../model/Factory/User.js";
 export class Don extends Controller {
     constructor() {
         super();
-        debugger
         this.uniqueUser = User.getUniqueInstance();
         this.itemManager = new ItemManager();
         this.inputPhotos = document.querySelector('input[name="photos"]');
@@ -22,14 +21,12 @@ export class Don extends Controller {
         this.card = parser.parseFromString(cardString, "text/html");
         this.inputPhotos.addEventListener("change", () => {
             for (const image of this.inputPhotos.files) {
-                debugger
                 const cardImage = this.card.querySelector("li").cloneNode(true);
                 cardImage.id = image.name;
                 const imageNode = cardImage.querySelector('img#photo');
                 //On recupere,lie et affiche l'image dan une liste
                 const reader = new FileReader()
                 reader.onload = (event)=>{
-                    console.log(event.target.result)
                     imageNode.src = event.target.result
                 }
                 reader.readAsDataURL(image)
@@ -39,7 +36,6 @@ export class Don extends Controller {
                     this.inputPhotos.files = this.listPhotos.filter(img => img === image);
                     this.listPhotos.removeChild(image.name);
                 });
-                // 
                 this.listPhotos.appendChild(cardImage);
             }
         });
@@ -57,25 +53,26 @@ export class Don extends Controller {
     }
     uploadImage(idItem) {
         try{
-            const data =  {}
+            debugger
+            const data = new FormData()
+            data.append('idUser',this.uniqueUser.getId())
+            data.append('idItem',idItem)//Pour test idItem ="1"
             for (const file of this.inputPhotos.files){
-                data['idUser'] = this.uniqueUser.getId()
-                data['idItem'] =  idItem
-                data['name'] = file.name
-                data['location'] =  file
+                data.append('file[]',file)
             }
-            this.itemManager.uploadImages(this.uniqueUser.getHeader(), data);
+            console.log(data.get('file[]'))
+            this.itemManager.uploadImages(this.uniqueUser.getHeaders(), data);
         }catch(e){
             throw new TypeError(`L'insertion a echoué : Detail : ${e} `);
         }
     }
     publishedAd() {
         // On récupere ,trie et  securise les datas avant l'insertion sur le serveur
+        debugger
         const formData = new FormData(this.form);
         const secureData = {};
         const category = [];
         const checkBoxValues = document.querySelectorAll('input[type="checkbox"]');
-        // 
         formData.forEach((val, key) => {
             const input = this.form.querySelector(`[name="${key}"]`);
             if (input.getAttribute('type') !== "checkbox" && input.getAttribute('name') !== "findResidence" && input.getAttribute('name') !== 'photos') {
@@ -84,23 +81,22 @@ export class Don extends Controller {
         });
         checkBoxValues.forEach(input => {
             if (input.checked) {
-                if (input.id = "other") {
+                if (input.id === "other") {
                     const inputOther = document.querySelector('input[name="otherSerie"]');
-                    series.push(encodeURIComponent(inputOther.value));
+                    category.push(encodeURIComponent(inputOther.value));
                 }
-                series.push(input.value);
+                category.push(input.value);
             }
         });
         secureData['category'] = category;
-        debugger
-        //Les images sont sauvées
+        //Les images sont sauvées dans une table differente
         try{
-            this.uploadImage();
-            this.itemManager.saveAd(this.uniqueUser.getHeader(), secureData);
+            // this.uploadImage(1)//Pour test idItem =1
+            this.itemManager.uploadImages(this.uniqueUser.getHeaders(), formData);
+            this.itemManager.saveAd(this.uniqueUser.getHeaders(), secureData);
             const result = this.itemManager.getData()
-            this.uploadImage(result.data.id);
-               
             // Redirection Vers la page d'acceuil
+            debugger
             window.location.href = "/";
         }catch(e){
             throw new TypeError(e)
@@ -124,7 +120,6 @@ export class Don extends Controller {
         this.addOtherSerie();
         // this.findResidence()
         this.btnPublished.addEventListener('click',(event) =>{
-            debugger
             event.preventDefault()
             this.publishedAd()
         });

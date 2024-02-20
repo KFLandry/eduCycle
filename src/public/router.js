@@ -41,9 +41,7 @@ const routes = {
  export async function handleLocation() {
     let path = window.location.pathname;
     // On force la redirection vers la page de connexion si pas connecté
-    
     let routePath;
-    debugger
     let uniqueUser = User.getUniqueInstance()
     if (routes[path] || AuthRequiredRoutes[path]){        
         if (!uniqueUser.isAuthenticated() && path in AuthRequiredRoutes){
@@ -99,6 +97,10 @@ document.addEventListener('click', function(event) {
         route(event); // Appeler la fonction de routage lorsqu'un lien est cliqué
     }
 });
+// On gère la fermitur de l'onglet ou du navigateur
+window.addEventListener('beforeunload', ()=>{
+    sessionStorage.clear()
+})
 // Fonction qui cache et affiche le menu
 function hidden(){
     let labelHam =  document.querySelector("#labelHam")
@@ -123,10 +125,18 @@ function hidden(){
         }
     })
 }
-
+const btnLogout = document.querySelector('#logout')
+btnLogout.addEventListener('click',()=>{
+    debugger
+    if(confirm("Etes-vous sûr de vouloir nous quitter??")){
+        const uniqueUser = User.getUniqueInstance()
+        uniqueUser=null
+        sessionStorage.clear()
+        window.location.href ="/"
+    }
+})
 // Gérer le changement d'état de navigation
 window.onpopstate = handleLocation;
-// window.route =  route()
 //Changement de la page principale
 handleLocation();
 hidden()

@@ -73,7 +73,7 @@
                 <label id="labelHam" class="md:hidden size-fit focus:outline-none flex flex-col items-center cursor-pointer">
                     <i class="mx-2 size-10 fa-solid fa-burger"></i>
                     <div id="menu" class="hidden absolute mt-10 top-0 right-0 w-3/4 h-screen  bg-white border">
-                        <ul id="listeMenu"  class="pl-2 flex-col items-center space-x-3 space-y-4">
+                        <ul id="listeMenu"  class="pl-2 flex flex-col items-center justify-around space-y-4">
                             <li class="p-3 rounded-md flex flex-row justify-center items-center space-x-2 hover:bg-gray-50 cursor-pointer">
                                 <i class="fa-solid fa-plus"></i>
                                 <a href="/don" onclick="route()">Je dépose une annonce</a>
@@ -100,11 +100,11 @@
                             </li>
                             <li name="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
                                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                <a href="/account">Account</a>
+                                <a href="/account"  onclick="route()">Account</a>
                             </li>
-                            <li name="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
+                            <li  id="logout" name="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
                                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                <button onclick="" >Deconnexion</button>
+                                <button>Deconnexion</button>
                             </li>
                         </ul>
                     </div>

@@ -1,11 +1,14 @@
 class ItemManager {
     constructor(){
         this.datas =  []
-        this.port = ""
+        this.port = "50234"
     }
     async fetchDatas(){
         try{
             const promise = await fetch(`http://localhost:${this.port}/item`)
+            if (!promise.ok){
+                throw new TypeError("Requête échoué")
+            }
             this.datas = await promise.json()
              for await (const data of this.datas){
                 promise =  await fetch(`http://localhost:${this.port}/media/${data.id}`)
@@ -21,12 +24,18 @@ class ItemManager {
         return this.datas
     }
     async uploadImages(headers,data){
+        debugger
         try{
-            const promsie =   await fetch(`http://localhost:${this.port}/item`,{
+            // Pour ce cas les content C'est un image/*
+            const promsie =   await fetch(`http://localhost:${this.port}/media`,{
                 method : 'POST',
-                header : headers,
-                body :  JSON.stringify(data)
+                headers : headers,
+                body : data
             })
+            debugger
+            if (!promsie.ok){
+                throw new TypeError("Requête échoué")
+            }
             this.datas = await promsie.json()
         }catch(e){
             throw new TypeError(e)
@@ -34,16 +43,22 @@ class ItemManager {
     }
     
     async saveAd(headers,data){
-        await fetch(`http://localhost:${this.port}/item`,{
-            method : 'POST',
-            header : headers,
-            body :  JSON.stringify(data)
-        }).then(response => {
-            this.datas =  response.json()
-        }).catch(e =>{
+        try{
+            const promise = await fetch(`http://localhost:${this.port}/media`,{
+                method : 'POST',
+                headers : headers,
+                body :  data
+                // body :  JSON.stringify(data)
+            })
+            debugger
+            if (!promise.ok){
+                throw new TypeError("Requête échoué")
+            }
+            this.datas = await promise.json()
+        }
+        catch(e){
             throw new TypeError(e)
         }
-        )   
     }
 }
 export default ItemManager
