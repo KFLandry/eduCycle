@@ -1,4 +1,5 @@
 import User from "../model/Factory/User.js";
+import ItemManager from "../model/Manager/ItemManager.js";
 import Controller from "./Controller.js";
 
 class Account extends Controller{
@@ -6,60 +7,68 @@ class Account extends Controller{
     constructor(){
         super()
         this.uniqueInstance = User.getUniqueInstance()
-        this.userData  = {}
-        // On recupere les paramètres dans l'url de la page
-        const idUser  =  window.location.search
-        if(this.uniqueInstance.id === idUser){
-            this.userData =  this.uniqueInstance.getDatas()
-        }else{
-            this.userData  =  this.uniqueInstance.getUser(idUser)
-        }
+        this.itemManager = new ItemManager()
         // Les controlles 
         this.imgProlile = document.querySelector("img#profile")
         this.btnChangeImage =   document.querySelector("i#changeImage")
         this.labelName = document.querySelector('p#labelName')
-        this.lablePhone =  docucment.querySelector("p#labelPhone")
-        this.emailStatut = document.querySecletor("p#emailState")
+        this.lablePhone =  document.querySelector("p#labelPhone")
+        this.emailStatut = document.querySelector("p#emailState")
         this.labelEmail = document.querySelector("p#labelEmail")
-        this.memberSince = document.querySelector("span#labesSince")
+        this.memberSince = document.querySelector("span#labelSince")
         this.residence =  document.querySelector('p#labelAdress')
         this.nbAnnonce = document.querySelector("span#nbAnnonces")
         this.nbRecuperation = document.querySelector("span#ndRecuperations")
         this.linkUpdateProfile =  document.querySelector('a#updateProfile')
-        this.btnEmailVerification =  document.querySelector('button#EmailVerification')
+        this.btnEmailVerification =  document.querySelector('button#emailVerification')
         this.btnDelete =  document.querySelector('button#delete')
         this.btnDeconnexion =  document.querySelector('button#deconnexion')
-        this.listAnnonces =  document.querySelector('ul#annonce')
-        this.listRecuperations =  document.querySelector('ul#recuperation')
+        this.listAnnonces =  document.querySelector('ul#annonces')
+        this.listRecuperations =  document.querySelector('ul#recuperations')
         // La carte des annonces et recuperation
-        this.cardAnnonce = new Document()
-        this.cardRecuperation= new Document()
+        this.userData  = {}
+        this.cardAnnonce  = null
+        this.cardRecuperations =  null
+        this.urlParameters =  new URLSearchParams(window.location.search)
+        this.fetchCards()
+        if(this.urlParameters.has('idAccount')){
+            this.enableUserControls('hidden')
+            this.userData  =  this.uniqueInstance.getUser(this.urlParameters.get('idAccount'))
+        }else{
+            // On recupere les information de l'utilisateur logé
+            this.enableUserControls('flex')
+            this.userData =  this.uniqueInstance.datas(this.userData.id)
+        }
+        this.cardAnnonce = this.itemManager.getAll(this.userData.id).filter(item => item.statut !== "Validé")
+        this.cardRecuperations = this.itemManager.getAll(this.userData.id).filter(item => item.statut === "Validé")
     }
-    async setUserConctrol(){
-        const cardRecup =   await fetch("src\template\Component\maRecupation.html").then(response => response.text()).catch(e =>console.log())
-        const cardAn =  await fetch("src\template\Component\monAnnonce.html").then(response => response.text()).catch(e =>console.log())
+    async fetchCards(){
+        debugger
+        const cardRecup =   await fetch("src/template/Component/maRecupation.html").then(response => response.text()).catch(e =>console.log())
+        const cardAn =  await fetch("src/template/Component/monAnnonce.html").then(response => response.text()).catch(e =>console.log())
+        debugger
         const parser = new DOMParser()
         this.cardAnnonce =  parser.parseFromString(cardAn,"text/html")
         this.cardRecuperation =  parser.parseFromString(cardRecup,"text/html")
     }
-    enableUserControls(visibility){
+    enableUserControls(display){
         //On desactive les controls
+        debugger
         const divControls =  this.cardAnnonce.querySelector('#controls')
-        const divRecuperation  =  document.querySelector('#recuperation')
-        this.btnChangeImage.visibility =  visibility
-        this.linkUpdateProfile.visibility =  visibility
-        this.btnEmailVerification.visibility =  visibility
-        this.btnDelete.visibility =  visibility
-        this.btnDeconnexion.visibility =visibility
+        const divRecuperation  =  document.querySelector('#recuperations')
+        this.btnChangeImage.style.display =  display
+        this.linkUpdateProfile.style.display =  display
+        this.btnEmailVerification.style.display =  display
+        this.btnDelete.style.display =  display
+        this.btnDeconnexion.style.display =display
         divControls.innerHTML =  '<i id="iconStar"  class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>'
-        divRecuperation.visibility =visibility
+        divRecuperation.style.display =display
     }
     sendEmailVerification(){
         // 
     }
     deconnexion(){
         if(confirm("Etes-vous sûr de vouloir nous quitter???")){
-            
             this.User = null            
         }
     }
@@ -86,6 +95,7 @@ class Account extends Controller{
         this.linkUpdateProfile.href = `/signup?id=${user.id}`        
     }
     fillList(which,data){
+        debugger
         this.listAnnonces.innerHTML = ""
         this.listRecuperations.innerHTML = ""
         for(const item of data){
@@ -93,7 +103,6 @@ class Account extends Controller{
             let card =  ""
             if(which === "annonce"){
                 card =  this.cardAnnonce.querySelector("li#item").cloneNode(true)
-
                 //  On retire les controlles et ajoute la mise en favoris
             }else{
                 card =  this.cardRecuperation.querySelector("li#item").cloneNode(true)
@@ -155,7 +164,9 @@ class Account extends Controller{
         })
     }
     initialisePage(){
-        
+        this.fillUser()
+        this.fillList('annonce',this.mesAnnonces)
+        this.fillList('recuperation',this.mesRecuperations)
     }
 }
 export default Account;

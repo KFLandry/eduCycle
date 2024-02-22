@@ -57,8 +57,17 @@
                     <label for="description">Description detaillée de la fourniture</label>
                     <textarea class="rounded-md border" name="description" id="description" cols="30" rows="10"></textarea>
                 </div>
-                <!--  -->
-                <div class="rounded-md py-1 flex flex-col">
+                <p>Quand le deposeras-tu à l'acceuil de ta residence</p>
+                <div class="rounded-md border p-2 flex flex-row justify-between">
+                    <label for="available">Date</label>
+                    <input id="available" type="date" name="available"/>
+                    <label for="period"></label>
+                    <select name="period" title="period">
+                        <option value="Matin">Matin</option>
+                        <option value="Soir">Soir</option>
+                    </select>
+                </div>
+                <div id="formFile" class="rounded-md py-1 flex flex-col">
                     <label for="photos" class="rounded-md p-2 w-full flex flex-row justify-center items-center space-x-2 bg-green-600">
                         <i class="fa-solid fa-upload"></i>
                         <p>Selectionner les photos</p>
@@ -76,26 +85,16 @@
                                 <img class="" src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
                             </li>
                         </ul>
+                        <!--  -->
                     </div>
-                </div>
-                <p>Quand le deposeras-tu à l'acceuil de ta residence</p>
-                <div class="rounded-md border p-2 flex flex-row justify-between">
-                    <label for="available">Date</label>
-                    <input id="available" type="date" name="available"/>
-                    <label for="period"></label>
-                    <select name="period" title="period">
-                        <option value="Matin">Matin</option>
-                        <option value="Soir">Soir</option>
-                    </select>
-                </div>
-                <!--  -->
+                </div>  
                 <div class="rounded mt-1 p-4 flex flex-row justify-end items-end border">
                     <button type="submit" name="submit"  class="rounded p-2 flex flex-row space-x-2 border bg-sky-500 bottom-3 sm:left-[80%] md:left-[76%] transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110" >
                         <p>Publier mon annonce</p>  
                         <i class="fa-solid fa-hand-holding-dollar"></i>
                     </button>
                 </div>
-        </form>    
+        </form>              
     </div>    
     </div>
 </section>

@@ -1,17 +1,22 @@
 import Controller from "./Controller.js";
 import ItemManager from "../model/Manager/ItemManager.js";
 import User from "../model/Factory/User.js";
+import { handleLocation } from "../public/router.js";
 
 export class Don extends Controller {
     constructor() {
         super();
+        this.result ={}
         this.uniqueUser = User.getUniqueInstance();
         this.itemManager = new ItemManager();
         this.inputPhotos = document.querySelector('input[name="photos"]');
         this.inputFindResidence = document.querySelector('input[name="findResidence"]');
         this.listPhotos = document.querySelector('ul#listPhotos');
         this.form = document.querySelector(`form`);
+        this.formFile = document.querySelector('form#formFile')
         this.btnPublished = document.querySelector('button[name="submit"]');
+        debugger
+        this.btnPublishedImages = document.querySelector('button#publishedImages')
         this.card = {}
     }
     async addPhoto() {
@@ -32,9 +37,15 @@ export class Don extends Controller {
                 reader.readAsDataURL(image)
                 //On ajoute l'event supprimer 
                 const btnRemoveImage = cardImage.querySelector("#delete");
-                btnRemoveImage.addEventListener('click', () => {
-                    this.inputPhotos.files = this.listPhotos.filter(img => img === image);
-                    this.listPhotos.removeChild(image.name);
+                btnRemoveImage.addEventListener('click', (event) => {
+                    const liToRemove =  event.target.closest('li')
+                    this.listPhotos.removeChild(liToRemove);
+                    const filteredFiles = Array.from(this.inputPhotos.files).filter(img => img.name !== image.name);
+                    // Créer une nouvelle FileList à partir des fichiers filtrés
+                    const newFileList = new DataTransfer();
+                    filteredFiles.forEach(file => newFileList.items.add(file));
+                    // Assigner la nouvelle FileList à inputPhotos.files
+                    this.inputPhotos.files = newFileList.files;
                 });
                 this.listPhotos.appendChild(cardImage);
             }
@@ -51,34 +62,23 @@ export class Don extends Controller {
         });
     });
     }
-    uploadImage(idItem) {
+    uploadImage() {
         try{
             debugger
-            const data = new FormData()
+            const data = new FormData(this.formFile)
+            // L'id utilisateur
             data.append('idUser',this.uniqueUser.getId())
-            data.append('idItem',idItem)//Pour test idItem ="1"
-            for (const file of this.inputPhotos.files){
-                data.append('file[]',file)
-            }
-            console.log(data.get('file[]'))
-            this.itemManager.uploadImages(this.uniqueUser.getHeaders(), data);
+            const headers  =  this.uniqueUser.getHeaders()
+            this.itemManager.uploadImages("", data);
         }catch(e){
-            throw new TypeError(`L'insertion a echoué : Detail : ${e} `);
+            throw new TypeError(`L'insertion a echoué : Détails : ${e} `);
         }
     }
     publishedAd() {
-        // On récupere ,trie et  securise les datas avant l'insertion sur le serveur
-        debugger
+        // On récupere ,trie et  sécurisé les datas avant l'insertion sur le serveur
         const formData = new FormData(this.form);
-        const secureData = {};
         const category = [];
         const checkBoxValues = document.querySelectorAll('input[type="checkbox"]');
-        formData.forEach((val, key) => {
-            const input = this.form.querySelector(`[name="${key}"]`);
-            if (input.getAttribute('type') !== "checkbox" && input.getAttribute('name') !== "findResidence" && input.getAttribute('name') !== 'photos') {
-                secureData[key] = encodeURIComponent(val);
-            }
-        });
         checkBoxValues.forEach(input => {
             if (input.checked) {
                 if (input.id === "other") {
@@ -88,21 +88,22 @@ export class Don extends Controller {
                 category.push(input.value);
             }
         });
-        secureData['category'] = category;
-        //Les images sont sauvées dans une table differente
-        try{
-            // this.uploadImage(1)//Pour test idItem =1
-            this.itemManager.uploadImages(this.uniqueUser.getHeaders(), formData);
-            this.itemManager.saveAd(this.uniqueUser.getHeaders(), secureData);
-            const result = this.itemManager.getData()
-            // Redirection Vers la page d'acceuil
-            debugger
-            window.location.href = "/";
-        }catch(e){
-            throw new TypeError(e)
-            // window.location.href ="/503"
+        formData.append('category',category)
+        for( const file of this.inputPhotos.files){
+            formData.append('files[]', file)
         }
-   
+        try{
+            this.itemManager.saveAd(formData);
+            // Redirection Vers la page d'acceuil
+            if (this.itemManager.getData().statut === 1 ){
+                const href = target.getAttribute('/');
+                handleLocation()
+            }
+        }catch(e){
+            const href = target.getAttribute('503');
+            handleLocation()
+            throw new TypeError(e)
+        }
     }
     addOtherSerie() {
         const checkOther = document.querySelector("input#other");
@@ -118,11 +119,17 @@ export class Don extends Controller {
     initialisePage() {
         this.addPhoto();
         this.addOtherSerie();
-        // this.findResidence()
         this.btnPublished.addEventListener('click',(event) =>{
             event.preventDefault()
             this.publishedAd()
         });
+        this.btnPublishedImages.addEventListener('click', (event)=>{
+            debugger
+            event.preventDefault()
+            this.uploadImage(33)
+            if (this.result.id){
+            }
+        })
     }
 }
 export default Don

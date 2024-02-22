@@ -11,7 +11,6 @@ class User {
       this.token = sessionStorage.getItem('token')
       this.headers ={
         'Authorization' : `Bearer ${this.token}`,
-        'content-type' :  "application/JSON"
       }
     }
     this.data ={}
@@ -19,7 +18,7 @@ class User {
     this.connected = false;
     this.token =""
     this.headers = {}
-    this.port = "50234";
+    this.port = "52569";
     User.exists =  true;
     User.uniqueInstance = this;
   }
@@ -27,7 +26,6 @@ class User {
   async login(data){
       const req  =  await fetch(`http://localhost:${this.port}/login`,{
         method :'POST',
-        headers :  this.headers,
         body : JSON.stringify(data),
       })
       const response =  await req.json()
@@ -41,7 +39,6 @@ class User {
         // 
         this.headers ={
           'Authorization' : `Bearer ${this.token}`,
-          'content-type' :  "application/JSON"
         }
       }
       return response
@@ -58,15 +55,26 @@ class User {
       this.data =  response.data
       this.token =  response.token
       // Session Storage
-      sessionStorage.setItem('UserData', response.data)
+      sessionStorage.setItem('UserData', JSON.stringify(response.data))
       sessionStorage.setItem('token',response.token)
       // 
       this.headers ={
         'Authorization' : `Bearer ${User.token}`,
-        'content-type' :  "application/JSON"
       }
     }
     return response
+  }
+  async getUser(){
+    try{
+      const promsie =   await fetch(`http://localhost:${this.port}/user`,{
+      })
+      if (!promsie.ok){
+          throw new TypeError("Requête échoué")
+      }
+      return await promsie.json()
+    }catch(e){
+        throw new TypeError(e)
+    }
   }
   logout(){
       sessionStorage.clear()

@@ -1,56 +1,44 @@
 class ItemManager {
     constructor(){
         this.datas =  []
-        this.port = "50234"
+        this.port = "52569"
     }
+    // Cette methode recupère toutes les annonces de la base de données
     async fetchDatas(){
         try{
             const promise = await fetch(`http://localhost:${this.port}/item`)
             if (!promise.ok){
                 throw new TypeError("Requête échoué")
             }
-            this.datas = await promise.json()
-             for await (const data of this.datas){
-                promise =  await fetch(`http://localhost:${this.port}/media/${data.id}`)
-                this.datas[medias] =  await promise.json()
-            }
+            return await promise.json()
         }catch(e){
             throw new TypeError(e)
-        }finally{
-            return this.datas
+        }
+    }
+    // getAll Recupere les annonces d'un utilisateur bien precis
+    async getAll(id){
+        try{
+            const promise = await fetch(`http://localhost:${this.port}/items/${id}`,{
+                body :  data
+            })
+            if (!promise.ok){
+                throw new TypeError("Requête échoué")
+            }
+            return await promise.json()
+        }
+        catch(e){
+            throw new TypeError(e)
         }
     }
     getData(){
         return this.datas
     }
-    async uploadImages(headers,data){
-        debugger
+    async saveAd(data){
         try{
-            // Pour ce cas les content C'est un image/*
-            const promsie =   await fetch(`http://localhost:${this.port}/media`,{
+            const promise = await fetch(`http://localhost:${this.port}/item`,{
                 method : 'POST',
-                headers : headers,
-                body : data
-            })
-            debugger
-            if (!promsie.ok){
-                throw new TypeError("Requête échoué")
-            }
-            this.datas = await promsie.json()
-        }catch(e){
-            throw new TypeError(e)
-        }
-    }
-    
-    async saveAd(headers,data){
-        try{
-            const promise = await fetch(`http://localhost:${this.port}/media`,{
-                method : 'POST',
-                headers : headers,
                 body :  data
-                // body :  JSON.stringify(data)
             })
-            debugger
             if (!promise.ok){
                 throw new TypeError("Requête échoué")
             }

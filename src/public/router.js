@@ -7,6 +7,7 @@ import Notification from "../controller/Notification.js"
 import Account from "../controller/Account.js";
 import Favoris from "../controller/Favoris.js";
 import Don from "../controller/Don.js";
+import Item from "../controller/Item.js";
 // On definie la fonction de routage et on creer l'unique instance de l'utilisateur
 new User()
 function route(event) {
@@ -73,6 +74,8 @@ const routes = {
         case "/signup": 
             controller =  new Signup()
             break;
+        case "item" : 
+            controller = new Item()
         case "/file" :
             controller = new File()
             break
@@ -129,10 +132,11 @@ const btnLogout = document.querySelector('#logout')
 btnLogout.addEventListener('click',()=>{
     debugger
     if(confirm("Etes-vous sûr de vouloir nous quitter??")){
-        const uniqueUser = User.getUniqueInstance()
+        let uniqueUser = User.getUniqueInstance()
         uniqueUser=null
         sessionStorage.clear()
-        window.location.href ="/"
+        window.history.pushState({}, "", "/")
+        handleLocation()
     }
 })
 // Gérer le changement d'état de navigation

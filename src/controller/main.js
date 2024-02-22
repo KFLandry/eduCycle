@@ -6,14 +6,8 @@ class Main extends Controller{
         super()
         this.ItemsManager = new ItemManager()
         this.datas =  []
-        // On checks le localStorage$
-
-        // if (localStorage.getItem("Items")){
-        //     this.datas = localStorage.getItem("Items")
-        // }else{
-        //     this.datas = this.ItemsManager.fetchDatas()
-        //     localStorage.setItem("Items",this.datas)
-        // }
+        // On checks le sessionStorage
+        this.loadDatas()
         // Les controlles
         this.btnSearch =  document.querySelector('input[name="search"]')
         this.residenceName = document.querySelector('select[name="Residence"]')
@@ -23,8 +17,16 @@ class Main extends Controller{
         this.listItems =   document.querySelector("ul#listItems");
         this.btnDeleteFilters =  document.querySelector('button#deleteFilters')
     }
+    async loadDatas(){
+        debugger
+        if (sessionStorage.getItem("Items")){
+            this.datas = sessionStorage.getItem("Items")
+        }else{
+            this.datas = await this.ItemsManager.fetchDatas()
+            sessionStorage.setItem("Items",this.datas)
+        }
+    }
     addAtFavoris(idItems){
-
     }
     searchItems(){
         this.btnSearch.addEventListener("input",(event) =>{
@@ -43,15 +45,19 @@ class Main extends Controller{
         this.fillItems(this.datas)
     }
     // La methode qui remplie les items
-    async fillItems(data){
+    async fillItems(datas){
+        debugger
         // ON vide la liste en premier
         this.listItems.innerHTML =""
         // On recupère le composant  card de la page d'acceuil et on le transform en noeud du DOM...
         const cardString = await fetch("src/template/Component/card.html").then(response  => response.text()).catch( e => console.log(e))
+        debugger
         const parser  =  new DOMParser()
         const cardDOM =  parser.parseFromString(cardString,"text/html")
-        for(let i = 0; i<20; i++){
-        // for(const item  of data){
+        
+        for(let i=0;i<= datas.length; i++){
+            const item = datas[i];
+            console.log(item)
             // On recupere les controlles de la cards  et on clone l'original
             const card =  cardDOM.querySelector("li#item").cloneNode(true)
             const image = card.querySelector('img#itemPhoto')
@@ -63,18 +69,19 @@ class Main extends Controller{
             const linkAccount =  card.querySelector('a#account')
             const btnStar =  card.querySelector("i#iconStar")
             // On les remplie...
-            
-            // image.src =  item.media[1] || ""
-            // linkItem.textContent = item.name
-            // worth.textContent =  item.worth
-            // state.textContent = item.state
-            // publishedDate.textContent =  item.publishedDate
-            // residenceName.textContent =  item.address.name
-            // linkAccount.textContent = item.publisher.name
-            // linkAccount.href =  `/account?idAccount=${item.publisher.id}`
-            // linkItem.href =  `/item?idItem=${item.id}`
+            if (item.medias){
+                image.src =  item.medias[1].location || ""
+            }
+            linkItem.textContent = item.name
+            worth.textContent =  item.worth
+            state.textContent = item.state
+            publishedDate.textContent =  item.publishedDate
+            residenceName.textContent =  item.address.name
+            linkAccount.textContent = item.publisher.name
+            linkAccount.href =  `/account?idAccount=${item.publisher.id}`
+            linkItem.href =  `/item?idItem=${item.id}`
             // On remplie les events
-            // btnStar.addEventListener('click',this.addAtFavoris())
+            btnStar.addEventListener('click',this.addAtFavoris())
             // On ajoute la card à la liste d'items
             this.listItems.appendChild(card)
         }
@@ -120,6 +127,7 @@ class Main extends Controller{
         }
     }
     initialisePage(){
+        debugger
         this.fillItems(this.datas)
         this.sort()
         this.filter()
