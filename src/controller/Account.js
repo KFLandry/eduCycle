@@ -11,7 +11,7 @@ class Account extends Controller{
         // Les controlles 
         this.imgProlile = document.querySelector("img#profile")
         this.btnChangeImage =   document.querySelector("i#changeImage")
-        this.labelName = document.querySelector('p#labelName')
+        this.labelNames = document.querySelectorAll('#labelName')
         this.lablePhone =  document.querySelector("p#labelPhone")
         this.emailStatut = document.querySelector("p#emailState")
         this.labelEmail = document.querySelector("p#labelEmail")
@@ -29,26 +29,14 @@ class Account extends Controller{
         this.userData  = {}
         this.cardAnnonce  = null
         this.cardRecuperations =  null
-        this.urlParameters =  new URLSearchParams(window.location.search)
-        this.fetchCards()
-        if(this.urlParameters.has('idAccount')){
-            this.enableUserControls('hidden')
-            this.userData  =  this.uniqueInstance.getUser(this.urlParameters.get('idAccount'))
-        }else{
-            // On recupere les information de l'utilisateur logé
-            this.enableUserControls('flex')
-            this.userData =  this.uniqueInstance.datas(this.userData.id)
-        }
-        this.cardAnnonce = this.itemManager.getAll(this.userData.id).filter(item => item.statut !== "Validé")
-        this.cardRecuperations = this.itemManager.getAll(this.userData.id).filter(item => item.statut === "Validé")
+        // this.mesAnnonces = this.itemManager.getAll(this.userData.id).filter(item => item.statut !== "Validé")
+        // this.mesRecuperations = this.itemManager.getAll(this.userData.id).filter(item => item.statut === "Validé")
     }
     async fetchCards(){
-        debugger
         const cardRecup =   await fetch("src/template/Component/maRecupation.html").then(response => response.text()).catch(e =>console.log())
         const cardAn =  await fetch("src/template/Component/monAnnonce.html").then(response => response.text()).catch(e =>console.log())
-        debugger
         const parser = new DOMParser()
-        this.cardAnnonce =  parser.parseFromString(cardAn,"text/html")
+        this.cardAnnonce = parser.parseFromString(cardAn,"text/html")
         this.cardRecuperation =  parser.parseFromString(cardRecup,"text/html")
     }
     enableUserControls(display){
@@ -56,11 +44,11 @@ class Account extends Controller{
         debugger
         const divControls =  this.cardAnnonce.querySelector('#controls')
         const divRecuperation  =  document.querySelector('#recuperations')
-        this.btnChangeImage.style.display =  display
-        this.linkUpdateProfile.style.display =  display
-        this.btnEmailVerification.style.display =  display
-        this.btnDelete.style.display =  display
-        this.btnDeconnexion.style.display =display
+        this.btnChangeImage.style.display = display;
+        this.linkUpdateProfile.style.display = display;
+        this.btnEmailVerification.style.display = display;
+        this.btnDelete.style.display = display;
+        this.btnDeconnexion.style.display = display;
         divControls.innerHTML =  '<i id="iconStar"  class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>'
         divRecuperation.style.display =display
     }
@@ -73,12 +61,17 @@ class Account extends Controller{
         }
     }
     fillUser(){
-        // Les controlles     
+        // Les controlles   
+        debugger  
         const user =  this.userData
-        this.imgProlile =user.media[1]
-        // this.btnChangeImage = user.
-        this.labelName.textContent = user.firstName + " " + user.lastName
+        if (user.hasOwnProperty('media')){
+            this.imgProlile.src =  user.media.lenght > 0 ? user.media[0] : ""
+        }
+        for (const labelName of this.labelNames ){
+            labelName.textContent = user.firstName + " " + user.lastName
+        } 
         this.lablePhone.textContent = user.phone
+        debugger
         if (user.emailIsVerified){
             this.emailStatut.textContent = "Email verifié"
             this.emailStatut.className =  "bg-green-400"
@@ -86,6 +79,7 @@ class Account extends Controller{
             this.emailStatut.textContent = "Email Non verifié"
             this.emailStatut.className =  "bg-yellow-400"
         }
+        debugger
         this.emailStatut.textContent = user.emailIsVerified ? "Email verifié" : "Email Non verifié"
         this.labelEmail.textContent =user.email
         this.memberSince.textContent =user.dateCreation
@@ -118,7 +112,9 @@ class Account extends Controller{
             const labelStatut = card.querySelector("p#statut")
             const iconStatut = card.querySelector('i#statut')
             // On les remplie...
-            image.src =  item.media[1] || ""
+            if (item.hasOwnProperty('media')){
+                image.src =  item.media.lenght > 0 ? item.media[0] : ""
+            }
             linkItem.textContent = item.name
             worth.textContent =  item.worth
             state.textContent = item.state
@@ -163,7 +159,19 @@ class Account extends Controller{
             this.uniqueInstance.delete('item',id)
         })
     }
-    initialisePage(){
+   async initialisePage(){
+        this.urlParameters =  new URLSearchParams(window.location.search)
+        await this.fetchCards()
+        if(this.urlParameters.has('idAccount')){
+            this.enableUserControls('hidden')
+            console.log(this.urlParameters.get('idAccount'))
+            this.userData  = await this.uniqueInstance.getUser(this.urlParameters.get('idAccount'))
+        }else{
+            // On recupere les information de l'utilisateur logé
+            this.enableUserControls('flex')
+            this.userData = await  this.uniqueInstance.datas(this.userData.id)
+        }
+        debugger
         this.fillUser()
         this.fillList('annonce',this.mesAnnonces)
         this.fillList('recuperation',this.mesRecuperations)

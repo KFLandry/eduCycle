@@ -18,7 +18,7 @@ class User {
     this.connected = false;
     this.token =""
     this.headers = {}
-    this.port = "52569";
+    this.port = "59371";
     User.exists =  true;
     User.uniqueInstance = this;
   }
@@ -64,17 +64,17 @@ class User {
     }
     return response
   }
-  async getUser(){
+  async getUser(id){
     try{
-      const promsie =   await fetch(`http://localhost:${this.port}/user`,{
+      const promsie =   await fetch(`http://localhost:${this.port}/user/${id}`,{
       })
       if (!promsie.ok){
           throw new TypeError("Requête échoué")
       }
-      return await promsie.json()
+      this.result = await promsie.json()
     }catch(e){
         throw new TypeError(e)
-    }
+    }finally{return this.result} 
   }
   logout(){
       sessionStorage.clear()

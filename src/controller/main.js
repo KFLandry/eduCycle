@@ -5,26 +5,25 @@ class Main extends Controller{
     constructor(){
         super()
         this.ItemsManager = new ItemManager()
-        this.datas =  []
-        // On checks le sessionStorage
-        this.loadDatas()
+        this.datas = {}
+        this.filtedDatas ={}
         // Les controlles
         this.btnSearch =  document.querySelector('input[name="search"]')
-        this.residenceName = document.querySelector('select[name="Residence"]')
-        this.serie = document.querySelector('select[name="serie"]')
-        this.worth = document.querySelector( 'select[name="worth"]')
         this.inputSort = document.querySelector('select[name="sort"]')
+        this.filtertSerie = document.querySelector('select[name="serie"]')
+        this.filterWorth = document.querySelector('select[name="worth"]')
+        this.filterResidence = document.querySelector('select[name="residence"]')
         this.listItems =   document.querySelector("ul#listItems");
         this.btnDeleteFilters =  document.querySelector('button#deleteFilters')
     }
     async loadDatas(){
-        debugger
         if (sessionStorage.getItem("Items")){
             this.datas = sessionStorage.getItem("Items")
         }else{
-            this.datas = await this.ItemsManager.fetchDatas()
-            sessionStorage.setItem("Items",this.datas)
+         this.datas = await this.ItemsManager.fetchDatas()
+         sessionStorage.setItem("Items",this.datas)
         }
+        this.filtedDatas  =  this.datas.slice() 
     }
     addAtFavoris(idItems){
     }
@@ -37,27 +36,24 @@ class Main extends Controller{
     }
     deleteFilters(){
         this.btnDeleteFilters.addEventListener("click", () => {
-            this.residenceName.selectedIndex =  0
-            this.serie.selectedIndex =  0
-            this.worth.selectedIndex =  0
+            debugger
+            this.filterResidence.selectedIndex =  0
+            this.filtertSerie.selectedIndex =  0
+            this.filterWorth.selectedIndex =  0
             this.inputSort.selectedIndex =  0
+            this.fillItems(this.datas)
         })
-        this.fillItems(this.datas)
     }
     // La methode qui remplie les items
     async fillItems(datas){
-        debugger
         // ON vide la liste en premier
         this.listItems.innerHTML =""
         // On recupère le composant  card de la page d'acceuil et on le transform en noeud du DOM...
         const cardString = await fetch("src/template/Component/card.html").then(response  => response.text()).catch( e => console.log(e))
-        debugger
         const parser  =  new DOMParser()
         const cardDOM =  parser.parseFromString(cardString,"text/html")
-        
         for(let i=0;i<= datas.length; i++){
             const item = datas[i];
-            console.log(item)
             // On recupere les controlles de la cards  et on clone l'original
             const card =  cardDOM.querySelector("li#item").cloneNode(true)
             const image = card.querySelector('img#itemPhoto')
@@ -69,14 +65,14 @@ class Main extends Controller{
             const linkAccount =  card.querySelector('a#account')
             const btnStar =  card.querySelector("i#iconStar")
             // On les remplie...
-            if (item.medias){
-                image.src =  item.medias[1].location || ""
+            if (item.hasOwnProperty('medias')){
+                image.src = item.medias.length>0 ? item.medias[0].location : ""
             }
             linkItem.textContent = item.name
             worth.textContent =  item.worth
             state.textContent = item.state
             publishedDate.textContent =  item.publishedDate
-            residenceName.textContent =  item.address.name
+            residenceName.textContent =  item.residence
             linkAccount.textContent = item.publisher.name
             linkAccount.href =  `/account?idAccount=${item.publisher.id}`
             linkItem.href =  `/item?idItem=${item.id}`
@@ -90,20 +86,17 @@ class Main extends Controller{
         this.inputSort.addEventListener("input",() =>{
             const sortedDatas =  this.datas.slice()
             // On range
+            debugger
             sortedDatas.sort( (a,b) => {
                 switch (this.inputSort.value){
                     case "de A à Z" :
-                        a.name.localeCompare(b.name)
-                        break;
+                        return a.name.localeCompare(b.name)
                     case "de Z à A" :  
-                        b.name.localeCompare(a.name)
-                        break;
+                        return b.name.localeCompare(a.name)
                     case "Croissant" :
-                        a.worth - b.worth
-                        break;
+                        return a.worth - b.worth
                     case "Deccroissant" :
-                        b.worth - a.worth  
-                        break;
+                        return b.worth - a.worth  
                 }
             })
             // On met a jour l'affichage avec le tableau rangé
@@ -112,22 +105,38 @@ class Main extends Controller{
     }
     filter(){
         const listFilters =  document.querySelectorAll("div#filter select")
-        
         for( const filter of listFilters){
             // Le select #sort est géré differement
             if (filter !== this.inputSort){
-                filter.addEventListener("change",()=>{
-                    const filtedDatas  =  this.datas.slice() 
-                    filtedDatas.filter(item => {
-                        return item.address.Name === this.residenceName && item.worth >= this.worth && item.serie === this.serie;
-                    });
-                    this.fillItems(filtedDatas)
+                filter.addEventListener("input",()=>{
+                    debugger
+                    switch (filter){
+                        case this.filtertSerie : 
+                            this.filtedDatas =  this.filtedDatas.filter(item => {
+                                category = item.category.split(",")
+                                return category.include(filter.value)
+                            });
+                            break
+                        case this.filterWorth : 
+                            this.filtedDatas =  this.filtedDatas.filter(item => {
+                                return item.worth >= filter.value
+                                 });
+                            break
+                        case this.filterResidence :  
+                            this.filtedDatas =  this.filtedDatas.filter(item => {
+                                return item.residence === filter.value
+                            });
+                            break
+                    }
+                    this.fillItems(this.filtedDatas)
                 })
             }
         }
     }
-    initialisePage(){
+    async initialisePage(){
         debugger
+        // On checks le sessionStorage
+        await this.loadDatas()
         this.fillItems(this.datas)
         this.sort()
         this.filter()

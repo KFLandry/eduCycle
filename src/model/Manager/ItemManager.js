@@ -1,7 +1,7 @@
 class ItemManager {
     constructor(){
         this.datas =  []
-        this.port = "52569"
+        this.port = "59371"
     }
     // Cette methode recupère toutes les annonces de la base de données
     async fetchDatas(){
@@ -10,9 +10,11 @@ class ItemManager {
             if (!promise.ok){
                 throw new TypeError("Requête échoué")
             }
-            return await promise.json()
+            this.datas = await promise.json()
         }catch(e){
             throw new TypeError(e)
+        }finally{
+            return this.datas
         }
     }
     // getAll Recupere les annonces d'un utilisateur bien precis
