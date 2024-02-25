@@ -1,8 +1,13 @@
-<section class="size-full h-screen flex flex-col">
+<section class="size-full h-fit flex flex-col">
     <div class="rounded-md shadow-md h-fit m-3 p-3 border flex flex-row space-x-4">
         <div  class="relative" >
             <img  class="rounded-full object-cover h-36 w-44 " id="profile" src="src/public/ressource/image/pexels-rodolfo-clix-1615776.jpg" alt="">
-            <i id="changeImage"  class="absolute bottom-0 right-0 fa-solid fa-circle-plus hover:scale-110"></i>
+            <form name="profile" id="authorize" enctype="multipart/form-data">
+                <label for="profile" class="absolute bottom-0 right-0  hover:scale-125">
+                    <p><i class=" fa-solid fa-circle-plus"></i></p>
+                    <input type="file" name="profile" accept="image/*" class="hidden"/>
+                </label>
+            </form>
         </div>
         <div class="rounded w-full flex-col px-2 border h-fit">
             <div class="w-full border-b-2 "><p class="font-semibold text-center" id="labelName">Arthur Gael</p>
@@ -10,7 +15,7 @@
             <div class="px-4 flex flex-col items-start">
                 <div class="flex space-x-2 items-center">
                     <i class="fa-regular fa-envelope"></i>
-                    <p id="labelEmail">a@a.a </p><p id="emailState" class="rounded bg-yellow-400">Non verifiée</p></div>
+                    <p id="labelEmail">a@a.a </p><p id="emailState" class="rounded-md bg-yellow-400">Non verifiée</p></div>
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-mobile-screen-button"></i>
                     <p id="labelPhone">+33 623432343</p></div>
@@ -26,68 +31,25 @@
             </div>
         </div>
     </div>
-    <div class="grid grid-cols-4 grid-row-2 gap-1 border p-1">
-        <a href="/don" class="p-1 rounded-md hover:bg-slate-300 border-b-2 col-span-4 text-center ">Je fais un don</a>
-        <a id="updateProfile" href=""  class="p-2 text-center size-full rounded-md hover:bg-slate-300">Modifier mon profile</a>
-        <button id="emailVerification"  class="p-2 size-full rounded-md hover:bg-slate-300">Verifier mon address mail</button>
-        <button id="delete"  class="p-2 size-full rounded-md hover:bg-slate-300">Supprimer mon compte</button>
-        <button id="deconnexion"  class="p-2 size-full rounded-md hover:bg-slate-300">Deconnexion</button>
+    <div  class="flex flex-col border p-1">
+        <a href="/don" class="p-1 rounded-md hover:bg-slate-300 border-b-2 text-center">Je fais un don</a>
+        <div id="authorize" class="flex-row flex-1">
+            <a id="updateProfile" href=""  class="p-2 text-center size-full rounded-md hover:bg-slate-300">Modifier mon profile</a>
+            <button id="emailVerification"  class="p-2 size-full rounded-md hover:bg-slate-300">Verifier mon address mail</button>
+            <button id="delete"  class="p-2 size-full rounded-md hover:bg-slate-300">Supprimer mon compte</button>
+            <button id="deconnexion"  class="p-2 size-full rounded-md hover:bg-slate-300">Deconnexion</button>
+        </div>
     </div>
     <div class="flex-1 flex flex-col">
         <h3 class="font-semibold">Mes annonces</h3>
         <div class="overflow-y-scroll flex-1 flex flex-col space-y-2 ">
             <ul id="annonces" role="list" class="py-1 space-y-1">
-                <li  class="p-2 group/item shadow-md rounded-md hover:bg-slate-100 flex flex-row justify-between space-x-5">
-                   <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
-                   <div class="font-semibold flex-1 "> 
-                       <div class="flex flex-row items-center justify-between">
-                           <a href="/item" onclick="router()">Ti 83 Premium</a>
-                           <div class="flex flex-row items-center space-x-2">
-                               <p id="statut">En attente de validation</p>
-                               <i id="statut" class="rounded-full fa-regular fa-circle bg-yellow-300"></i>
-                           </div>
-                       </div>
-                       <p>Valeur estimer à 40€</p>
-                       <p class="text-green-600">Fonctionne encore</p>
-                       <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
-                       <div class="flex items-center space-x-1 hover:bg-gray-50">
-                           <div  class="">Residence Jean medecin</div>
-                           <i class="fa-solid fa-location-dot"></i>
-                       </div>
-                   </div>
-                   <!--  -->
-                   <div id="controls" class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-                       <i class="cursor-pointer rounded-md p-2   hover:shadow-md  fa-regular fa-pen-to-square"></i>
-                       <i class="cursor-pointer rounded-md p-2   hover:bg-red-600 fa-regular fa-trash-can"></i>
-                   </div>
-               </li>
            </ul>
         </div>
-        <div id="recuperations">
-            <h3 class="pt-5 w-full  font-semibold">Mes Recupations</h3>
+        <div id="authorize">
+            <h3 class="pt-5 w-full font-semibold">Mes Recupations</h3>
             <div  class="overflow-y-scroll flex-1 flex flex-col border">
                 <ul id="recuperations" role="list" class="py-1 space-y-1">
-                    <li  class="p-2 group/item shadow-md rounded-md hover:bg-slate-100 flex flex-row justify-between space-x-5">
-                       <img class="rounded-md object-cover h-28 w-32" src="src/public/ressource/image/1086048702.avif" alt="itemsds">
-                       <div class="font-semibold flex-1 "> 
-                           <div class="flex flex-row items-center justify-between">
-                               <a href="/item" onclick="router()">Ti 83 Premium</a>
-                               <div class="flex flex-row items-center space-x-2">
-                                   <p id="labelStatut">Validé</p>
-                                   <i id="statut" class="rounded-full fa-regular fa-circle bg-green-600"></i>
-                               </div>
-                           </div>
-                           <p>Valeur estimer à 40€</p>
-                           <p class="text-green-600">Fonctionne encore</p>
-                           <p>Publié le 2 Septembre 2023 par <a class="text-blue-400" href="\account" onclick="route()"> Pierre </a></p>
-                           <div class="flex items-center space-x-1 hover:bg-gray-50">
-                               <div  class="">Residence Jean medecin</div>
-                               <i class="fa-solid fa-location-dot"></i>
-                           </div>
-                       <!-- </div> -->
-                       <div class="p-2 group/edit flex flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-                       </div>
-                   </li>
                </ul>
             </div>
         </div>

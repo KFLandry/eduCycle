@@ -18,7 +18,7 @@ class User {
     this.connected = false;
     this.token =""
     this.headers = {}
-    this.port = "59371";
+    this.port = "64468";
     User.exists =  true;
     User.uniqueInstance = this;
   }
@@ -32,6 +32,7 @@ class User {
       if(response.statut === 1){
         this.connected = true;
         this.data =  response.data
+        if (this.data.medias){this.data.medias.location =`http://localhost:${this.port}/${this.data.medias.location}`;}
         this.token =  response.token
         // Session Storage
         sessionStorage.setItem('UserData', JSON.stringify(response.data))
@@ -53,6 +54,10 @@ class User {
     if(response.statut === 1){
       this.connected = true;
       this.data =  response.data
+      debugger
+      if (this.datas.hasOwnProperty("medias")){
+        this.data.medias.location =`http://localhost:${this.port}/${this.data.medias.location}`
+      }
       this.token =  response.token
       // Session Storage
       sessionStorage.setItem('UserData', JSON.stringify(response.data))
@@ -74,8 +79,30 @@ class User {
       this.result = await promsie.json()
     }catch(e){
         throw new TypeError(e)
-    }finally{return this.result} 
+    }finally{
+      if (this.datas.hasOwnProperty("medias")){
+        this.data.medias.location =`http://localhost:${this.port}/${this.data.medias.location}`
+      }
+      return this.result
+    } 
   }
+ async uploadProfile(formData){
+  debugger
+    try{
+      const promise = await fetch(`http://localhost:${this.port}/media`, {
+        method : 'POST',
+        body :  formData
+      })
+      if (!promise.ok){
+          throw new TypeError("Requête échoué")
+      }
+      this.datas = await promise.json()
+    }catch(e){
+        throw new TypeError(e)
+    }finally{
+        if (this.datas.statut !== 1 ){throw new Error("L'insertion de profile a echoué! Detail :  \n"+ this.datas.message)}
+    }
+}
   logout(){
       sessionStorage.clear()
       uniqueInstance = null
@@ -89,7 +116,6 @@ class User {
 
   }
   udpate(fields){
-
   }
   isAuthenticated(){
     return this.connected

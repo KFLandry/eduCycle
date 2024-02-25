@@ -18,12 +18,13 @@ class Main extends Controller{
     }
     async loadDatas(){
         if (sessionStorage.getItem("Items")){
-            this.datas = sessionStorage.getItem("Items")
+            this.datas = JSON.parse(sessionStorage.getItem("Items"))
         }else{
          this.datas = await this.ItemsManager.fetchDatas()
-         sessionStorage.setItem("Items",this.datas)
+         sessionStorage.setItem("Items",JSON.stringify(this.datas))
         }
-        this.filtedDatas  =  this.datas.slice() 
+        
+        this.filtedDatas = this.datas.slice() 
     }
     addAtFavoris(idItems){
     }
@@ -52,7 +53,7 @@ class Main extends Controller{
         const cardString = await fetch("src/template/Component/card.html").then(response  => response.text()).catch( e => console.log(e))
         const parser  =  new DOMParser()
         const cardDOM =  parser.parseFromString(cardString,"text/html")
-        for(let i=0;i<= datas.length; i++){
+        for(let i=0;i<datas.length; i++){
             const item = datas[i];
             // On recupere les controlles de la cards  et on clone l'original
             const card =  cardDOM.querySelector("li#item").cloneNode(true)
@@ -86,7 +87,6 @@ class Main extends Controller{
         this.inputSort.addEventListener("input",() =>{
             const sortedDatas =  this.datas.slice()
             // On range
-            debugger
             sortedDatas.sort( (a,b) => {
                 switch (this.inputSort.value){
                     case "de A à Z" :
@@ -134,7 +134,6 @@ class Main extends Controller{
         }
     }
     async initialisePage(){
-        debugger
         // On checks le sessionStorage
         await this.loadDatas()
         this.fillItems(this.datas)

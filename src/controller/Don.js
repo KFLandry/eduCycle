@@ -7,6 +7,7 @@ export class Don extends Controller {
     constructor() {
         super();
         this.result ={}
+        debugger
         this.uniqueUser = User.getUniqueInstance();
         this.itemManager = new ItemManager();
         this.inputPhotos = document.querySelector('input[name="photos"]');
@@ -15,8 +16,6 @@ export class Don extends Controller {
         this.form = document.querySelector(`form`);
         this.formFile = document.querySelector('form#formFile')
         this.btnPublished = document.querySelector('button[name="submit"]');
-        debugger
-        this.btnPublishedImages = document.querySelector('button#publishedImages')
         this.card = {}
     }
     async addPhoto() {
@@ -123,13 +122,6 @@ export class Don extends Controller {
             event.preventDefault()
             this.publishedAd()
         });
-        this.btnPublishedImages.addEventListener('click', (event)=>{
-            debugger
-            event.preventDefault()
-            this.uploadImage(33)
-            if (this.result.id){
-            }
-        })
     }
 }
 export default Don

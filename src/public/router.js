@@ -10,7 +10,8 @@ import Don from "../controller/Don.js";
 import Item from "../controller/Item.js";
 // On definie la fonction de routage et on creer l'unique instance de l'utilisateur
 new User()
-function route(event) {
+const route = (event) => {
+    event = event || window.event
     event.preventDefault();
     const target = event.target || event.srcElement;
     const href = target.getAttribute('href'); // Obtenir l'attribut href de l'élément cible
@@ -44,6 +45,7 @@ const routes = {
     // On force la redirection vers la page de connexion si pas connecté
     let routePath;
     let uniqueUser = User.getUniqueInstance()
+    // enableUserControls(uniqueUser.isAuthenticated())
     if (routes[path] || AuthRequiredRoutes[path]){        
         if (!uniqueUser.isAuthenticated() && path in AuthRequiredRoutes){
             // Pour test ON Retire             
@@ -94,53 +96,58 @@ const routes = {
         }
     controller.initialisePage();
 }
+// Fonction qui cache et affiche le menu
+function hidden(){
+    let labelHam =  document.querySelector("#labelHam")
+    labelHam.addEventListener("click", ()=>{
+        let menu =  document.querySelector("#menu")
+        menu.style.display = menu.style.display=== "none" ? "block" : 'none'
+    })
+    labelHam =  document.querySelector("#btnMenu")
+    labelHam.addEventListener("click", ()=>{
+        let menu =  document.querySelector("#sMenu")
+        menu.style.display = menu.style.display=== "none" ? "block" : 'none'
+    })
+}
+// Gérer le changement d'état de navigation
+export function enableUserControls(display){
+    //On des/active les controls
+    // les Controlles qui nécessite un authentification de l'utilisateur
+    let userControllers = document.querySelectorAll("#authorize")
+    for(const control of userControllers){
+        if (display){
+            control.classList.add('flex')
+            control.classList.remove('hidden')
+        }else{
+            control.classList.remove('flex')
+            control.classList.add('hidden')
+        }
+    }
+    // les Controlles qui ne nécessite pas un authentification de l'utilisateur
+    userControllers = document.querySelectorAll("#unauthorise")
+    for(const control of userControllers){
+        if (display){
+            control.classList.add('flex')
+            control.classList.remove('hidden')
+        }else{
+            control.classList.remove('flex')
+            control.classList.add('hidden')
+        }   
+    }
+}
 // Attacher le gestionnaire d'événements aux liens correspondants
 document.addEventListener('click', function(event) {
     if (event.target.matches('a[href]')) {
         route(event); // Appeler la fonction de routage lorsqu'un lien est cliqué
     }
 });
-// On gère la fermitur de l'onglet ou du navigateur
+// On gère la fermeture de l'onglet ou du navigateur
 window.addEventListener('beforeunload', ()=>{
+    localStorage.clear()
     sessionStorage.clear()
 })
-// Fonction qui cache et affiche le menu
-function hidden(){
-    let labelHam =  document.querySelector("#labelHam")
-    labelHam.addEventListener("click", ()=>{
-        let menu =  document.querySelector("#menu")
-        if(menu.style.display=== "none" ){
-            menu.style.display = "block"
-            menu.focus()
-        }else{
-            menu.style.display = "none"
-        }
-    })
-// 
-    labelHam =  document.querySelector("#btnMenu")
-    labelHam.addEventListener("click", ()=>{
-        let menu =  document.querySelector("#sMenu")
-        if(menu.style.display=== "none" ){
-            menu.style.display = "block"
-            menu.focus()
-        }else{
-            menu.style.display = "none"
-        }
-    })
-}
-const btnLogout = document.querySelector('#logout')
-btnLogout.addEventListener('click',()=>{
-    debugger
-    if(confirm("Etes-vous sûr de vouloir nous quitter??")){
-        let uniqueUser = User.getUniqueInstance()
-        uniqueUser=null
-        sessionStorage.clear()
-        window.history.pushState({}, "", "/")
-        handleLocation()
-    }
-})
-// Gérer le changement d'état de navigation
 window.onpopstate = handleLocation;
+window.route =  route
 //Changement de la page principale
 handleLocation();
 hidden()

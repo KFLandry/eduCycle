@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="src/output.css" />
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="/src/input.css">
-        <link href="./output.css" rel="stylesheet">
+        <!-- <link href="./output.css" rel="stylesheet"> -->
     </head>
     <body class="">
         <nav id="main-nav" class="fixed w-full z-40 bg-sky-500">
@@ -39,26 +39,26 @@
                             <i class="fa-regular fa-user"></i>
                         </div>
                         <div>
-                            <p id="labelName">KFlandry</p>
+                            <p id="labelName">Account</p>
                             <div id="sMenu"  class="absolute hidden w-fit right-0 border bg-white">
                                 <div class="p-2 flex flex-col size-fit">
-                                    <a href="/don" onclick="route()" class="w-full flex flex-row items-center justify-between">
+                                    <a href="/don" onclick="route()" class="w-full p-1 flex flex-row items-center justify-between hover:bg-gray-50">
                                         <i class="fa-solid fa-user-plus"></i>
-                                        <p>Faire un don</p>
+                                        <p class="pl-2"> Faire un don </p>
                                     </a>
-                                    <a name="unauthorize" href="/login" onclick="route()" class="w-full flex flex-row items-center justify-between ">
+                                    <a name="unauthorize" href="/login" onclick="route()" class="w-full p-1 flex flex-row items-center justify-between hover:bg-gray-50" >
                                         <i class="fa-solid fa-arrow-right-to-bracket"></i>
                                         <p> Login </p>
                                     </a>
-                                    <a name="unauthorize"href="/signup" onclick="route()" class="w-full flex flex-row items-center justify-between">
+                                    <a name="unauthorize"href="/signup" onclick="route()" class="w-full  p-1 flex flex-row items-center justify-between hover:bg-gray-50">
                                         <i class="fa-solid fa-user-plus"></i>
                                         <p>S'inscrire</p>
                                     </a>
-                                    <a name="authorize" href="/account" onclick="route()" class="w-full flex flex-row items-center justify-between">
-                                        <i class="fa-solid fa-user-plus"></i>
+                                    <a name="authorize" href="/account" onclick="route()" class="hidden w-full flex-row p-1 items-center justify-between hover:bg-gray-50" >
+                                        <div id="profile"><i class="fa-solid fa-user-plus"></i></div>
                                         <p>Account</p>
                                     </a>
-                                    <button name="authorize" type="submit" onclick="route()" class="w-full flex flex-row items-center justify-between">
+                                    <button name="authorize" type="submit" onclick="route()" class="hidden w-full p-1 flex-row items-center justify-between hover:bg-gray-50">
                                         <i class="fa-solid fa-user-plus"></i>
                                         <p>Me déconnecter</p>
                                     </button>
@@ -69,7 +69,7 @@
 
                 </ul>
                 <!-- Le humburger -->
-                
+
                 <label id="labelHam" class="md:hidden size-fit focus:outline-none flex flex-col items-center cursor-pointer">
                     <i class="mx-2 size-10 fa-solid fa-burger"></i>
                     <div id="menu" class="hidden absolute mt-10 top-0 right-0 w-3/4 h-screen  bg-white border">
@@ -78,11 +78,11 @@
                                 <i class="fa-solid fa-plus"></i>
                                 <a href="/don" onclick="route()">Je dépose une annonce</a>
                             </li>
-                            <li class="ml-3 flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
+                            <li class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
                                 <i class="fa-solid fa-hands-holding-circle"></i>
                                 <a href="/file" onclick="route()">File</a>
                             </li>
-                            <li  class="flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
+                            <li  class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
                                 <i class="fa-regular fa-star"></i>
                                 <a href="/favoris" onclick="route()">Favoris</a>
                             </li>
@@ -90,19 +90,19 @@
                                 <i class="fa-regular fa-envelope"></i>
                                 <a href="/notifications" onclick="route()">notifications</a>
                             </li>
-                            <li name="unauthorize"  class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
+                            <li id="unauthorize"  class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
                                 <i class="fa-regular fa-user"></i>                                
                                 <a id="userName"href="/login" onclick="route()">Login</a>
                             </li>
-                            <li name="unauthorise" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
+                            <li id="unauthorise" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
                                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                <a id="signup" href="/signup" onclick="route()">S'inscrire</a>
+                                <a id="signup" href="/signup" onclick="route()">S'inscrire</a>      
                             </li>
-                            <li name="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
+                            <li id="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
                                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
                                 <a href="/account"  onclick="route()">Account</a>
                             </li>
-                            <li  id="logout" name="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
+                            <li name="logout" id="authorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
                                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
                                 <button>Deconnexion</button>
                             </li>
