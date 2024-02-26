@@ -35,8 +35,8 @@ class Signup extends Controller{
 
             let response =  await  this.User.signup(secureData)
             if (response.statut === 1){
-                // Si connexion reussie,On maj l'affichage et on stocke le token dans le localStorage            
-                localStorage.setItem('token',response.token)
+                // Si connexion reussie,On maj l'affichage et on stocke le token dans le sessionStorage            
+                sessionStorage.setItem('token',response.token)
                 this.updateDisplay()
                 window.location.href ="/"
             }else{

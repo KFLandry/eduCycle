@@ -1,5 +1,5 @@
 import Signup from "../controller/Signup.js";
-import Main from "../controller/Main.js";
+import Main from "../controller/main.js";
 import Login from "../controller/Login.js";
 import File from "../controller/File.js";
 import User from "../model/Factory/User.js";
@@ -44,21 +44,20 @@ const routes = {
     let path = window.location.pathname;
     // On force la redirection vers la page de connexion si pas connecté
     let routePath;
-    let uniqueUser = User.getUniqueInstance()
-    // enableUserControls(uniqueUser.isAuthenticated())
-    if (routes[path] || AuthRequiredRoutes[path]){        
-        if (!uniqueUser.isAuthenticated() && path in AuthRequiredRoutes){
-            // Pour test ON Retire             
-            routePath =routes["/login"]
-            path = "/login"
-        }else if (!uniqueUser.isAuthenticated() || path in routes){
-            routePath = routes[path]
-        }else if (uniqueUser.isAuthenticated()) {
-            routePath = routes[path]
-        }
-    }else{
-        routePath = routes["404"]
-    }
+    // let uniqueUser = User.getUniqueInstance()
+    // if (routes[path] || AuthRequiredRoutes[path]){        
+    //     if (!uniqueUser.isAuthenticated() && path in AuthRequiredRoutes){ 
+    //         routePath =routes["/login"]
+    //         path = "/login"
+    //     }else if (!uniqueUser.isAuthenticated() || path in routes){
+    //         routePath = routes[path]
+    //     }else if (uniqueUser.isAuthenticated()) {
+    //         routePath = routes[path]
+    //     }
+    // }else{
+    //     routePath = routes["404"]
+    // }
+    routePath = routes[path]
     // Récupérer le chemin correspondant à l'URL ou la route 404
     const html = await fetch(routePath).then(response => response.text());
     document.getElementById("main-page").innerHTML = html;
@@ -76,8 +75,9 @@ const routes = {
         case "/signup": 
             controller =  new Signup()
             break;
-        case "item" : 
+        case "/item" : 
             controller = new Item()
+            break
         case "/file" :
             controller = new File()
             break
@@ -90,7 +90,7 @@ const routes = {
         case "/account" :
             controller =  new Account()
             break    
-        case "favoris": 
+        case "/favoris": 
             controller =  new Favoris()
             break;
         }
@@ -143,7 +143,6 @@ document.addEventListener('click', function(event) {
 });
 // On gère la fermeture de l'onglet ou du navigateur
 window.addEventListener('beforeunload', ()=>{
-    localStorage.clear()
     sessionStorage.clear()
 })
 window.onpopstate = handleLocation;

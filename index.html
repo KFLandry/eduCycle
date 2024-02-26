@@ -111,7 +111,14 @@
                 </div>
             </label>
         </nav>
-        <section class="md:pt-16 sm:pt-10 flex flex-col items-center bg-white">
+        <section id="main" class="md:pt-16 sm:pt-10 flex flex-col items-center bg-white">
+            <!-- Loading area -->
+            <div id="loading" class="hidden fixed inset-y-1/2 inset-x-1/2 flex-col border" hidden>
+                <svg class="animate-spin h-20 w-5 mr-20" viewBox="0 0 24 24">
+                    <!-- ... -->
+                  </svg>
+                  Processing...
+            </div>
             <div class="size-full xl:size-4/6 flex flex-col items-center min-h-svh"> 
                 <div id="main-page" class="size-full border"></div>
                 <div id="main-footer" class="size-full border bottom-0 italic text-end" >By landry</div>

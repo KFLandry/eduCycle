@@ -27,8 +27,7 @@ class Login extends Controller{
         let data = {"login" : encodeURIComponent(login.value), "password" : encodeURIComponent(password.value)}
         let response =  await  this.User.login(data)    
         // Si connexion réussie on met à jour l'affichage et redirection vers la page principale
-        if (response.statut === 1){
-            // Si connexion reussie,On maj l'affichage et on stocke le token dans le localStorage            
+        if (response.statut === 1){           
             this.updateDisplay()
             // Redirection
             window.history.pushState({}, "", "/"); // Modifier l'URL sans recharger la page

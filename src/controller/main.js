@@ -15,18 +15,24 @@ class Main extends Controller{
         this.filterResidence = document.querySelector('select[name="residence"]')
         this.listItems =   document.querySelector("ul#listItems");
         this.btnDeleteFilters =  document.querySelector('button#deleteFilters')
+        this.card =  ""
     }
-    async loadDatas(){
+    async fetchDatas(){
         if (sessionStorage.getItem("Items")){
             this.datas = JSON.parse(sessionStorage.getItem("Items"))
         }else{
          this.datas = await this.ItemsManager.fetchDatas()
          sessionStorage.setItem("Items",JSON.stringify(this.datas))
         }
-        
         this.filtedDatas = this.datas.slice() 
-    }
-    addAtFavoris(idItems){
+        // Card
+        const cardString = await fetch("src/template/Component/card.html").then(response  => response.text()).catch( e => console.log(e))
+        const parser  =  new DOMParser()
+        this.card =  parser.parseFromString(cardString,"text/html")
+        // On active les controlles
+        const controls =  this.card.querySelector("#main")
+        controls.classList.add("flex")
+        controls.classList.remove("hidden")
     }
     searchItems(){
         this.btnSearch.addEventListener("input",(event) =>{
@@ -49,14 +55,16 @@ class Main extends Controller{
     async fillItems(datas){
         // ON vide la liste en premier
         this.listItems.innerHTML =""
-        // On recupère le composant  card de la page d'acceuil et on le transform en noeud du DOM...
-        const cardString = await fetch("src/template/Component/card.html").then(response  => response.text()).catch( e => console.log(e))
-        const parser  =  new DOMParser()
-        const cardDOM =  parser.parseFromString(cardString,"text/html")
-        for(let i=0;i<datas.length; i++){
-            const item = datas[i];
+        let listFavoris = []
+        if (localStorage.getItem("favoris")){
+            listFavoris  = JSON.parse(localStorage.getItem("favoris"))
+        }
+        for(let i=0;i<20; i++){
+            // for(let i=0;i<datas.length; i++){
+            // const item = datas[i];
+            let item = {name  : "test", publisher : {name :  'Pierre'}};
             // On recupere les controlles de la cards  et on clone l'original
-            const card =  cardDOM.querySelector("li#item").cloneNode(true)
+            const card =  this.card.querySelector("li#item").cloneNode(true)
             const image = card.querySelector('img#itemPhoto')
             const linkItem =  card.querySelector('a#itemName')
             const state =  card.querySelector('p#itemState ')
@@ -64,21 +72,37 @@ class Main extends Controller{
             const publishedDate =  card.querySelector('span#itemPublisherDate')
             const residenceName =  card.querySelector('#itemLocation')
             const linkAccount =  card.querySelector('a#account')
-            const btnStar =  card.querySelector("i#iconStar")
+            const btnStar =  card.querySelector("button#favor")
+            // On verifie si l'annonce a ete mis en favoris
+            let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
+            if (found){btnStar.classList.add("bg-yellow-400")}
             // On les remplie...
-            if (item.hasOwnProperty('medias')){
-                image.src = item.medias.length>0 ? item.medias[0].location : ""
-            }
-            linkItem.textContent = item.name
-            worth.textContent =  item.worth
-            state.textContent = item.state
-            publishedDate.textContent =  item.publishedDate
-            residenceName.textContent =  item.residence
-            linkAccount.textContent = item.publisher.name
-            linkAccount.href =  `/account?idAccount=${item.publisher.id}`
-            linkItem.href =  `/item?idItem=${item.id}`
-            // On remplie les events
-            btnStar.addEventListener('click',this.addAtFavoris())
+            // if (item.hasOwnProperty('medias')){
+            //     image.src = item.medias.length>0 ? item.medias[0].location : ""
+            // }
+            // linkItem.textContent = item.name
+            // worth.textContent =  item.worth
+            // state.textContent = item.state
+            // publishedDate.textContent =  item.publishedDate
+            // residenceName.textContent =  item.residence
+            // linkAccount.textContent = item.publisher.name
+            // linkAccount.href =  `/account?idAccount=${item.publisher.id}`
+            // linkItem.href =  `/item?idItem=${item.id}`
+            // // On remplie les events
+            btnStar.addEventListener('click',() => {
+                let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
+                if (!found){
+                    alert(`L'annonce du/de la ${item.name} de ${item.publisher.name} a été ajouteé dans vos favoris✨✔`)
+                    listFavoris.push(item)
+                    btnStar.classList.add("bg-yellow-400")
+                }else{
+                    if (confirm('Cette annonce existe deja dans vos favoris.Voulez-vous le supprimer??')){
+                        listFavoris.pop(item)
+                        btnStar.classList.remove("bg-yellow-400")
+                    }
+                }
+                localStorage.setItem('favoris',JSON.stringify(listFavoris))
+            })
             // On ajoute la card à la liste d'items
             this.listItems.appendChild(card)
         }
@@ -135,7 +159,7 @@ class Main extends Controller{
     }
     async initialisePage(){
         // On checks le sessionStorage
-        await this.loadDatas()
+        await this.fetchDatas()
         this.fillItems(this.datas)
         this.sort()
         this.filter()

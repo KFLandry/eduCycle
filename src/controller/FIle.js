@@ -4,5 +4,6 @@ class File extends Controller{
     constructor(){
         super()
     }
+    initialisePage(){}
 }
 export default File;

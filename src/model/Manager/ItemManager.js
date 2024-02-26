@@ -14,7 +14,6 @@ class ItemManager {
         }catch(e){
             throw new TypeError(e)
         }finally{
-            debugger
             this.datas.forEach(item => { item.medias.forEach(file => file.location =`http://localhost:${this.port}/${file.location}`)});
             return this.datas
         }

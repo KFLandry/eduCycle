@@ -34,33 +34,12 @@
         </div>
         <img class="w-20 h-20 rounded-full object-cover" src="src\public\ressource\image\pexels-rodolfo-clix-1615776.jpg" alt="publisher">
     </div>
-    <form class="invisible hidden w-fit h-fit rounded-md shadow-md p-2 absolute border bg-white z-50 top-10 left-1/4">
-        <h2 class="border-b-2 text-center font-semibold  " id="itemName"> Calculatrice </h2>
-        
-        <p>Publié par : <span id="ItemPublisher" class="font-semibold">Aaron Djibi</span></p>
-        <p>Date de publication : <span id="publishedDate" class="font-semibold">14 janvier 2023</span></p>
-        <p id="Residence" class="font-semibold">Residence Jean Medecin</p>
-        <p for="">Disponible depuis à l'accueil depuis le : <span id="publishedDate" >15 janvier 2023</span> </p>
-        <div class="flex flex-col py-2">
-            <label for="Message">Manifestes ton souhait</label>
-            <textarea name="" id="Message" class="p-2 text-start rounded-md border w-full"  cols="30"  rows="10">
-                Bonjour,
-
-                Je suis intéressé(e) par ton annonce.
-                Laisse moi te débarrasser.
-
-                Je remercie par avance de ta générosité!✨😉
-            
-            </textarea>
-        </div>
-        <div class="flex flex-row w-full justify-end space-x-4">
-            <button type="submit" class="p-2 rounded-md hover:bg-red-600">Annuler</button>
-            <button type="reset"   class="p-2 rounded-md hover:bg-green-600">Envoyer</button>
-        </div>
-    </form>
-  
-    <a href="/don" class="fixed bottom-10 p-2 rounded-md inset-x-1/4 bg-sky-300 flex flex-row justify-center space-x-2 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 items-center ">
-        <i class="fa-solid fa-circle-plus"></i>
-        <div> Recuperer la fourniture </div>
-    </a>
+    <div>
+        <div id="recoverForm"></div>
+        <button class="fixed bottom-10 p-2 rounded-md inset-x-1/4 bg-sky-300 flex flex-row justify-center space-x-2 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 items-center " id="recover">
+            <i class="fa-solid fa-circle-plus"></i>
+            <div> Recuperer la fourniture </div>
+        </button>
+    </div>
+   
 </section>
