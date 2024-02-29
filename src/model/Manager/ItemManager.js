@@ -1,7 +1,8 @@
 class ItemManager {
     constructor(){
-        this.datas =  []
-        this.port = "64468"
+        this.AllDatas =  []
+        this.fileItems =  []
+        this.port = "55885"
     }
     // Cette methode recupère toutes les annonces de la base de données
     async fetchDatas(){
@@ -18,7 +19,7 @@ class ItemManager {
             return this.datas
         }
     }
-    // getAll Recupere les annonces d'un utilisateur bien precis
+    // getAll Recupere les annonces d'un utilisateur bien prècis
     async getAll(id){
         try{
             const promise = await fetch(`http://localhost:${this.port}/items/${id}`,{
@@ -37,8 +38,13 @@ class ItemManager {
             }else return []
         }
     }
+    getFileItems(iduser){
+        this.fileItems =  this.datas.filter( item  => {item.idUser === iduser && item.statut !== ""})
+        return this.fileItems
+    }
     getData(){
-        return this.datas
+        const data = this.datas.filter( item  => { item === ""})
+        return data;
     }
     async saveAd(data){
         try{

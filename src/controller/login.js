@@ -1,6 +1,6 @@
 
 import UserFactory from "../model/Factory/UserFactory.js"
-import { handleLocation } from "../public/router.js"
+import { CustomRouter } from "../public/router.js"
 import Controller from "./Controller.js"
 
 class Login extends Controller{
@@ -28,34 +28,13 @@ class Login extends Controller{
         let response =  await  this.User.login(data)    
         // Si connexion réussie on met à jour l'affichage et redirection vers la page principale
         if (response.statut === 1){           
-            this.updateDisplay()
+            // Session Storage
+            sessionStorage.setItem('currentUser', JSON.stringify(response.data))
             // Redirection
             window.history.pushState({}, "", "/"); // Modifier l'URL sans recharger la page
-            handleLocation()
+            CustomRouter.handleLocation()
         }else{
            txtErreur.textContent = response.message;
-        }
-    }
-    logout(){}
-    updateDisplay(){
-        const authorizeControls =  document.querySelectorAll('[name="authorize"]')
-        const unauthorizeControls =  document.querySelectorAll('[name="unauthorize"]')
-        let profile = document.querySelector("#profile")
-        let userName =  document.querySelector("p#labelName") 
-        // On recupere les données du model
-        const data =  this.User.datas()
-        if (data.media){
-            profile.style.backgroundImage= data.media.location  
-        }
-        userName.textContent = `${data.firstName}`
-        // On active les controls
-        for(const control of authorizeControls){
-            control.classList.remove('hidden')
-            control.classList.add('flex')
-        }
-        for(const control of unauthorizeControls){
-            control.classList.add('hidden')
-            control.classList.remove('flex')
         }
     }
 }

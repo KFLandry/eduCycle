@@ -8,145 +8,194 @@ import Account from "../controller/Account.js";
 import Favoris from "../controller/Favoris.js";
 import Don from "../controller/Don.js";
 import Item from "../controller/Item.js";
-// On definie la fonction de routage et on creer l'unique instance de l'utilisateur
-new User()
-const route = (event) => {
-    event = event || window.event
-    event.preventDefault();
-    const target = event.target || event.srcElement;
-    const href = target.getAttribute('href'); // Obtenir l'attribut href de l'élément cible
-    if (href) {
-        window.history.pushState({}, "", href); // Modifier l'URL sans recharger la page
-        handleLocation(); // Appeler la fonction pour gérer la nouvelle URL
-    }
-}
-// Définir les routes de l'application
-const AuthRequiredRoutes = {
-    "/file": "/src/template/file.html",
-    "/notification": "/src/template/notification.html",
-    "/don" : "/src/template/don.html",
-}
-const routes = {
-    "/": "/src/template/index.html",
-    "/index.html":"/src/template/index.html",
-    "/login": "/src/template/login.html",
-    "/signup": "/src/template/signup.html",
-    "/item" : "/src/template/item.html",
-    "/favoris": "/src/template/favoris.html",
-    "/account" : "/src/template/account.html", 
-    "/file": "/src/template/file.html",
-    "/notification": "/src/template/notification.html",
-    "/don" : "/src/template/don.html",
-    "404": "/src/template/error.html"
-};
-// Fonction pour gérer la localisation actuelle et initialiser les controlleurs correspondants
- export async function handleLocation() {
-    let path = window.location.pathname;
-    // On force la redirection vers la page de connexion si pas connecté
-    let routePath;
-    // let uniqueUser = User.getUniqueInstance()
-    // if (routes[path] || AuthRequiredRoutes[path]){        
-    //     if (!uniqueUser.isAuthenticated() && path in AuthRequiredRoutes){ 
-    //         routePath =routes["/login"]
-    //         path = "/login"
-    //     }else if (!uniqueUser.isAuthenticated() || path in routes){
-    //         routePath = routes[path]
-    //     }else if (uniqueUser.isAuthenticated()) {
-    //         routePath = routes[path]
-    //     }
-    // }else{
-    //     routePath = routes["404"]
-    // }
-    routePath = routes[path]
-    // Récupérer le chemin correspondant à l'URL ou la route 404
-    const html = await fetch(routePath).then(response => response.text());
-    document.getElementById("main-page").innerHTML = html;
 
-    // Les controllers
-    let controller;
-    switch (path){
-        case "/index.html":
-        case "/" :
-            controller = new Main()
-            break;
-        case "/login" :    
-            controller = new Login()
-            break;
-        case "/signup": 
-            controller =  new Signup()
-            break;
-        case "/item" : 
-            controller = new Item()
-            break
-        case "/file" :
-            controller = new File()
-            break
-        case "/don" :
-            controller = new Don()
-            break
-        case "/notification" :
-            controller =  new Notification()
-            break
-        case "/account" :
-            controller =  new Account()
-            break    
-        case "/favoris": 
-            controller =  new Favoris()
-            break;
-        }
-    controller.initialisePage();
-}
-// Fonction qui cache et affiche le menu
-function hidden(){
-    let labelHam =  document.querySelector("#labelHam")
-    labelHam.addEventListener("click", ()=>{
-        let menu =  document.querySelector("#menu")
-        menu.style.display = menu.style.display=== "none" ? "block" : 'none'
-    })
-    labelHam =  document.querySelector("#btnMenu")
-    labelHam.addEventListener("click", ()=>{
-        let menu =  document.querySelector("#sMenu")
-        menu.style.display = menu.style.display=== "none" ? "block" : 'none'
-    })
-}
-// Gérer le changement d'état de navigation
-export function enableUserControls(display){
-    //On des/active les controls
-    // les Controlles qui nécessite un authentification de l'utilisateur
-    let userControllers = document.querySelectorAll("#authorize")
-    for(const control of userControllers){
-        if (display){
-            control.classList.add('flex')
-            control.classList.remove('hidden')
-        }else{
-            control.classList.remove('flex')
-            control.classList.add('hidden')
+// On définit la fonction de routage et on crée l'unique instance de l'utilisateur
+export class CustomRouter {
+    constructor(){
+        CustomRouter.user =  User.getUniqueInstance();
+        CustomRouter.controller  =  null;
+        // Définir les routes de l'application
+        CustomRouter.AuthRequiredRoutes = {
+            "/file": "/src/template/file.html",
+            "/notification": "/src/template/notification.html",
+            "/don" : "/src/template/don.html",
+        };
+        CustomRouter.routes = {
+            "/": "/src/template/index.html",
+            "/index.html":"/src/template/index.html",
+            "/login": "/src/template/login.html",
+            "/signup": "/src/template/signup.html",
+            "/item" : "/src/template/item.html",
+            "/favoris": "/src/template/favoris.html",
+            "/account" : "/src/template/account.html", 
+            "/file": "/src/template/file.html",
+            "/notification": "/src/template/notification.html",
+            "/don" : "/src/template/don.html",
+            "404": "/src/template/error.html"
+        };
+        this.route = (event) => {
+            event = event || window.event;
+            event.preventDefault();
+            const target = event.target || event.srcElement;
+            const href = target.getAttribute('href'); // Obtenir l'attribut href de l'élément cible
+            if (href) {
+                window.history.pushState({}, "", href); // Modifier l'URL sans recharger la page
+                CustomRouter.handleLocation(); // Appeler la fonction pour gérer la nouvelle URL
+            }
+        };
+        this.onload =  (event)=>{
+            const currentUser =  sessionStorage.getItem("currentUser");
+            if (currentUser){
+                const user  =  User.getUniqueInstance();
+                user.setCurrentUser(JSON.parse(currentUser));
+                user.isConnected(true);
+                CustomRouter.handleLocation();
+            }
+        };
+        this.btnLogout = document.querySelectorAll('button#logout')
+    }
+    handleLink(event){
+        if (event.target.matches('a[href]')) {
+            this.route(event); // Appeler la fonction de routage lorsqu'un lien est cliqué
         }
     }
-    // les Controlles qui ne nécessite pas un authentification de l'utilisateur
-    userControllers = document.querySelectorAll("#unauthorise")
-    for(const control of userControllers){
-        if (display){
-            control.classList.add('flex')
+    // Fonction pour gérer la localisation actuelle et initialiser les controlleurs correspondants
+    static async handleLocation() {
+        let path = window.location.pathname;
+        // On force la redirection vers la page de connexion si pas connecté
+        let routePath;
+        let uniqueUser = User.getUniqueInstance();
+        if (CustomRouter.routes[path] || CustomRouter.AuthRequiredRoutes[path]){        
+            if (!uniqueUser.isAuthenticated() && path in CustomRouter.AuthRequiredRoutes){ 
+                routePath = CustomRouter.routes["/login"];
+                path = "/login";   
+            } else if (!uniqueUser.isAuthenticated()){
+                routePath = CustomRouter.routes[path];
+            }else if (uniqueUser.isAuthenticated()){
+                CustomRouter.updateDisplay()
+                routePath = CustomRouter.routes[path];
+            }
+        } else {
+            routePath = CustomRouter.routes["404"];
+        }
+        // Récupérer le chemin correspondant à l'URL ou la route 404
+        const html = await fetch(routePath).then(response => response.text());
+        document.getElementById("main-page").innerHTML = html;
+        // Les controllers
+        switch (path){
+            case "/index.html":
+            case "/" :
+                CustomRouter.controller = new Main();
+                break;
+            case "/login" :    
+            CustomRouter.controller = new Login();
+                break;
+            case "/signup": 
+            CustomRouter.controller =  new Signup();
+                break;
+            case "/item" : 
+            CustomRouter.controller = new Item();
+                break;
+            case "/file" :
+                CustomRouter.controller = new File();
+                break;
+            case "/don" :
+                CustomRouter.controller = new Don();
+                break;
+            case "/notification" :
+                CustomRouter.controller =  new Notification();
+                break;
+            case "/account" :
+                CustomRouter.controller =  new Account();
+                break;    
+            case "/favoris": 
+            CustomRouter.controller =  new Favoris();
+                break;
+        }
+        CustomRouter.controller.initialisePage();
+    }
+    // Gérer le changement d'état de navigation
+    enableUserControls(display){
+        //On des/active les controls
+        // les Controlles qui nécessitent une authentification de l'utilisateur
+        let userControllers = document.querySelectorAll("#authorize");
+        for(const control of userControllers){
+            if (display){
+                control.classList.add('flex');
+                control.classList.remove('hidden');
+            } else {
+                control.classList.remove('flex');
+                control.classList.add('hidden');
+            }
+        }
+        // les Controlles qui ne nécessitent pas une authentification de l'utilisateur
+        userControllers = document.querySelectorAll("#unauthorise");
+        for(const control of userControllers){
+            if (display){
+                control.classList.add('flex');
+                control.classList.remove('hidden');
+            } else {
+                control.classList.remove('flex');
+                control.classList.add('hidden');
+            }   
+        }
+    }
+    // Fonction de mise a jour de la page
+     static updateDisplay(){
+        const authorizeControls =  document.querySelectorAll('[name="authorize"]')
+        const unauthorizeControls =  document.querySelectorAll('[name="unauthorize"]')
+        let profile = document.querySelector("#profile")
+        let userName =  document.querySelector("p#labelName") 
+        // On recupere les données du model
+        const data =  CustomRouter.user.datas()
+        if (data.media){
+            profile.style.backgroundImage= data.media.location  
+        }
+        userName.textContent = `${data.firstName}`
+        // On active les controls
+        for(const control of authorizeControls){
             control.classList.remove('hidden')
-        }else{
-            control.classList.remove('flex')
+            control.classList.add('flex')
+        }
+        for(const control of unauthorizeControls){
             control.classList.add('hidden')
-        }   
+            control.classList.remove('flex')
+        }
+    }
+    // Fonction qui cache et affiche le menu
+    hidden(){
+        let labelHam =  document.querySelector("#labelHam");
+        labelHam.addEventListener("click", ()=>{
+            let menu =  document.querySelector("#menu");
+            menu.style.display = menu.style.display=== "none" ? "block" : 'none';
+        });
+        labelHam =  document.querySelector("#btnMenu");
+        labelHam.addEventListener("click", ()=>{
+            let menu =  document.querySelector("#sMenu");
+            menu.style.display = menu.style.display=== "none" ? "block" : 'none';
+        });
+    }
+    logout(){
+        for( const btn of this.btnLogout){
+            btn.addEventListener('click', () =>{
+                sessionStorage.clear()
+                window.location.href = "/"
+            })
+        }
+    }
+    run(){
+        // Attacher le gestionnaire d'événements aux liens correspondants
+        document.onclick = (event) => this.handleLink(event)
+        this.logout();
+        this.hidden();
+        window.onload = this.onload()
+        window.onpopstate = CustomRouter.handleLocation()
+        window.route = this.route
+
+        //Changement de la page principale
+        CustomRouter.handleLocation();
     }
 }
-// Attacher le gestionnaire d'événements aux liens correspondants
-document.addEventListener('click', function(event) {
-    if (event.target.matches('a[href]')) {
-        route(event); // Appeler la fonction de routage lorsqu'un lien est cliqué
-    }
-});
-// On gère la fermeture de l'onglet ou du navigateur
-window.addEventListener('beforeunload', ()=>{
-    sessionStorage.clear()
-})
-window.onpopstate = handleLocation;
-window.route =  route
-//Changement de la page principale
-handleLocation();
-hidden()
+// Créer une instance du routeur et démarrer on l'application
+const router = new CustomRouter();
+router.run();

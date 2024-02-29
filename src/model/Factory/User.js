@@ -16,9 +16,8 @@ class User {
     this.data ={}
     this.media = {}
     this.connected = false;
-    this.token =""
     this.headers = {}
-    this.port = "64468";
+    this.port = "55885";
     User.exists =  true;
     User.uniqueInstance = this;
   }
@@ -33,13 +32,8 @@ class User {
         this.connected = true;
         this.data =  response.data
         if (this.data.medias){this.data.medias.location =`http://localhost:${this.port}/${this.data.medias.location}`;}
-        this.token =  response.token
-        // Session Storage
-        sessionStorage.setItem('UserData', JSON.stringify(response.data))
-        sessionStorage.setItem('token',response.token)
-        // 
         this.headers ={
-          'Authorization' : `Bearer ${this.token}`,
+          'Authorization' : `Bearer ${this.data.token}`,
         }
       }
       return response
@@ -58,13 +52,8 @@ class User {
       if (this.datas.hasOwnProperty("medias")){
         this.data.medias.location =`http://localhost:${this.port}/${this.data.medias.location}`
       }
-      this.token =  response.token
-      // Session Storage
-      sessionStorage.setItem('UserData', JSON.stringify(response.data))
-      sessionStorage.setItem('token',response.token)
-      // 
       this.headers ={
-        'Authorization' : `Bearer ${User.token}`,
+        'Authorization' : `Bearer ${this.data.token}`,
       }
     }
     return response
@@ -87,7 +76,6 @@ class User {
     } 
   }
  async uploadProfile(formData){
-  debugger
     try{
       const promise = await fetch(`http://localhost:${this.port}/media`, {
         method : 'POST',
@@ -110,12 +98,8 @@ class User {
   getId(){
     return this.data.id
   }
-  delete(what,fields){
-  }
-  updateItem(what,fields){
-
-  }
-  udpate(fields){
+  isConnected(b){
+    this.connected =  b
   }
   isAuthenticated(){
     return this.connected
@@ -126,17 +110,15 @@ class User {
   getHeaders(){
     return this.headers
   }
-  mesAnnonces(){
-
-  }
-  mesRecuperation(){
-    
-  }
   medias(){
     return this.media;
+  }
+  setCurrentUser(datasCurrentUser){
+    this.data = datasCurrentUser
   }
   datas(){
     return this.data;
   }
 }
+new User
 export default User;

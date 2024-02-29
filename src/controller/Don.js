@@ -1,7 +1,7 @@
 import Controller from "./Controller.js";
 import ItemManager from "../model/Manager/ItemManager.js";
 import User from "../model/Factory/User.js";
-import { handleLocation } from "../public/router.js";
+import { CustomRouter } from "../public/router.js";
 
 export class Don extends Controller {
     constructor() {

@@ -1,6 +1,7 @@
 import User from "../model/Factory/User.js";
 import { LOGIN, PASSWORD } from "../public/ressource/secret.js";
 import Controller from "./Controller.js";
+import { CustomRouter } from "../public/router.js";
 
 class Signup extends Controller{
     constructor(){
@@ -32,28 +33,17 @@ class Signup extends Controller{
             this.formData.forEach((value,key) => { 
                 secureData[key] = encodeURIComponent(value);
             });
-
             let response =  await  this.User.signup(secureData)
             if (response.statut === 1){
-                // Si connexion reussie,On maj l'affichage et on stocke le token dans le sessionStorage            
-                sessionStorage.setItem('token',response.token)
-                this.updateDisplay()
-                window.location.href ="/"
+                // Si connexion reussie,On maj l'affichage et on stocke l'utilisateur dans le sessionStorage
+                sessionStorage.setItem('currentUser', JSON.stringify(response.data))
+                CustomRouter.handleLocation()
             }else{
                let txtErreur =  document.querySelector('#erreur')
                txtErreur.innerHTML = response.message;
             }
         }
     } 
-    updateDisplay(){
-        let profile = document.querySelector("#profile")
-        let userName =  document.querySelector("#userName")  
-        if (this.User.medias().lenght()>0){
-            profile.className = `bg-[url(${this.User.medias()["location"]})]`
-            userName =  `${this.user.data.firstName} ${this.user.data.firstName}` 
-        }  
-    }
-
     saveCredentials(){
         // LOGIN = this.formData.get("email")
         // PASSWORD = this.formData.get("password")
