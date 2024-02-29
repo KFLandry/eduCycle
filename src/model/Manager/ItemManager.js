@@ -1,10 +1,36 @@
+import { PORT } from "../../public/ressource/secret.js"
+
 class ItemManager {
     constructor(){
         this.AllDatas =  []
         this.fileItems =  []
-        this.port = "55885"
+        this.port = PORT
     }
     // Cette methode recupère toutes les annonces de la base de données
+     async fetch (ressource,method,param="",body=null){
+        try{
+            const promise = method==='GET' ? await fetch(`http://localhost:${this.port}/${ressource}/${param}`,{
+                method : `${method}`,
+            }) : await fetch(`http://localhost:${this.port}/${ressource}/${param}`,{
+                method : `${method}`,
+                body :  body
+            })
+            if (!promise.ok){
+                throw new TypeError("Requête échoué")
+            }
+            this.datas = await promise.json()
+        }
+        catch(e){
+            throw new TypeError(e)
+        }
+        finally{
+            this.datas.medias.forEach(file =>{
+                if (!file.location.startsWith("http")){
+                    file.location =`http://localhost:${this.port}/${file.location}`}
+                })
+                return this.datas
+            }
+     }
     async fetchDatas(){
         try{
             const promise = await fetch(`http://localhost:${this.port}/item`)

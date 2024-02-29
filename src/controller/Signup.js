@@ -1,5 +1,4 @@
 import User from "../model/Factory/User.js";
-import { LOGIN, PASSWORD } from "../public/ressource/secret.js";
 import Controller from "./Controller.js";
 import { CustomRouter } from "../public/router.js";
 

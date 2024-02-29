@@ -1,3 +1,5 @@
+import { PORT } from "../../public/ressource/secret.js";
+
 class User {
   // On implemente le singleton pattern
   constructor() {
@@ -17,7 +19,7 @@ class User {
     this.media = {}
     this.connected = false;
     this.headers = {}
-    this.port = "55885";
+    this.port = PORT
     User.exists =  true;
     User.uniqueInstance = this;
   }

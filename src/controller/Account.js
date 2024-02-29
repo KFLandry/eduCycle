@@ -108,7 +108,9 @@ class Account extends Controller{
             this.listRecuperations.innerHTML = ""
         }
         for(const item of data){
-            if (card==="") break
+            if (!card) {
+                break
+            }
             card  = card.cloneNode(true)
             const image = card.querySelector('img#itemPhoto')
             const linkItem =  card.querySelector('a#itemName')

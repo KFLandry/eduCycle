@@ -7,7 +7,6 @@ export class Don extends Controller {
     constructor() {
         super();
         this.result ={}
-        debugger
         this.uniqueUser = User.getUniqueInstance();
         this.itemManager = new ItemManager();
         this.inputPhotos = document.querySelector('input[name="photos"]');
