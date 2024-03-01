@@ -55,14 +55,8 @@ class Main extends Controller{
     async fillItems(datas){
         // ON vide la liste en premier
         this.listItems.innerHTML =""
-        let listFavoris = []
-        if (localStorage.getItem("favoris")){
-            listFavoris  = JSON.parse(localStorage.getItem("favoris"))
-        }
-        for(let i=0;i<20; i++){
-            // for(let i=0;i<datas.length; i++){
-            // const item = datas[i];
-            let item = {name  : "test", publisher : {name :  'Pierre'}};
+        let listFavoris = JSON.parse(localStorage.getItem("favoris")) || []
+        for(const item of datas){
             // On recupere les controlles de la cards  et on clone l'original
             const card =  this.card.querySelector("li#item").cloneNode(true)
             const image = card.querySelector('img#itemPhoto')
@@ -77,17 +71,17 @@ class Main extends Controller{
             let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
             if (found){btnStar.classList.add("bg-yellow-400")}
             // On les remplie...
-            // if (item.hasOwnProperty('medias')){
-            //     image.src = item.medias.length>0 ? item.medias[0].location : ""
-            // }
-            // linkItem.textContent = item.name
-            // worth.textContent =  item.worth
-            // state.textContent = item.state
-            // publishedDate.textContent =  item.publishedDate
-            // residenceName.textContent =  item.residence
-            // linkAccount.textContent = item.publisher.name
-            // linkAccount.href =  `/account?idAccount=${item.publisher.id}`
-            // linkItem.href =  `/item?idItem=${item.id}`
+            if (item.hasOwnProperty('medias')){
+                image.src = item.medias.length>0 ? item.medias[0].location : ""
+            }
+            linkItem.textContent = item.name
+            worth.textContent =  item.worth
+            state.textContent = item.state
+            publishedDate.textContent =  item.publishedDate
+            residenceName.textContent =  item.residence
+            linkAccount.textContent = item.publisher.name
+            linkAccount.href =  `/account?idAccount=${item.publisher.id}`
+            linkItem.href =  `/item?idItem=${item.id}`
             // // On remplie les events
             btnStar.addEventListener('click',() => {
                 let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))

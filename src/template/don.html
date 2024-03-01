@@ -48,9 +48,10 @@
                     <div class="rounded-md border p-2 flex justify-between">
                         <label for="state">Sur une echelle de 1 à 3 Dans quelle etat est votre bien</label>
                         <select name="state" id="" title="state">
-                            <option value="3">3</option>
-                            <option value="2">2</option>
-                            <option value="1">1</option>
+                            <option value="En parfait état">3 -> En parfait état</option>
+                            <option value="Bon état">2 -> Bon état</option>
+                            <option value="Endommangé mais fonctionnelle">1 -> Endommangé mais fonctionnelle</option>
+                            <option value="N'est plus utilisable">0 -> N'est plus utilisable</option>
                         </select>
                     </div>
                 <div class="flex flex-col">
@@ -73,8 +74,8 @@
                         <p>Selectionner les photos</p>
                         <input type="file" name="photos" id="photos" accept="image*/" hidden multiple/>
                     </label>
-                    <div class="rounded-md overflow-x-scroll border h-52 p-2">
-                        <ul id="listPhotos" role="list"  class="size-full flex flex-row space-x-2">
+                    <div class="rounded-md border h-52 p-2">
+                        <ul id="listPhotos" role="list"  class="size-full overflow-x-auto flex space-x-2">
                             <li  class="group/item">
                                 <img class="" src="src\public\ressource\image\calco.jpg" class="rounded border" alt="">
                             </li>

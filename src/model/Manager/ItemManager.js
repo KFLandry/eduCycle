@@ -24,11 +24,14 @@ class ItemManager {
             throw new TypeError(e)
         }
         finally{
-            this.datas.medias.forEach(file =>{
-                if (!file.location.startsWith("http")){
-                    file.location =`http://localhost:${this.port}/${file.location}`}
+            if (this.datas.hasOwnProperty("publisher")){ this.datas.publisher.medias.location = `http://localhost:${this.port}/${this.datas.publisher.medias.location}`}
+            if (this.datas.hasOwnProperty("medias")){
+                this.datas.medias.forEach(file =>{
+                    if (!file.location.startsWith("http")){
+                        file.location =`http://localhost:${this.port}/${file.location}`}
                 })
-                return this.datas
+            }  
+            return this.datas
             }
      }
     async fetchDatas(){
@@ -64,13 +67,13 @@ class ItemManager {
             }else return []
         }
     }
-    getFileItems(iduser){
-        this.fileItems =  this.datas.filter( item  => {item.idUser === iduser && item.statut !== ""})
+    async getFileDatas(iduser){
+        await this.fetchDatas()
+        this.fileItems =  this.datas.filter( row  => {return row.idUser === iduser && row.statut !== "normal"})
         return this.fileItems
     }
     getData(){
-        const data = this.datas.filter( item  => { item === ""})
-        return data;
+        return this.datas;
     }
     async saveAd(data){
         try{

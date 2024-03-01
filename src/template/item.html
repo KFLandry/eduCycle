@@ -1,32 +1,29 @@
 <section class="relative size-full h-screen">
     <div id="item"  class="p-2 w-full basis-1/4 border font-semibold text-center">Vous etes sur dans la page Item</div>
     <!--  -->
-    <div class="h-2/5 py-2 border">
-        <ul id="itemImages" class="p-1 overflow-x-scroll size-full flex flex-row space-x-1">
-            <li class="rounded-md border h-full w-2/3 border-red-700"><img class="object-top size-full" src="src\public\ressource\image\calco.jpg" alt=""></li>
-            <li class="rounded border"><img class="object-cover size-full" src="src\public\ressource\image\R.png" alt=""></li>
-            <li class="rounded border"><img class="object-cover size-full" src="src\public\ressource\image\R.png" alt=""></li>
+    <div class="h-3/5 py-2 border">
+        <ul id="itemImages" class="overflow-x-auto flex space-x-1 size-full">
         </ul>
     </div>
     <div class="p-3 h-fit flex flex-col  items-stretch border"> 
         <div  id="" class="w-full py-1 font-semibold border-b-2 flex flex-row items-center justify-between">
-            <p id="itemName">Calculatrice ti 83 Premium<p>
-            <i class="rounded-md fa-regular fa-star p-2  hover:bg-yellow-400"></i>
+            <p id="itemName" class="font-semibold">Calculatrice ti 83 Premium<p>
+            <button title="favoris" id="favoris" class="rounded-md hover:bg-yellow-400">
+                <i class="fa-regular fa-star p-2"></i>
+            </button> 
         </div>
-        <div   class="">Categorie  :  <span id="itemCategories"> Scientifique </span></div>
+        <div   class="">Categories  :  <span id="itemCategories"> Scientifique </span></div>
         <div   class="">Etat : <span id="itemState">Etat correct</span></div>
         <div class="">Valeur estimée :  <span id="itemWorth">80€</span> </div>
         <div class="">Date publication  :  <span id="itemPublishedDate">20 Janvier 2023</span> </div> 
         <div class="">Disponible à la l'acceuil de la residence <span id="itemResidence" class="font-semibold">Jean Medecin</span> depuis <span id="itemSince" class="font-semibold">20 Janvier 2023</span> </div> 
-        <label  >Description</label>
+        <br>
+        <p class="font-semibold">Description</p>
         <p class="text-justify" id="description">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quo veniam, minima minus nostrum est possimus ratione molestias debitis magni facilis! Dolore laudantium et adipisci magni blanditiis ad commodi mollitia aperiam.</p>
     </div>
-    <div class="h-28 p-2 flex flex-row justify-between">
+    <div class="h-28 p-2 flex flex-row justify-between items-center">
         <div class="flex flex-col justify-start">
             <a href="\account" class="font-semibold" id="publisher">Jean Luc Parpin</a>
-            <a id="publisherResidence" href="#" class="flex flex-row items-center space-x-1" >
-                Residence Jean Medecin
-                <i class="fa-solid fa-map-pin"></i>
             </a>
             <p>Membre depuis <span class="font-semibold" id="publisherSince"> 2 Septembre 2023</span></p>
         </div>
@@ -36,7 +33,7 @@
         <div id="recoverForm"></div>
         <button class="fixed bottom-10 p-2 rounded-md inset-x-1/4 bg-sky-300 flex flex-row justify-center space-x-2 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 items-center " id="toggle">
             <i class="fa-solid fa-circle-plus"></i>
-            <div> Recuperer la fourniture </div>
+            <div id="recoverLabel"> Afficher le bloc de récupération </div>
         </button>
     </div>
    
