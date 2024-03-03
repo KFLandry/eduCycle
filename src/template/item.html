@@ -1,11 +1,11 @@
-<section class="relative size-full h-screen">
+<section class="size-full h-screen">
     <div id="item"  class="p-2 w-full basis-1/4 border font-semibold text-center">Vous etes sur dans la page Item</div>
     <!--  -->
     <div class="h-3/5 py-2 border">
         <ul id="itemImages" class="overflow-x-auto flex space-x-1 size-full">
         </ul>
     </div>
-    <div class="p-3 h-fit flex flex-col  items-stretch border"> 
+    <div class="p-3 h-fit flex flex-col border border-b-2"> 
         <div  id="" class="w-full py-1 font-semibold border-b-2 flex flex-row items-center justify-between">
             <p id="itemName" class="font-semibold">Calculatrice ti 83 Premium<p>
             <button title="favoris" id="favoris" class="rounded-md hover:bg-yellow-400">
@@ -29,12 +29,10 @@
         </div>
         <img id="publisherProfil" class="w-20 h-20 rounded-full object-cover" src="src\public\ressource\image\pexels-rodolfo-clix-1615776.jpg" alt="publisher">
     </div>
-    <div>
-        <div id="recoverForm"></div>
-        <button class="fixed bottom-10 p-2 rounded-md inset-x-1/4 bg-sky-300 flex flex-row justify-center space-x-2 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 items-center " id="toggle">
-            <i class="fa-solid fa-circle-plus"></i>
-            <div id="recoverLabel"> Afficher le bloc de récupération </div>
-        </button>
-    </div>
-   
+    <!--  -->
+    <div id="recoverForm"></div>
+    <button class="w-3/5 fixed bottom-10 p-2 rounded-md inset-x-1/4 bg-sky-500 flex flex-row justify-center space-x-2 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 items-center " id="toggle">
+        <i class="fa-solid fa-circle-plus"></i>
+        <div id="recoverLabel"> Afficher le bloc de récupération </div>
+    </button>
 </section>

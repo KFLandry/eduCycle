@@ -7,11 +7,9 @@ class ItemManager {
         this.port = PORT
     }
     // Cette methode recupère toutes les annonces de la base de données
-     async fetch (ressource,method,param="",body=null){
+     async fetch (ressource, method, param="", body=null){
         try{
-            const promise = method==='GET' ? await fetch(`http://localhost:${this.port}/${ressource}/${param}`,{
-                method : `${method}`,
-            }) : await fetch(`http://localhost:${this.port}/${ressource}/${param}`,{
+            const promise = method ==='GET' ? await fetch(`http://localhost:${this.port}/${ressource}/${param}`) : await fetch(`http://localhost:${this.port}/${ressource}/${param }`,{
                 method : `${method}`,
                 body :  body
             })
@@ -25,14 +23,27 @@ class ItemManager {
         }
         finally{
             if (this.datas.hasOwnProperty("publisher")){ this.datas.publisher.medias.location = `http://localhost:${this.port}/${this.datas.publisher.medias.location}`}
-            if (this.datas.hasOwnProperty("medias")){
+            if (this.datas instanceof Array){
+                this.datas.forEach( row => {
+                    if (row.hasOwnProperty("sender")){ 
+                        row.sender.medias.location = `http://localhost:${this.port}/${row.sender.medias.location}`
+                    }
+                    if(row.hasOwnProperty("medias")){
+                        row.medias.forEach(file =>{
+                            if (!file.location.startsWith("http")){
+                                file.location =`http://localhost:${this.port}/${file.location}`}
+                        })
+                    }  
+                })
+            }
+            if(this.datas.hasOwnProperty("medias")){
                 this.datas.medias.forEach(file =>{
                     if (!file.location.startsWith("http")){
                         file.location =`http://localhost:${this.port}/${file.location}`}
                 })
             }  
             return this.datas
-            }
+        }
      }
     async fetchDatas(){
         try{
@@ -67,8 +78,13 @@ class ItemManager {
             }else return []
         }
     }
+    async getMainDatas(){
+        await this.fetch('item','GET')
+        this.mainDatas =  this.datas.filter( row  => { return row.statut === "normal"})
+        return this.mainDatas
+    }
     async getFileDatas(iduser){
-        await this.fetchDatas()
+        await this.getAll(iduser)
         this.fileItems =  this.datas.filter( row  => {return row.idUser === iduser && row.statut !== "normal"})
         return this.fileItems
     }
@@ -79,8 +95,8 @@ class ItemManager {
         try{
             const promise = await fetch(`http://localhost:${this.port}/item`,{
                 method : 'POST',
-                body :  data
             })
+                body :  data
             if (!promise.ok){
                 throw new TypeError("Requête échoué")
             }

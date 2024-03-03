@@ -18,20 +18,20 @@
   </div>
   <!--  -->
   <div id="main" class="hidden flex-col justify-between">
-      <button title="favor" id="favor" class="rounded-md hover:bg-yellow-400">
+      <button title="Ajouter au favoris" id="favor_main" class="rounded-md hover:bg-yellow-400">
           <i  class="fa-regular fa-star p-2"></i>
       </button>
   </div>
   <div class="hidden flex-col justify-between" id="favoris">
-      <a id="recover" title="recover">
+      <a title="recupérer la fourniture" id="recover">
           <i class="cursor-pointer rounded-md p-2  hover:bg-slate-400 fa-solid fa-right-to-bracket"></i>
       </a>
-      <button id="delete" title="delete">
+      <button id="delete_favor" title="delete">
           <i class="cursor-pointer rounded-md p-2  hover:bg-red-600 fa-regular fa-trash-can"></i>
       </button>
   </div>
-  <div id="authorize" class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-      <a id="edit" onclick="route()">
+  <div name="authorize" class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+      <a id="edit" title="Editer l'annonce" onclick="route()">
           <i  class="rounded-md p-2  hover:shadow-md  fa-regular fa-pen-to-square"></i>
       </a>
       <button title="delete" id="delete">
@@ -39,9 +39,14 @@
       </button>
       
   </div>
-  <div id="unauthorize" class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
-      <button title="favor" id="favor" class="rounded-md  hover:bg-yellow-400">
+  <div name="unauthorize" class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+      <button title="Ajouter au favoris" id="favor" class="rounded-md  hover:bg-yellow-400">
           <i  class="fa-regular fa-star p-2"></i>
       </button>
   </div>
+   <div class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" id='file' >
+      <button title="Valider la récupération" id="accept" class="rounded-md p-2  hover:bg-green-600"><i class=" fa-solid fa-check-double"></i></button>
+      <button title="Annuler mais enregistrer dans mes favoris" id="deny" class="rounded-md p-2  hover:bg-yellow-600"><i class="fa-solid fa-xmark"></i></button>
+      <button title="Annuler totalement la récupération" id="delete_file" class="rounded-md p-2   hover:bg-red-600 "><i class="fa-regular fa-trash-can"></i></button>
+   </div>
 </li>

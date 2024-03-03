@@ -21,7 +21,7 @@ class Main extends Controller{
         if (sessionStorage.getItem("Items")){
             this.datas = JSON.parse(sessionStorage.getItem("Items"))
         }else{
-         this.datas = await this.ItemsManager.fetchDatas()
+         this.datas = await this.ItemsManager.getMainDatas()
          sessionStorage.setItem("Items",JSON.stringify(this.datas))
         }
         this.filtedDatas = this.datas.slice() 
@@ -66,7 +66,11 @@ class Main extends Controller{
             const publishedDate =  card.querySelector('span#itemPublisherDate')
             const residenceName =  card.querySelector('#itemLocation')
             const linkAccount =  card.querySelector('a#account')
-            const btnStar =  card.querySelector("button#favor")
+            const btnStar =  card.querySelector("button#favor_main")
+            const labelStatut = card.querySelector("p#statut")
+            const iconStatut = card.querySelector('i#statut')
+            labelStatut.textContent = ''
+            iconStatut.classList.add('hidden')
             // On verifie si l'annonce a ete mis en favoris
             let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
             if (found){btnStar.classList.add("bg-yellow-400")}
@@ -82,6 +86,17 @@ class Main extends Controller{
             linkAccount.textContent = item.publisher.name
             linkAccount.href =  `/account?idAccount=${item.publisher.id}`
             linkItem.href =  `/item?idItem=${item.id}`
+            if (item.statut !== 'normal'){
+                labelStatut.textContent =  item.statut
+                iconStatut.classList.remove('hidden')
+                if(item.statut === "En attente de validation"){
+                    iconStatut.classList.add("bg-orange-400")
+                }else if(item.statut === "Validé"){
+                    iconStatut.classList.add("bg-green-400")
+                }else if(item.statut === "En attente de récupéraion"){
+                    iconStatut.classList.add("bg-yellow-400")
+                }
+            }
             // // On remplie les events
             btnStar.addEventListener('click',() => {
                 let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
@@ -127,7 +142,6 @@ class Main extends Controller{
             // Le select #sort est géré differement
             if (filter !== this.inputSort){
                 filter.addEventListener("input",()=>{
-                    debugger
                     switch (filter){
                         case this.filtertSerie : 
                             this.filtedDatas =  this.filtedDatas.filter(item => {

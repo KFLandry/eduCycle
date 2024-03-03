@@ -2,10 +2,10 @@
     <div class="rounded-md shadow-md h-fit m-3 p-3 border flex flex-row space-x-4">
         <div  class="relative" >
             <img  class="rounded-full object-cover h-36 w-44 " id="profile" src="src/public/ressource/image/pexels-rodolfo-clix-1615776.jpg" alt="">
-            <form name="profile" id="authorize" enctype="multipart/form-data">
+            <form name="profile" name="authorize" enctype="multipart/form-data">
                 <label for="profile" class="absolute bottom-0 right-0  hover:scale-125">
                     <p><i class=" fa-solid fa-circle-plus"></i></p>
-                    <input type="file" name="profile" accept="image/*" class="hidden"/>
+                    <input title="file" name="profile" accept="image/*" class="hidden"/>
                 </label>
             </form>
         </div>
@@ -18,7 +18,7 @@
                     <p id="labelEmail">a@a.a </p><p id="emailState" class="rounded-md bg-yellow-400">Non verifiée</p></div>
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-mobile-screen-button"></i>
-                    <p id="labelPhone">+33 623432343</p></div>
+                    +33 <p id="labelPhone">623432343</p></div>
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-people-line"></i>
                     <p >Membre depuis <span id="labelSince" class="font-semibold"> Septembre 2023 </span></p></div>
@@ -33,7 +33,7 @@
     </div>
     <div  class="flex flex-col border p-1">
         <a href="/don" class="p-1 rounded-md hover:bg-slate-300 border-b-2 text-center">Je fais un don</a>
-        <div id="authorize" class="flex-row flex-1">
+        <div name="authorize" class="flex-row flex-1">
             <a id="updateProfile" href=""  class="p-2 text-center size-full rounded-md hover:bg-slate-300">Modifier mon profile</a>
             <button id="emailVerification"  class="p-2 size-full rounded-md hover:bg-slate-300">Verifier mon address mail</button>
             <button id="delete"  class="p-2 size-full rounded-md hover:bg-slate-300">Supprimer mon compte</button>
@@ -46,7 +46,7 @@
             <ul id="annonces" role="list" class="py-1 space-y-1">
            </ul>
         </div>
-        <div id="authorize">
+        <div name="authorize">
             <h3 class="pt-5 w-full font-semibold">Mes Recupations</h3>
             <div  class="overflow-y-scroll flex-1 flex flex-col border">
                 <ul id="recuperations" role="list" class="py-1 space-y-1">

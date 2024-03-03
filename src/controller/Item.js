@@ -9,7 +9,7 @@ class Item extends Controller{
         this.itemManager  = new ItemManager()
         // Les  controlles
         this.formDOM = null
-        this.listFavoris = JSON.parse(localStorage.getItem('favoris')) || {}
+        this.listFavoris = JSON.parse(localStorage.getItem('favoris')) || []
         this.btnRecover =  document.querySelector('button#toggle')
         this.btnFavoris =  document.querySelector('button#favoris')
         this.recoverForm =  document.querySelector('#recoverForm') 
@@ -43,7 +43,8 @@ class Item extends Controller{
         // On verifie s'il existe dans la file de l'utlisateur
         const fileDatas = await this.itemManager.getFileDatas(this.user.getId())
         if (fileDatas){
-            found =fileDatas.some( ad => JSON.stringify(ad) === JSON.stringify(this.ItemDatas))
+            found =fileDatas.some( ad => {
+                ad === this.ItemDatas})
             if (found){
                 this.btnRecover.classList.add("bg-green-300")
                 this.btnFavoris.classList.add("cursor-not-allowed")
@@ -109,7 +110,7 @@ class Item extends Controller{
                     document.querySelector('#recoverLabel').textContent = "Cacher le bloc de récupération"
                     this.btnRecover.classList.remove("hover:scale-110")
                     this.btnRecover.classList.remove('hover:-translate-y-1')
-                }else{
+                }else if ("Cacher le bloc de récupération"){
                     document.querySelector('#recoverLabel').textContent = "Afficher le bloc de récupération"
                     this.btnRecover.classList.add("hover:scale-110")
                     this.btnRecover.classList.add('hover:-translate-y-1')

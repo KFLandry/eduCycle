@@ -1,8 +1,99 @@
+import User from "../model/Factory/User.js";
+import ItemManager from "../model/Manager/ItemManager.js";
 import Controller from "./Controller.js";
 
 class Notification extends Controller{
     constructor(){
         super()
+        this.itemManager =  new ItemManager()
+        this.user  = User.getUniqueInstance()
+        this.listNotifs = document.querySelector('ul#notifs')
+        this.Datas =  []
+    }
+    async fetchDatas(){
+        const stringCard = await fetch('src/template/Component/notif.html').then(resp => resp.text()).catch(e => console.log(e))
+        const parser  =  new DOMParser()
+        this.notifs =  parser.parseFromString(stringCard,'text/html')
+        this.Datas = await this.itemManager.fetch('donation','GET',this.user.getId())
+    }
+    async fillList(){
+        this.listNotifs.innerHTML = ""
+        for (const notif of this.Datas){
+            const cardNotif =  this.notifs.querySelector('li').cloneNode(true)
+            const linkSender = cardNotif.querySelector('#senderName')
+            linkSender.textContent =  notif.sender.name
+            linkSender.href = `/account?idAccount${notif.sender.id}`
+            cardNotif.querySelector('p#message').textContent =  notif.message
+            const valuePublishedDate = cardNotif.querySelector('#publishedDate')
+            const date =  Date.parse(notif.date)
+            let timePerMls  = Date.now() - date
+            let sincePerDays  =  timePerMls/(1000*60*60*24) //On converti en jour
+            if (0 <= sincePerDays &&  1 >= sincePerDays){
+                valuePublishedDate.textContent = "il y'a " +Math.round(timePerMls/(1000*60*60))+ " heure(s)"
+            }else if (1 < sincePerDays &&  2 > sincePerDays) {
+                valuePublishedDate.textContent = "publié il y'a 1 jour et "+ (Math.round(timePerMls/(1000*60*60))-24) +" heures"
+            }else if(2 < sincePerDays &&  8 > sincePerDays){
+                valuePublishedDate.textContent =  "publié il y'a " +Math.round(timePerMls/(1000*60*60*24))+" jours"
+            }else if  (7 < sincePerDays &&  14 > sincePerDays){
+                valuePublishedDate.textContent =  "publié il y'a 1(une) semaine et " +Math.round(timePerMls/(1000*60*60*24) - 7)+" jours"
+            }else if (sincePerDays > 31){
+                valuePublishedDate.textContent =  "publié il y'a 1(un) mois et " +Math.round(timePerMls/(1000*60*60*24)- 31)+" semaines"
+            }
+            cardNotif.querySelector('#senderProfile').src = notif.sender.medias.location
+            
+            const btnAccept =  cardNotif.querySelector("button#accept")
+            const btnDeny =  cardNotif.querySelector("button#deny")
+            const btnDelete =  cardNotif.querySelector("button#delete")
+            // On initialise les controlles
+            const item = await this.itemManager.fetch('item',"GET",notif.idItem)
+            switch (item.statut){
+                case "Validé" : 
+                case "En attente de récupération" :
+                    btnAccept.classList.add("bg-green-600")
+                    btnAccept.classList.add("cursor-not-allowed")
+                    btnDeny.classList.add("bg-red-600")
+                    btnDeny.classList.add("cursor-not-allowed")
+                    btnAccept.disabled = true
+                    btnDeny.disabled =  true
+                    break
+                default  : 
+            }
+            // Les events
+            btnAccept.addEventListener('click',async () =>{
+                const body =  {id : notif.idItem, statut :  'En attente de récupération'}
+                const result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
+                if (result.statut === 1 ){
+                    alert("Hé mec,tu dechires! Merci d'avoir donner ton truc.La communauté te fait un high-five virtuel pour ta generosité.\n Toute action avance vers sun monde plus cool✨😉")
+                    btnAccept.classList.add("bg-green-600")
+                    btnDeny.disabled =  true
+                }
+            })
+            btnDeny.addEventListener('click', async () =>{
+                const body =  {id : notif.idItem, statut :  'normal'}
+                this.itemManager.fetch('item',"PATCH","",body)
+                if (result.statut === 1 ){
+                    alert("Pas de souci mec.Merci quand même d'avoir envisager de partager\n Toute action nous avancé ver sun monde plus cool✨😉")
+                    btnDeny.classList.add("bg-red-600")
+                    btnAccept.disabled = true
+                }
+            })
+            btnDelete.addEventListener('click',async (event) =>{
+                if (confirm("Es-tu sûr de vouloir supprimer cette notifs???")){
+                    const result =  await this.itemManager.fetch('donation',"DELETE",notif.id)
+                    if (result.statut === 1 ){
+                        alert("Hé mec,tu dechires! Merci d'avoir donner ton truc.La communauté te fiat un high-five virtuel pour ta generosité./n Tout action est avancé ver sun monde plus cool✨😉")
+                        const liToRemove = event.target.closest('li')
+                        this.listNotifs.removeChild(liToRemove)
+                    }
+                }
+            })
+            this.listNotifs.appendChild(cardNotif)
+
+        }
+    }
+    async initialisePage(){
+        await this.fetchDatas()
+        this.fillList()
     }
 }
 export default Notification;

@@ -9,7 +9,6 @@ class Favoris extends Controller{
         this.section= document.querySelector("section#main")
         this.listeFavoris =  document.querySelector("ul#ads")
         this.btnViderListe =  document.querySelector("button#deleteAll")
-        this.btnToutRecupere =  document.querySelector("button#recoverAll")
     }
     async loadDatas(){
         // Data
@@ -24,10 +23,18 @@ class Favoris extends Controller{
         controls.classList.add("flex")
         controls.classList.remove("hidden")
     }
+    //
+    setControls(){
+        this.btnViderListe.addEventListener('click', () =>{
+            if (localStorage.getItem('favoris')){
+                localStorage.removeItem('favoris')
+                this.listeFavoris.innerHTML = ""
+            }
+        })
+    }
     fillAds(){
         this.listeFavoris.innerHTML = ""
         for (const ad of this.datas){
-               const ad = {name  : "test", publisher : {name :  'Pierre'}};
                // On recupere les controlles de la cards  et on clone l'original
                const card =  this.cardAds.querySelector("li#item").cloneNode(true)
                const image = card.querySelector('img#itemPhoto')
@@ -38,20 +45,20 @@ class Favoris extends Controller{
                const residenceName =  card.querySelector('#itemLocation')
                const linkAccount =  card.querySelector('a#account')
                const linkRecover = card.querySelector("a#recover")
-               const btnDelete = card.querySelector("button#delete")
+               const btnDelete = card.querySelector("button#delete_favor")
                // On les remplie...
-               // if (ad.hasOwnProperty('medias')){
-               //     image.src = ad.medias.length>0 ? ad.medias[0].location : ""
-               // }
-               // linkItem.textContent = ad.name
-               // worth.textContent =  ad.worth
-               // state.textContent = ad.state
-               // publishedDate.textContent =  ad.publishedDate
-               // residenceName.textContent =  ad.residence
-               // linkAccount.textContent = ad.publisher.name
-               // linkAccount.href =  `/account?idAccount=${ad.publisher.id}`
-               // linkItem.href =  `/item?idItem=${ad.id}`
-            //    linkRecover = `/idItem?idItem=${ad.id}`
+               if (ad.hasOwnProperty('medias')){
+                   image.src = ad.medias.length>0 ? ad.medias[0].location : ""
+               }
+               linkItem.textContent = ad.name
+               worth.textContent =  ad.worth
+               state.textContent = ad.state
+               publishedDate.textContent =  ad.publishedDate
+               residenceName.textContent =  ad.residence
+               linkAccount.textContent = ad.publisher.name
+               linkAccount.href =  `/account?idAccount=${ad.publisher.id}`
+               linkItem.href =  `/item?idItem=${ad.id}`
+               linkRecover.href = `/item?idItem=${ad.id}`
                // // On remplie les events
                btnDelete.addEventListener('click', (event) =>{
                 const liToRemove = event.target.closest("li")
@@ -68,6 +75,7 @@ class Favoris extends Controller{
         this.loading.classList.add("flex")
         await this.loadDatas()
         this.fillAds()
+        this.setControls()
         this.loading.classList.remove("flex")
         this.loading.classList.add("hidden")
     }

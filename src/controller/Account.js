@@ -32,42 +32,39 @@ class Account extends Controller{
         this.mesAnnonces = {}
         this.mesRecuperations = {}
     }
-    async fetchCards(){
+    async fetchDatas(){
         // Cards
-        const cardRecup =   await fetch("src/template/Component/maRecuperation.html").then(response => response.text()).catch(e =>console.log())
-        const cardAn =  await fetch("src/template/Component/monAnnonce.html").then(response => response.text()).catch(e =>console.log())
+        const card =   await fetch("src/template/Component/card.html").then(response => response.text()).catch(e =>console.log())
         const parser = new DOMParser()
-        this.cardAnnonce = parser.parseFromString(cardAn,"text/html")
-        this.cardRecuperation =  parser.parseFromString(cardRecup,"text/html")
+        this.cardAnnonce = parser.parseFromString(card,"text/html")
+        this.cardRecuperation =  parser.parseFromString(card,"text/html")
+        // Datas
+        const Datas  =await this.itemManager.fetch('item','GET',this.userData.id)
+        this.mesAnnonces = Datas.filter(item => item.statut !== "Validé")
+        this.mesRecuperations = Datas.filter(item => item.statut === "Validé")
+        this.userData['nbAnnonces'] =  this.mesAnnonces.length || 0
+        this.userData['nbRecuperations'] =  this.mesRecuperations.length  || 0
     }
     enableUserControls(display){
         //On des/active les controls
         // les Controlles qui nécessite un authentification de l'utilisateur
-        let userControllers = document.querySelectorAll("#authorize")
+        let userControllers = document.querySelectorAll("[name='authorize']")
         for(const control of userControllers){
             control.style.display =    display ? "flex" : "none"
         }
         
-        userControllers = this.cardAnnonce.querySelectorAll("#authorize")
+        userControllers = this.cardAnnonce.querySelectorAll("[name='authorize']")
         for(const control of userControllers){
             control.style.display =  display ? "flex" : "none"   
         }
-        userControllers  =  this.cardRecuperation.querySelectorAll("#authorize")
-        for(const control of userControllers){
-            control.style.display =  display ? "flex" : "none"
-        }
         // les Controlles qui ne nécessite pas un authentification de l'utilisateur
-        userControllers = document.querySelectorAll("#unauthorize")
+        userControllers = document.querySelectorAll("[name='unauthorize']")
         for(const control of userControllers){
             control.style.display =  display ? "none" : "flex"       
         }
-        userControllers = this.cardAnnonce.querySelectorAll("#unauthorize")
+        userControllers = this.cardAnnonce.querySelectorAll("[name='unauthorize']")
         for(const control of userControllers){
             control.style.display =  display ? "none" : "flex"  
-        }
-        userControllers  =  this.cardRecuperation.querySelectorAll("#unauthorize")
-        for(const control of userControllers){
-            control.style.display =   display ? "none" : "flex: "
         }
     }
     sendEmailVerification(){
@@ -107,6 +104,7 @@ class Account extends Controller{
             card =  this.cardRecuperation.querySelector("li#item")
             this.listRecuperations.innerHTML = ""
         }
+        const listFavoris =  JSON.parse(localStorage.getItem('favoris')) || []
         for(const item of data){
             if (!card) {
                 break
@@ -126,7 +124,7 @@ class Account extends Controller{
             const iconStatut = card.querySelector('i#statut')
             // On les remplie...
             if (item.hasOwnProperty('medias')){
-                image.src =  item.medias.length > 0 ? item.medias[0] : ""
+                image.src =  item.medias.length > 0 ? item.medias[0].location : ""
             }
             linkItem.textContent = item.name
             worth.textContent =  item.worth
@@ -138,36 +136,44 @@ class Account extends Controller{
             linkItem.href =  `/item?idItem=${item.id}`
             linkEdit.href =  `/don?idItem=${item.id}`
             labelStatut.textContent =  item.statut
-            if(item.statut === "En attente de validation"){
-                iconStatut.className = "bg-orange-400"
-            }else if(item.statut === "Validé"){
-                iconStatut.className = "bg-green-400"
-            }else{
-                iconStatut.className = "bg-yellow-400"
+            if (item.statut !== 'normal'){
+                labelStatut.textContent =  item.statut
+                iconStatut.classList.remove('hidden')
+                if(item.statut === "En attente de validation"){
+                    iconStatut.classList.add("bg-orange-400")
+                }else if(item.statut === "Validé"){
+                    iconStatut.classList.add("bg-green-400")
+                }else if(item.statut === "En attente de récupéraion"){
+                    iconStatut.classList.add("bg-yellow-400")
+                }
             }
+            // 
+            let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
+            if (found){btnStar.classList.add("bg-yellow-400")}
             // On remplie les events
             // On uilise le localStorage pour la gestion des favoris
             btnStar.addEventListener('click',() => {
-                let listFavoris = {}
-                if (!localStorage.getItem("favoris")){
-                    listFavoris  = JSON.parse(localStorage.getItem("favoris"))
-                }
-                if (listFavoris.includes(item)){
-                    alert('Cette annonce va être supprimée de vos favoris')
-                    listFavoris.pop(item)
+                let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
+                if (!found){
+                    alert(`L'annonce du/de la ${item.name} de ${item.publisher.name} a été ajouteé dans vos favoris✨✔`)
+                    listFavoris.push(item)
                     btnStar.classList.add("bg-yellow-400")
                 }else{
-                    alert('Cette annonce va être supprimée de vos favoris')
-                    listFavoris.push(item)
-                    btnStar.classList.remove("bg-yellow-400")
+                    if (confirm('Cette annonce existe deja dans vos favoris.Voulez-vous le supprimer??')){
+                        listFavoris.pop(item)
+                        btnStar.classList.remove("bg-yellow-400")
+                    }
                 }
-                localStorage.setItem('favoris',JSON.stringify(listFavoris))
             })
             btnDelete.addEventListener('click',(event) => {
                 if (confirm("Etes-vous sur et certain de vouloir supprimer cette annonce??")){
-                    const liToRemove =  event.target.closest('li')
-                    this.listAnnonces.removeChild(liToRemove)
-                    this.itemManager.delete(item.id)
+                    const result = this.itemManager.fetch('item','DELETE',item.id)
+                    if (result.statut ===1){
+                        const liToRemove =  event.target.closest('li')
+                        this.listAnnonces.removeChild(liToRemove)
+                    }else{
+                        alert("Un problème est survenu gros😩!Réessayes plus tard.La comnunauté te pris de l'excuser😔")
+                    }
                 }
             })
             // On ajoute la card à la liste d'items
@@ -217,25 +223,23 @@ class Account extends Controller{
     }
    async initialisePage(){        
         this.urlParameters =  new URLSearchParams(window.location.search)
-        await this.fetchCards()
-        if(this.urlParameters.has('idAccount')){
-            this.enableUserControls(false)
-            this.userData  = await this.uniqueInstance.getUser(this.urlParameters.get('idAccount'))
-        }else{
-            // On recupere les information de l'utilisateur authentifié
+        await this.fetchDatas()
+        if (this.urlParameters.has('idAccount') && this.urlParameters.get('idAccount')>0){
+            if (this.uniqueInstance.isAuthenticated() && this.urlParameters.get('idAccount')==this.uniqueInstance.getId()){
+                this.enableUserControls(true)
+                this.userData = await  this.uniqueInstance.datas(this.userData.id)
+                window.history.pushState({},"","/account")
+            }else{
+                this.enableUserControls(false)  
+                this.userData  = await this.uniqueInstance.getUser(this.urlParameters.get('idAccount'))
+            }
+        }else if(this.uniqueInstance.isAuthenticated() && !this.urlParameters.has('idAccount')){
             this.enableUserControls(true)
             this.userData = await  this.uniqueInstance.datas(this.userData.id)
+        }else {
+            alert("Aucune reference à un compte n'a été trouvée!")
+            window.location.href =  "/"
         }
-        // Si aucune reference trouve dans le l'url...Redirection vers la page d'acceuil
-        if (!this.userData){
-            // window.location.href =  "/"
-        }
-        // Datas
-        const Datas  =await this.itemManager.getAll(this.userData.id)
-        this.mesAnnonces = Datas.filter(item => item.statut !== "Validé")
-        this.mesRecuperations = Datas.filter(item => item.statut === "Validé")
-        this.userData['nbAnnonces'] =  this.mesAnnonces.length || 0
-        this.userData['nbRecuperations'] =  this.mesRecuperations.length  || 0
         this.fillUser()
         this.fillList('annonce',this.mesAnnonces)
         this.fillList('recuperation',this.mesRecuperations)

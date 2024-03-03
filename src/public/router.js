@@ -1,7 +1,7 @@
 import Signup from "../controller/Signup.js";
 import Main from "../controller/main.js";
 import Login from "../controller/Login.js";
-import File from "../controller/File.js";
+import File from "../controller/FIle.js";
 import User from "../model/Factory/User.js";
 import Notification from "../controller/Notification.js"
 import Account from "../controller/Account.js";
@@ -52,7 +52,7 @@ export class CustomRouter {
                 CustomRouter.handleLocation();
             }
         };
-        this.btnLogout = document.querySelectorAll('button#logout')
+        this.btnLogout = document.querySelectorAll('button.logout')
     }
     handleLink(event){
         if (event.target.matches('a[href]')) {
@@ -114,33 +114,7 @@ export class CustomRouter {
         }
         CustomRouter.controller.initialisePage();
     }
-    // Gérer le changement d'état de navigation
-    enableUserControls(display){
-        //On des/active les controls
-        // les Controlles qui nécessitent une authentification de l'utilisateur
-        let userControllers = document.querySelectorAll("#authorize");
-        for(const control of userControllers){
-            if (display){
-                control.classList.add('flex');
-                control.classList.remove('hidden');
-            } else {
-                control.classList.remove('flex');
-                control.classList.add('hidden');
-            }
-        }
-        // les Controlles qui ne nécessitent pas une authentification de l'utilisateur
-        userControllers = document.querySelectorAll("#unauthorise");
-        for(const control of userControllers){
-            if (display){
-                control.classList.add('flex');
-                control.classList.remove('hidden');
-            } else {
-                control.classList.remove('flex');
-                control.classList.add('hidden');
-            }   
-        }
-    }
-    // Fonction de mise a jour de la page
+     // Fonction de mise a jour de la page
      static updateDisplay(){
         const authorizeControls =  document.querySelectorAll('[name="authorize"]')
         const unauthorizeControls =  document.querySelectorAll('[name="unauthorize"]')
@@ -164,16 +138,16 @@ export class CustomRouter {
     }
     // Fonction qui cache et affiche le menu
     hidden(){
-        let labelHam =  document.querySelector("#labelHam");
-        labelHam.addEventListener("click", ()=>{
-            let menu =  document.querySelector("#menu");
-            menu.style.display = menu.style.display=== "none" ? "block" : 'none';
-        });
-        labelHam =  document.querySelector("#btnMenu");
-        labelHam.addEventListener("click", ()=>{
-            let menu =  document.querySelector("#sMenu");
-            menu.style.display = menu.style.display=== "none" ? "block" : 'none';
-        });
+        let btnMenu =  document.querySelector("button[name='menu']");
+        let btnSMenu =  document.querySelector("button#sMenu");
+        const menu = document.querySelector("#menu")
+        const sMenu = document.querySelector("#sMenu")
+        menu.popover = 'auto'
+        sMenu.popover = 'auto'
+        btnMenu.popoverTargetElement  = sMenu 
+        btnSMenu.popoverTargetElement  =  menu
+        btnMenu.popoverTargetAction  = "toggle"
+        btnSMenu.popoverTargetAction  = "toggle"
     }
     logout(){
         for( const btn of this.btnLogout){

@@ -71,8 +71,8 @@ class User {
     }catch(e){
         throw new TypeError(e)
     }finally{
-      if (this.datas.hasOwnProperty("medias")){
-        this.data.medias.location =`http://localhost:${this.port}/${this.data.medias.location}`
+      if (this.result.hasOwnProperty("medias")){
+        this.result.medias.location =`http://localhost:${this.port}/${this.result.medias.location}`
       }
       return this.result
     } 
