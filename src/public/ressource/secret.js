@@ -1,2 +1,4 @@
-export const token = "eyJ1c2VyX2lkIjoxMjMsInJvbGVzIjpbIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwiZW1haWwiOiJjb250YWN0QGRlbW8uZnIifQ.eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImlhdCI6MTcwNzMzMTE2MiwiZXhwIjoxNzA5OTIzMTYyfQ.pzwfTQoNBvTILSE1MhO3A4U7yBlWxe45HgcVxLIfBQk"
-export const PORT  ='57936'
+export const GOOGLE_APPLICATION_CREDENTIALS = "AIzaSyCE42fAlkk9JLjgw3Beyew26v53y3gjMoY"
+// Le serveur smtp c'est "elasticemail" et l'api de mail c'est smtpJS.com
+export const APITOKEN = "9a708c77-7e1f-4c44-b06a-2a67abee80e7"
+export const PORT  ='62266'

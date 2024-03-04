@@ -54,8 +54,11 @@ class Main extends Controller{
     // La methode qui remplie les items
     async fillItems(datas){
         // ON vide la liste en premier
-        this.listItems.innerHTML =""
-        let listFavoris = JSON.parse(localStorage.getItem("favoris")) || []
+        this.listItems.innerHTML = ""
+        let listFavoris= []
+        if (localStorage.getItem('favoris')){
+            listFavoris = JSON.parse(localStorage.getItem('favoris'))
+        }
         for(const item of datas){
             // On recupere les controlles de la cards  et on clone l'original
             const card =  this.card.querySelector("li#item").cloneNode(true)

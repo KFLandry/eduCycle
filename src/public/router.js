@@ -105,6 +105,7 @@ export class CustomRouter {
             case "/notification" :
                 CustomRouter.controller =  new Notification();
                 break;
+            case  "/accountVerificaiton":
             case "/account" :
                 CustomRouter.controller =  new Account();
                 break;    

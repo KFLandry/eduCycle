@@ -1,7 +1,7 @@
 <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
     <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 class="text-xl font-bold leading-tight tracking-tight  md:text-2xl ">
+            <h1 id="title" class="text-xl font-bold leading-tight tracking-tight  md:text-2xl ">
                 Sign up in to your account
             </h1>
             <form class="space-y-4 md:space-y-6" id="SignupForm" >
@@ -23,6 +23,10 @@
                 <div>
                     <label for="phone" class="block mb-2 text-sm font-medium" >Phone</label>
                     <input type="number" name="phone" id="phone" autocomplete=""  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="">
+                </div>
+                <div>
+                    <label for="address" class="block mb-2 text-sm font-medium" >Votre residence</label>
+                    <input type="text" name="address" id="address"  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="">
                 </div>
                 <div>
                     <label for="birthday" class="block mb-2 text-sm font-medium" >Birthday</label>
@@ -52,8 +56,8 @@
                         Don’t have an account yet? <a href="/login" onclick="route()" class="font-medium text-primary-600 hover:underline dark:text-primary-500">login</a>
                     </p>
                 </div>
-                <div id="update" hidden>
-                    <button type="submit" id="update" onclick="route()"  class="w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center border"  >Update</button>
+                <div id="update" class="hidden">
+                    <button type="submit" id="update" class="w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center border"  >Update</button>
                 </div>
             </form>
         </div>

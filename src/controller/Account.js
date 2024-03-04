@@ -1,7 +1,8 @@
 import User from "../model/Factory/User.js";
 import ItemManager from "../model/Manager/ItemManager.js";
 import Controller from "./Controller.js";
-
+import {CustomRouter} from "../public/router.js"
+import { PORT } from "../public/ressource/secret.js";
 class Account extends Controller{
     // La page acceuuil a deux entrée un en pour l-utilisateur et l'autre pour les autres
     constructor(){
@@ -67,9 +68,6 @@ class Account extends Controller{
             control.style.display =  display ? "none" : "flex"  
         }
     }
-    sendEmailVerification(){
-        // 
-    }
     fillUser(){
         // Les controlles   
         const user =  this.userData
@@ -104,7 +102,10 @@ class Account extends Controller{
             card =  this.cardRecuperation.querySelector("li#item")
             this.listRecuperations.innerHTML = ""
         }
-        const listFavoris =  JSON.parse(localStorage.getItem('favoris')) || []
+        const listFavoris= []
+        if (localStorage.getItem('favoris')){
+            listFavoris = JSON.parse(localStorage.getItem('favoris'))
+        }
         for(const item of data){
             if (!card) {
                 break
@@ -119,7 +120,7 @@ class Account extends Controller{
             const linkAccount =  card.querySelector('a#account')
             const btnStar =  card.querySelector("button#favor")
             const btnDelete =  card.querySelector("button#delete")
-            const linkEdit =  card.querySelector("a#edit")
+            const btnEdit =  card.querySelector("button#edit")
             const labelStatut = card.querySelector("p#statut")
             const iconStatut = card.querySelector('i#statut')
             // On les remplie...
@@ -134,7 +135,6 @@ class Account extends Controller{
             linkAccount.textContent = item.publisher.name
             linkAccount.href =  `/account?idAccount=${item.publisher.id}`
             linkItem.href =  `/item?idItem=${item.id}`
-            linkEdit.href =  `/don?idItem=${item.id}`
             labelStatut.textContent =  item.statut
             if (item.statut !== 'normal'){
                 labelStatut.textContent =  item.statut
@@ -151,6 +151,10 @@ class Account extends Controller{
             let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
             if (found){btnStar.classList.add("bg-yellow-400")}
             // On remplie les events
+            btnEdit.addEventListener('click', ()=> {
+                window.history.pushState({},"",`/don?idItem=${item.id}`)
+                CustomRouter.handleLocation()
+            })
             // On uilise le localStorage pour la gestion des favoris
             btnStar.addEventListener('click',() => {
                 let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
@@ -166,13 +170,13 @@ class Account extends Controller{
                 }
             })
             btnDelete.addEventListener('click',(event) => {
-                if (confirm("Etes-vous sur et certain de vouloir supprimer cette annonce??")){
+                if (confirm("Est-ce que t'es sûr sûr de vouloir supprimer cette annonce le S??")){
                     const result = this.itemManager.fetch('item','DELETE',item.id)
                     if (result.statut ===1){
                         const liToRemove =  event.target.closest('li')
                         this.listAnnonces.removeChild(liToRemove)
                     }else{
-                        alert("Un problème est survenu gros😩!Réessayes plus tard.La comnunauté te pris de l'excuser😔")
+                        alert("Un problème est survenu gros😩! Réessayes plus tard.La comnunauté te pris de l'excuser😔")
                     }
                 }
             })
@@ -218,12 +222,31 @@ class Account extends Controller{
         // 
         this.linkUpdateProfile.href = `/signup?idUser=${id}`
         // 
-        this.btnEmailVerification.addEventListener('click', this.sendEmailVerification())
+        this.btnEmailVerification.addEventListener('click', () => {
+            debugger
+            // Le server SMT
+            Email.send({
+                SecureToken :APITOKEN,
+                To : 'kankeulandry26@gmail.com',
+                From : "kankeulandry26@gmail.com",
+                Subject : "Mail de Verification",
+                Body : `link : http://localhost:${PORT}/accountVerification?id=${id}`
+            })
+            .then(response => {
+                if (response=="OK"){
+                    alert('Un mail de verification a été envoyé sur votre mail 📧')
+                }else{
+                    alert(response)
+                }
+            })        
+            .catch(e => alert(e)) 
+        })
         
     }
    async initialisePage(){        
         this.urlParameters =  new URLSearchParams(window.location.search)
         await this.fetchDatas()
+        // Cette page a trois entrées 2 pour les comptes et 1 pour la verification
         if (this.urlParameters.has('idAccount') && this.urlParameters.get('idAccount')>0){
             if (this.uniqueInstance.isAuthenticated() && this.urlParameters.get('idAccount')==this.uniqueInstance.getId()){
                 this.enableUserControls(true)
@@ -236,6 +259,18 @@ class Account extends Controller{
         }else if(this.uniqueInstance.isAuthenticated() && !this.urlParameters.has('idAccount')){
             this.enableUserControls(true)
             this.userData = await  this.uniqueInstance.datas(this.userData.id)
+        }else if (window.location.pathname =="accountVerification"){
+            //  La verificatrion de compte en question
+            const body ={ id :this.urlParameters.has('id'), emailVerified  : 1}
+            const result = await this.itemManager.fetch('user',"PATCH","",JSON.stringify(body))
+            if (result.statut === 1){
+                sessionStorage.clear()
+                alert("Ton compte est desormais verifié! Ca fait toujours plaisir de travailler avec des vrais le S!✨👌")
+                window.history.pushState({},"","/account")
+                CustomRouter.handleLocation() 
+            }else{
+                alert(result.message)
+            }
         }else {
             alert("Aucune reference à un compte n'a été trouvée!")
             window.location.href =  "/"

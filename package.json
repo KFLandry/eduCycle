@@ -9,5 +9,9 @@
   "author": "landry kankeu",
   "devDependencies": {
     "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "@googleapis/docs": "^3.0.0",
+    "googleapis": "^133.0.0"
   }
 }

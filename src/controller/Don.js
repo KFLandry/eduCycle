@@ -10,7 +10,7 @@ export class Don extends Controller {
         this.uniqueUser = User.getUniqueInstance();
         this.itemManager = new ItemManager();
         this.inputPhotos = document.querySelector('input[name="photos"]');
-        this.inputFindResidence = document.querySelector('input[name="findResidence"]');
+        this.inputFindResidence = document.querySelector('input#findResidence');
         this.listPhotos = document.querySelector('ul#listPhotos');
         this.form = document.querySelector(`form`);
         this.formFile = document.querySelector('form#formFile')
@@ -50,15 +50,13 @@ export class Don extends Controller {
         });
     }
     findResidence() {
-        document.addEventListener('DOMContentLoaded', function () {
-        var autocomplete = new google.maps.places.Autocomplete(this.inputFindResidence, { 
-        types: ['geocode'],
-        componentRestrictions: { country: 'fr' }
-        }); 
-        autocomplete.addListener('place_changed', function () { 
-        var near_place = autocomplete.getPlace(); 
-        });
-    });
+        const options = {
+        componentRestrictions: { country: "fr" },
+        fields: ["address_components", "geometry", "icon", "name"],
+        strictBounds: true,
+        types: ["establishment","school"],
+        };
+        new google.maps.places.Autocomplete(this.inputFindResidence, options);
     }
     uploadImage() {
         try{
@@ -94,12 +92,12 @@ export class Don extends Controller {
             this.itemManager.saveAd(formData);
             // Redirection Vers la page d'acceuil
             if (this.itemManager.getData().statut === 1 ){
-                const href = target.getAttribute('/');
-                handleLocation()
+                window.history.pushState({},"","/503")
+                CustomRouter.handleLocation()
             }
         }catch(e){
-            const href = target.getAttribute('503');
-            handleLocation()
+            window.history.pushState({},"","/503")
+            CustomRouter.handleLocation()
             throw new TypeError(e)
         }
     }
@@ -114,13 +112,18 @@ export class Don extends Controller {
             }
         });
     }
-    initialisePage() {
-        this.addPhoto();
-        this.addOtherSerie();
+    setControls(){
         this.btnPublished.addEventListener('click',(event) =>{
             event.preventDefault()
             this.publishedAd()
         });
+        // 
+        this.findResidence()
     }
+    initialisePage() {
+        this.addPhoto();
+        this.addOtherSerie();
+        this.setControls()
+    }  
 }
 export default Don

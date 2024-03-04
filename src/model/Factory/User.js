@@ -23,7 +23,6 @@ class User {
     User.exists =  true;
     User.uniqueInstance = this;
   }
-  
   async login(data){
       const req  =  await fetch(`http://localhost:${this.port}/login`,{
         method :'POST',
@@ -92,6 +91,24 @@ class User {
     }finally{
         if (this.datas.statut !== 1 ){throw new Error("L'insertion de profile a echoué! Detail :  \n"+ this.datas.message)}
     }
+}
+async fetch (ressource, method, param="", body=null){
+  try{
+      const promise = method ==='GET' ? await fetch(`http://localhost:${this.port}/${ressource}/${param}`) : await fetch(`http://localhost:${this.port}/${ressource}/${param }`,{
+          method : `${method}`,
+          body :  body
+      })
+      if (!promise.ok){
+          throw new TypeError("Requête échoué")
+      }
+      this.datas = await promise.json()
+  }
+  catch(e){
+      throw new TypeError(e)
+  }
+  finally{
+      return this.datas
+  }
 }
   logout(){
       sessionStorage.clear()
