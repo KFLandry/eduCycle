@@ -2,14 +2,19 @@ import ItemManager from "../model/Manager/ItemManager.js";
 import Controller from "./Controller.js";
 import User from "../model/Factory/User.js";
 import { CustomRouter } from "../public/router.js";
+import { DOMAINFRONT,APITOKEN,EMAILTEST } from "../public/ressource/secret.js";
 class Item extends Controller{
     constructor(){
         super()
         this.user  = User.getUniqueInstance();
         this.itemManager  = new ItemManager()
+        this.item = null
         // Les  controlles
         this.formDOM = null
-        this.listFavoris = JSON.parse(localStorage.getItem('favoris')) || []
+        this.listFavoris = []
+        if (localStorage.getItem('favoris')){
+            this.listFavoris =  JSON.parse(localStorage.getItem('favoris'))
+        }
         this.btnRecover =  document.querySelector('button#toggle')
         this.btnFavoris =  document.querySelector('button#favoris')
         this.recoverForm =  document.querySelector('#recoverForm') 
@@ -34,7 +39,11 @@ class Item extends Controller{
         document.querySelector('a#publisher').textContent =  this.ItemDatas.publisher.name
         document.querySelector('a#publisher').href =  `/account?idAccount=${this.ItemDatas.publisher.id}`
         document.querySelector('#publisherSince').textContent = this.ItemDatas.publisher.dateCreation
-        document.querySelector('#publisherProfil').src =  this.ItemDatas.publisher.medias.location
+        document.querySelector('#publisherProfil').src =  this.ItemDatas.publisher.medias.location || "src/public/ressource/image/defaultProfile.jpeg"
+        document.querySelectorAll('a#itemResidence').forEach( a => {
+            a.href =  this.ItemDatas.residence.url
+            a.textContent =  this.ItemDatas.residence.name
+        })
         // On verifie si l'annonce est deja dans les favoris
         let found = this.listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(this.ItemDatas))
         if (found){
@@ -47,12 +56,35 @@ class Item extends Controller{
                 ad === this.ItemDatas})
             if (found){
                 this.btnRecover.classList.add("bg-green-300")
-                this.btnFavoris.classList.add("cursor-not-allowed")
+                this.btnRecover.classList.add("cursor-not-allowed")
                 this.btnFavoris.addEventListener('click',() =>{
                     alert('Vous avez déjà lancé la récupération de cette fourniture')
                 })
             }
         }
+    }
+    async notifyTarget(){
+        // On fetch et remplie le body du mail
+        const StringEmail = await fetch('src/template/Component/emailDemand.html').then( resp => resp.text()).catch( e => console.log(e))
+        const parser= new DOMParser()
+        const DOMEmail =  parser.parseFromString(StringEmail,'text/html')
+        DOMEmail.querySelector('a#go').href = `${DOMAINFRONT}/login`
+        Email.send({
+            SecureToken : APITOKEN,
+            To : `${decodeURIComponent(this.ItemDatas.publisher.email)}`,
+            From : EMAILTEST,
+            Subject : "Nouvelles notifications dans ton espace eduCycle 🎉",
+            Body : DOMEmail.documentElement.outerHTML
+        })
+        .then(response => {
+            if (response=="OK"){
+                sessionStorage.removeItem('currentUser')
+                alert(`${this.ItemDatas.publisher.name} a été notifié par mail📧`)
+            }else{
+                alert(response)
+            }
+        })        
+        .catch(e => alert(e)) 
     }
     async fetchDatas(){
         // On resoud l'url
@@ -82,11 +114,14 @@ class Item extends Controller{
                 event.preventDefault()
                 const form =  document.querySelector("form#recover")
                 const formData =  new FormData(form)
+                formData.append("idTarget",  this.ItemDatas.publisher.id)
+                formData.append("idHunter",  this.user.getId())
                 formData.append("idItem",  this.ItemDatas.id)
-                formData.append("idUser",  this.user.getId())
                 const result = await this.itemManager.fetch("recover",'POST',"",formData)
                 if (result.statut === 1){
                     alert("Yeehaw ! 🎉 Tu l'as fait ! Ta demande de récup', c'est dans la boîte ! 🚀 Checke vite ta file pour voir ce qui se passe ! 🎆 Big up à toi pour ce moment funky ! ✨")
+                    // On notifie la cible par mail
+                    this.notifyTarget()
                     this.recoverForm.classList.remove("flex")
                     this.recoverForm.classList.add("hidden")
                     this.btnRecover.classList.add("bg-green-300")
@@ -94,7 +129,8 @@ class Item extends Controller{
                     this.btnRecover.disabled =  true
                 }else{
                     alert("Oups ! Désolé ! 😔 Quelque chose a foiré, mais t'inquiète pas, ça va s'arranger ! On te conseille d'essayer plus tard. 😊")
-                    window.location.href =  "/"
+                    console.log(result.message)
+                    // window.location.href =  "/"
                 }
             })
         }

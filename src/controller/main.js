@@ -18,11 +18,10 @@ class Main extends Controller{
         this.card =  ""
     }
     async fetchDatas(){
-        if (sessionStorage.getItem("Items")){
-            this.datas = JSON.parse(sessionStorage.getItem("Items"))
-        }else{
-         this.datas = await this.ItemsManager.getMainDatas()
-         sessionStorage.setItem("Items",JSON.stringify(this.datas))
+        this.datas = await this.ItemsManager.getMainDatas()
+        if (!(this.datas instanceof Array)){
+            alert(JSON.stringify(this.datas))
+            this.datas =  []
         }
         this.filtedDatas = this.datas.slice() 
         // Card
@@ -33,6 +32,16 @@ class Main extends Controller{
         const controls =  this.card.querySelector("#main")
         controls.classList.add("flex")
         controls.classList.remove("hidden")
+        let userControllers = this.card.querySelectorAll("[name='authorize']")
+        for(const control of userControllers){
+            control.classList.add('hidden')
+            control.classList.remove('flex')
+        }
+        userControllers = this.card.querySelectorAll("[name='unauthorize']")
+        for(const control of userControllers){
+            control.classList.add('hidden')
+            control.classList.remove('flex')
+        }
     }
     searchItems(){
         this.btnSearch.addEventListener("input",(event) =>{
@@ -43,7 +52,6 @@ class Main extends Controller{
     }
     deleteFilters(){
         this.btnDeleteFilters.addEventListener("click", () => {
-            debugger
             this.filterResidence.selectedIndex =  0
             this.filtertSerie.selectedIndex =  0
             this.filterWorth.selectedIndex =  0
@@ -85,7 +93,8 @@ class Main extends Controller{
             worth.textContent =  item.worth
             state.textContent = item.state
             publishedDate.textContent =  item.publishedDate
-            residenceName.textContent =  item.residence
+            residenceName.textContent =  item.residence.name
+            residenceName.href =  item.residence.url
             linkAccount.textContent = item.publisher.name
             linkAccount.href =  `/account?idAccount=${item.publisher.id}`
             linkItem.href =  `/item?idItem=${item.id}`

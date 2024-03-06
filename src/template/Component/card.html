@@ -12,17 +12,17 @@
       <p id="itemState" class="text-green-600">Fonctionne encore</p>
       <p>Publié le <span id="itemPublisherDate"></span> 2 Septembre 2023 par <a class="text-blue-400"  id="account" href="\account" onclick="route()"> Pierre </a></p>
       <div class="flex items-center space-x-1 hover:bg-gray-50">
-          <div id="itemLocation"  class="">Residence Jean medecin</div>
+          <a id="itemLocation"  class="">Residence Jean medecin</a>
           <i class="fa-solid fa-location-dot"></i>
       </div>
   </div>
   <!--  -->
-  <div id="main" class="hidden flex-col justify-between">
+  <div id="main" class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
       <button title="Ajouter au favoris" id="favor_main" class="rounded-md hover:bg-yellow-400">
           <i  class="fa-regular fa-star p-2"></i>
       </button>
   </div>
-  <div class="hidden flex-col justify-between" id="favoris">
+  <div class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible"  id="favoris">
       <a title="recupérer la fourniture" id="recover">
           <i class="cursor-pointer rounded-md p-2  hover:bg-slate-400 fa-solid fa-right-to-bracket"></i>
       </a>
@@ -30,16 +30,16 @@
           <i class="cursor-pointer rounded-md p-2  hover:bg-red-600 fa-regular fa-trash-can"></i>
       </button>
   </div>
-  <div name="authorize" class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+  <div name="authorize" class="p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
       <button id="edit" title="Editer l'annonce">
           <i  class="rounded-md p-2  hover:shadow-md  fa-regular fa-pen-to-square"></i>
       </button>
       <button title="delete" id="delete">
           <i class="rounded-md p-2   hover:bg-red-600 fa-regular fa-trash-can"></i>
       </button>
-      
+        
   </div>
-  <div name="unauthorize" class="hidden p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
+  <div name="unauthorize" class="p-2 group/edit flex-col justify-between invisible hover:bg-transparent group-hover/item:visible" >
       <button title="Ajouter au favoris" id="favor" class="rounded-md  hover:bg-yellow-400">
           <i  class="fa-regular fa-star p-2"></i>
       </button>

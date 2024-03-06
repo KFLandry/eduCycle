@@ -29,7 +29,7 @@ class Notification extends Controller{
             let timePerMls  = Date.now() - date
             let sincePerDays  =  timePerMls/(1000*60*60*24) //On converti en jour
             if (0 <= sincePerDays &&  1 >= sincePerDays){
-                valuePublishedDate.textContent = "il y'a " +Math.round(timePerMls/(1000*60*60))+ " heure(s)"
+                valuePublishedDate.textContent = "il y'a moins d'une heure"
             }else if (1 < sincePerDays &&  2 > sincePerDays) {
                 valuePublishedDate.textContent = "publié il y'a 1 jour et "+ (Math.round(timePerMls/(1000*60*60))-24) +" heures"
             }else if(2 < sincePerDays &&  8 > sincePerDays){
@@ -37,27 +37,25 @@ class Notification extends Controller{
             }else if  (7 < sincePerDays &&  14 > sincePerDays){
                 valuePublishedDate.textContent =  "publié il y'a 1(une) semaine et " +Math.round(timePerMls/(1000*60*60*24) - 7)+" jours"
             }else if (sincePerDays > 31){
-                valuePublishedDate.textContent =  "publié il y'a 1(un) mois et " +Math.round(timePerMls/(1000*60*60*24)- 31)+" semaines"
+                valuePublishedDate.textContent = notif.date
             }
             cardNotif.querySelector('#senderProfile').src = notif.sender.medias.location
-            
             const btnAccept =  cardNotif.querySelector("button#accept")
             const btnDeny =  cardNotif.querySelector("button#deny")
             const btnDelete =  cardNotif.querySelector("button#delete")
             // On initialise les controlles
             const item = await this.itemManager.fetch('item',"GET",notif.idItem)
-            switch (item.statut){
-                case "Validé" : 
-                case "En attente de récupération" :
-                    btnAccept.classList.add("bg-green-600")
-                    btnAccept.classList.add("cursor-not-allowed")
-                    btnDeny.classList.add("bg-red-600")
-                    btnDeny.classList.add("cursor-not-allowed")
-                    btnAccept.disabled = true
-                    btnDeny.disabled =  true
-                    break
-                default  : 
+            if (item.statut !=="En attente de validation"){
+                btnAccept.classList.add("bg-green-600")
+                btnAccept.classList.add("cursor-not-allowed")
+                btnDeny.classList.add("bg-red-600")
+                btnDeny.classList.add("cursor-not-allowed")
+                btnAccept.disabled = true
+                btnDeny.disabled =  true
             }
+            cardNotif.querySelector('a#itemName').textContent =item.name
+            cardNotif.querySelector('a#itemName').href = `/item?idItem=${item.id}`
+            
             // Les events
             btnAccept.addEventListener('click',async () =>{
                 const body =  {id : notif.idItem, statut :  'En attente de récupération'}
@@ -69,8 +67,8 @@ class Notification extends Controller{
                 }
             })
             btnDeny.addEventListener('click', async () =>{
-                const body =  {id : notif.idItem, statut :  'normal'}
-                this.itemManager.fetch('item',"PATCH","",body)
+                const body =  {id : notif.idItem, statut :'normal'}
+                const result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
                 if (result.statut === 1 ){
                     alert("Pas de souci mec.Merci quand même d'avoir envisager de partager\n Toute action nous avancé ver sun monde plus cool✨😉")
                     btnDeny.classList.add("bg-red-600")
@@ -81,9 +79,10 @@ class Notification extends Controller{
                 if (confirm("Es-tu sûr de vouloir supprimer cette notifs???")){
                     const result =  await this.itemManager.fetch('donation',"DELETE",notif.id)
                     if (result.statut === 1 ){
-                        alert("Hé mec,tu dechires! Merci d'avoir donner ton truc.La communauté te fiat un high-five virtuel pour ta generosité./n Tout action est avancé ver sun monde plus cool✨😉")
                         const liToRemove = event.target.closest('li')
                         this.listNotifs.removeChild(liToRemove)
+                    }else{
+                        alert(result.message)
                     }
                 }
             })

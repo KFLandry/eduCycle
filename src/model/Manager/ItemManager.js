@@ -1,37 +1,42 @@
-import { PORT } from "../../public/ressource/secret.js"
+import { DOMAINBACK } from "../../public/ressource/secret.js"
 
 class ItemManager {
     constructor(){
         this.AllDatas =  []
         this.fileItems =  []
-        this.port = PORT
+        this.data ={}
     }
     // Cette methode recupère toutes les annonces de la base de données
      async fetch (ressource, method, param="", body=null){
         try{
-            const promise = method ==='GET' ? await fetch(`http://localhost:${this.port}/${ressource}/${param}`) : await fetch(`http://localhost:${this.port}/${ressource}/${param }`,{
+            const promise = method ==='GET' ? await fetch(`${DOMAINBACK}/${ressource}/${param}`) : await fetch(`${DOMAINBACK}/${ressource}/${param }`,{
                 method : `${method}`,
                 body :  body
             })
             if (!promise.ok){
-                throw new TypeError("Requête échoué")
+                this.data = {statut :  3, message : "Requete échouée"}
             }
             this.datas = await promise.json()
         }
         catch(e){
-            throw new TypeError(e)
+            this.datas = { statut :  3, message : e}
         }
         finally{
-            if (this.datas.hasOwnProperty("publisher")){ this.datas.publisher.medias.location = `http://localhost:${this.port}/${this.datas.publisher.medias.location}`}
+            if (this.datas.hasOwnProperty("publisher")){ 
+                if (this.datas.publisher.medias){
+                    this.datas.publisher.medias.location = `${DOMAINBACK}/${this.datas.publisher.medias.location}`}
+                }
             if (this.datas instanceof Array){
                 this.datas.forEach( row => {
                     if (row.hasOwnProperty("sender")){ 
-                        row.sender.medias.location = `http://localhost:${this.port}/${row.sender.medias.location}`
+                        if (row.sender.medias){
+                            row.sender.medias.location = `${DOMAINBACK}/${row.sender.medias.location}`
+                        }
                     }
                     if(row.hasOwnProperty("medias")){
                         row.medias.forEach(file =>{
                             if (!file.location.startsWith("http")){
-                                file.location =`http://localhost:${this.port}/${file.location}`}
+                                file.location =`${DOMAINBACK}/${file.location}`}
                         })
                     }  
                 })
@@ -39,7 +44,7 @@ class ItemManager {
             if(this.datas.hasOwnProperty("medias")){
                 this.datas.medias.forEach(file =>{
                     if (!file.location.startsWith("http")){
-                        file.location =`http://localhost:${this.port}/${file.location}`}
+                        file.location =`${DOMAINBACK}/${file.location}`}
                 })
             }  
             return this.datas
@@ -47,7 +52,7 @@ class ItemManager {
      }
     async fetchDatas(){
         try{
-            const promise = await fetch(`http://localhost:${this.port}/item`)
+            const promise = await fetch(`${DOMAINBACK}/item`)
             if (!promise.ok){
                 throw new TypeError("Requête échoué")
             }
@@ -55,14 +60,14 @@ class ItemManager {
         }catch(e){
             throw new TypeError(e)
         }finally{
-            this.datas.forEach(item => { item.medias.forEach(file => file.location =`http://localhost:${this.port}/${file.location}`)});
+            this.datas.forEach(item => { item.medias.forEach(file => file.location =`${DOMAINBACK}/${file.location}`)});
             return this.datas
         }
     }
     // getAll Recupere les annonces d'un utilisateur bien prècis
     async getAll(id){
         try{
-            const promise = await fetch(`http://localhost:${this.port}/items/${id}`,{
+            const promise = await fetch(`${DOMAINBACK}/items/${id}`,{
             })
             if (!promise.ok){
                 throw new TypeError("Requête échoué")
@@ -73,42 +78,43 @@ class ItemManager {
             throw new TypeError(e)
         }finally{
             if (this.datas.statut !==2 || this.datas.length > 0){
-                this.datas.forEach(item => { item.medias.forEach(file => file.location = `http://localhost:${this.port}/${file.location}`)});
+                this.datas.forEach(item => { item.medias.forEach(file => file.location = `${DOMAINBACK}/${file.location}`)});
                 return this.datas
             }else return []
         }
     }
     async getMainDatas(){
         await this.fetch('item','GET')
-        this.mainDatas =  this.datas.filter( row  => { return row.statut === "normal"})
+        if ( this.datas instanceof Array ){
+            this.mainDatas =  this.datas.filter( row  => { return row.statut === "normal"})
+        }else {
+            this.mainDatas =  this.datas
+        }
         return this.mainDatas
-    }
-    async getFileDatas(iduser){
-        await this.getAll(iduser)
-        this.fileItems =  this.datas.filter( row  => {return row.idUser === iduser && row.statut !== "normal"})
-        return this.fileItems
     }
     getData(){
         return this.datas;
     }
     async saveAd(data){
         try{
-            const promise = await fetch(`http://localhost:${this.port}/item`,{
+            const promise = await fetch(`${DOMAINBACK}/item`,{
                 method : 'POST',
-            })
                 body :  data
+            })
             if (!promise.ok){
                 throw new TypeError("Requête échoué")
             }
             this.datas = await promise.json()
         }
         catch(e){
-            throw new TypeError(e)
+            this.datas =  { statut : 3, message :  e}
+        }finally{
+            return this.datas
         }
     }
     async delete(id) {
         try{
-            const promise = await fetch(`http://localhost:${this.port}/item/${id}`,{
+            const promise = await fetch(`${DOMAINBACK}/item/${id}`,{
                 method : 'DELETE',
             })
             if (!promise.ok){

@@ -2,20 +2,37 @@ import Controller from "./Controller.js";
 import ItemManager from "../model/Manager/ItemManager.js";
 import User from "../model/Factory/User.js";
 import { CustomRouter } from "../public/router.js";
+import { LATITTUDE, LONGITUDE, RAYON } from "../public/ressource/secret.js";
 
 export class Don extends Controller {
     constructor() {
         super();
+        // Cette page a deux entrées l'isnertion et la mise à jour
+        this.urlParameters =  new URLSearchParams(window.location.search)
+        if (this.urlParameters.has('idItem')){
+            if (this.urlParameters.get('idItem') < 0 || !this.urlParameters.get('idItem')){
+                alert("Les paramètres de l'url ne font reference a aucune annonce!")
+                window.history.pushState({},"","/")
+                CustomRouter.handleLocation()
+            }else{
+                document.querySelector('h1#title').textContent = "Mise à jour"
+                document.querySelector('p#info').textContent = "Les champs vides concerveront les valeurs"
+                document.querySelector('#update').classList.remove('hidden')
+                document.querySelector('#update').classList.add('flex')
+                document.querySelector('div#insert').classList.add("hidden")
+                document.querySelector('div#insert').classList.remove("flex")
+            }
+        }
         this.result ={}
         this.uniqueUser = User.getUniqueInstance();
         this.itemManager = new ItemManager();
         this.inputPhotos = document.querySelector('input[name="photos"]');
-        this.inputFindResidence = document.querySelector('input#findResidence');
         this.listPhotos = document.querySelector('ul#listPhotos');
         this.form = document.querySelector(`form`);
         this.formFile = document.querySelector('form#formFile')
         this.btnPublished = document.querySelector('button[name="submit"]');
         this.card = {}
+        this.residence ={}
     }
     async addPhoto() {
         this.listPhotos.innerHTML = "";
@@ -49,15 +66,30 @@ export class Don extends Controller {
             }
         });
     }
-    findResidence() {
-        const options = {
-        componentRestrictions: { country: "fr" },
-        fields: ["address_components", "geometry", "icon", "name"],
-        strictBounds: true,
-        types: ["establishment","school"],
+    initMap(){
+        // On defini l'aire de prediction à Nice
+        const center = { lat: LATITTUDE, lng: LONGITUDE };
+        // Create a bounding box with sides ~30km away from the center point
+        const defaultBounds = {
+        north: center.lat + RAYON,
+        south: center.lat - RAYON,
+        east: center.lng + RAYON,
+        west: center.lng - RAYON,
         };
-        new google.maps.places.Autocomplete(this.inputFindResidence, options);
-    }
+        const options = {
+          componentRestrictions: { country: "fr" },
+          bounds :  defaultBounds,
+          fields: ["name","url","website"],
+          types: ["establishment"],
+          strictBounds: false,
+        };
+        const autocomplete = new google.maps.places.Autocomplete(document.querySelector('input#residence'), options);
+        autocomplete.addListener("place_changed", () => {
+            const result =  autocomplete.getPlace()
+            this.residence ={name  : result.name, url :  result.url , website :  result.website}
+            console.log(JSON.stringify(this.residence))
+        });    
+      }
     uploadImage() {
         try{
             debugger
@@ -70,7 +102,7 @@ export class Don extends Controller {
             throw new TypeError(`L'insertion a echoué : Détails : ${e} `);
         }
     }
-    publishedAd() {
+    async publishedAd() {
         // On récupere ,trie et  sécurisé les datas avant l'insertion sur le serveur
         const formData = new FormData(this.form);
         const category = [];
@@ -89,14 +121,17 @@ export class Don extends Controller {
             formData.append('files[]', file)
         }
         try{
-            this.itemManager.saveAd(formData);
+            formData.append('residence', JSON.stringify(this.residence))
+            formData.append('idUser', this.uniqueUser.getId())
+            await this.itemManager.saveAd(formData);
             // Redirection Vers la page d'acceuil
             if (this.itemManager.getData().statut === 1 ){
-                window.history.pushState({},"","/503")
+                alert('La commnunauté te remercie pour ta contribution!')
+                window.history.pushState({},"","/")
                 CustomRouter.handleLocation()
-            }
+            }else{alert(this.itemManager.getData().message)}
         }catch(e){
-            window.history.pushState({},"","/503")
+            window.history.pushState({},"","/505")
             CustomRouter.handleLocation()
             throw new TypeError(e)
         }
@@ -113,17 +148,16 @@ export class Don extends Controller {
         });
     }
     setControls(){
-        this.btnPublished.addEventListener('click',(event) =>{
+        this.btnPublished.addEventListener('click',async (event) =>{
             event.preventDefault()
-            this.publishedAd()
+            await this.publishedAd()
         });
-        // 
-        this.findResidence()
     }
     initialisePage() {
         this.addPhoto();
         this.addOtherSerie();
         this.setControls()
+        this.initMap()
     }  
 }
 export default Don

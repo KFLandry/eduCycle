@@ -1,11 +1,11 @@
 <section class="size-full h-screen flex flex-col">
     <div class="rounded-md shadow-md h-fit m-3 p-3 border flex flex-row space-x-4">
         <div  class="relative" >
-            <img  class="rounded-full object-cover h-36 w-44 " id="profile" src="src/public/ressource/image/pexels-rodolfo-clix-1615776.jpg" alt="">
-            <form name="profile" name="authorize" enctype="multipart/form-data">
-                <label for="profile" class="absolute bottom-0 right-0  hover:scale-125">
-                    <p><i class=" fa-solid fa-circle-plus"></i></p>
-                    <input title="file" name="profile" accept="image/*" class="hidden"/>
+            <img  class="rounded-full object-cover h-36 w-44 " id="profile" src="src\public\ressource\image\defaultProfile.jpeg" alt="">
+            <form name="authorize" enctype="multipart/form-data" class="absolute bottom-0 right-0  hover:scale-125">
+                <label for="photos" class="rounded-full p-1 flex flex-row justify-center items-center space-x-2 bg-sky-500" title="Ajouter une image de profile a votre compte">
+                        <i class="fa-solid fa-upload"></i>
+                        <input type="file" name="profile" id="photos" accept="image*/" hidden/>
                 </label>
             </form>
         </div>
@@ -24,7 +24,8 @@
                     <p >Membre depuis <span id="labelSince" class="font-semibold"> Septembre 2023 </span></p></div>
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-location-dot"></i>
-                    <p id="labelAdress" class="font-semibold">Residence Jean Medecin</p></div>
+                    <a id="residence" class="font-semibold">Residence Jean Medecin</a>
+                </div>
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-recycle"></i>
                     <p ><span id="nbAnnonces" class="font-semibold"> 3 </span> dons et <span id="ndRecuperations" class="font-semibold">14</span> Récupérations</p></div>
@@ -33,7 +34,7 @@
     </div>
     <div  class="flex flex-col border p-1">
         <a href="/don" class="p-1 rounded-md hover:bg-slate-300 border-b-2 text-center">Je fais un don</a>
-        <div name="authorize" class="flex-row flex-1">
+        <div name="authorize" class="h-full ">
             <a id="updateProfile" href=""  class="p-2 text-center size-full rounded-md hover:bg-slate-300">Modifier mon profile</a>
             <button id="emailVerification"  class="p-2 size-full rounded-md hover:bg-slate-300">Verifier mon address mail</button>
             <button id="delete"  class="p-2 size-full rounded-md hover:bg-slate-300">Supprimer mon compte</button>
@@ -42,13 +43,13 @@
     </div>
     <div class="flex-1 flex flex-col">
         <h3 class="font-semibold">Mes annonces</h3>
-        <div class="overflow-y-scroll flex-1 flex flex-col space-y-2 ">
-            <ul id="annonces" role="list" class="py-1 space-y-1">
+        <div class="overflow-y-scroll flex flex-col space-y-2 h-fit">
+            <ul id="annonces" role="list" class="py-1 space-y-1 max-h-[50%]">
            </ul>
         </div>
-        <div name="authorize">
+        <div name="authorize" class="w-full flex-col" >
             <h3 class="pt-5 w-full font-semibold">Mes Recupations</h3>
-            <div  class="overflow-y-scroll flex-1 flex flex-col border">
+            <div  class="overflow-y-scroll flex flex-col space-y-2 ">
                 <ul id="recuperations" role="list" class="py-1 space-y-1">
                </ul>
             </div>

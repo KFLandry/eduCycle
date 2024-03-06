@@ -1,4 +1,4 @@
-import { PORT } from "../../public/ressource/secret.js";
+import { DOMAINBACK } from "../../public/ressource/secret.js";
 
 class User {
   // On implemente le singleton pattern
@@ -19,12 +19,11 @@ class User {
     this.media = {}
     this.connected = false;
     this.headers = {}
-    this.port = PORT
     User.exists =  true;
     User.uniqueInstance = this;
   }
   async login(data){
-      const req  =  await fetch(`http://localhost:${this.port}/login`,{
+      const req  =  await fetch(`${DOMAINBACK}/login`,{
         method :'POST',
         body : JSON.stringify(data),
       })
@@ -32,7 +31,7 @@ class User {
       if(response.statut === 1){
         this.connected = true;
         this.data =  response.data
-        if (this.data.medias){this.data.medias.location =`http://localhost:${this.port}/${this.data.medias.location}`;}
+        if (this.data.medias){this.data.medias.location =`${DOMAINBACK}/${this.data.medias.location}`;}
         this.headers ={
           'Authorization' : `Bearer ${this.data.token}`,
         }
@@ -40,7 +39,7 @@ class User {
       return response
   }
   async signup(data){
-    let result  = await fetch(`http://localhost:${this.port}/signup`,{
+    let result  = await fetch(`${DOMAINBACK}/signup`,{
       method :'POST',
       body : JSON.stringify(data)
     })
@@ -51,7 +50,7 @@ class User {
       this.data =  response.data
       debugger
       if (this.datas.hasOwnProperty("medias")){
-        this.data.medias.location =`http://localhost:${this.port}/${this.data.medias.location}`
+        this.data.medias.location =`${DOMAINBACK}/${this.data.medias.location}`
       }
       this.headers ={
         'Authorization' : `Bearer ${this.data.token}`,
@@ -61,40 +60,40 @@ class User {
   }
   async getUser(id){
     try{
-      const promsie =   await fetch(`http://localhost:${this.port}/user/${id}`,{
+      const promsie =   await fetch(`${DOMAINBACK}/user/${id}`,{
       })
       if (!promsie.ok){
-          throw new TypeError("Requête échoué")
+        this.data = {statut :  3, message : "Requete échouée"}
       }
       this.result = await promsie.json()
     }catch(e){
-        throw new TypeError(e)
+      this.data = {statut :  3, message : e}
     }finally{
-      if (this.result.hasOwnProperty("medias")){
-        this.result.medias.location =`http://localhost:${this.port}/${this.result.medias.location}`
+      if (this.result.medias){
+        this.result.medias.location =`${DOMAINBACK}/${this.result.medias.location}`
       }
       return this.result
     } 
   }
- async uploadProfile(formData){
+ async uploadProfile(formData,ressource="media"){
     try{
-      const promise = await fetch(`http://localhost:${this.port}/media`, {
-        method : 'POST',
+      const promise = await fetch(`${DOMAINBACK}/${ressource}`, {
+        method :'POST',
         body :  formData
       })
       if (!promise.ok){
-          throw new TypeError("Requête échoué")
+        this.data = {statut :  3, message : "Requete échouée"}
       }
-      this.datas = await promise.json()
+      this.data = await promise.json()
     }catch(e){
-        throw new TypeError(e)
+       this.data = {statut :  3, message : e}
     }finally{
-        if (this.datas.statut !== 1 ){throw new Error("L'insertion de profile a echoué! Detail :  \n"+ this.datas.message)}
+        return this.data
     }
 }
-async fetch (ressource, method, param="", body=null){
+async fetch (ressource, method, param="", body={}){
   try{
-      const promise = method ==='GET' ? await fetch(`http://localhost:${this.port}/${ressource}/${param}`) : await fetch(`http://localhost:${this.port}/${ressource}/${param }`,{
+      const promise = method ==='GET' ? await fetch(`${DOMAINBACK}/${ressource}/${param}`) : await fetch(`${DOMAINBACK}/${ressource}/${param }`,{
           method : `${method}`,
           body :  body
       })

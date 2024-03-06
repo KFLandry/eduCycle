@@ -42,31 +42,6 @@
                             <p id="labelName">Account</p>
                         </button>
                     </li>
-                    <div id="sMenu"  class="fixed left-auto mt-[4.9%] w-fit border bg-white">
-                        <div class="p-2 flex flex-col size-fit">
-                            <a href="/don" onclick="route()" class="w-full p-1 flex flex-row items-center justify-between hover:bg-gray-50">
-                                <i class="fa-solid fa-user-plus"></i>
-                                <p class="pl-2"> Faire un don </p>
-                            </a>
-                            <a name="unauthorize" href="/login" onclick="route()" class="w-full p-1 flex flex-row items-center justify-between hover:bg-gray-50" >
-                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                <p> Login </p>
-                            </a>
-                            <a name="unauthorize"href="/signup" onclick="route()" class="w-full  p-1 flex flex-row items-center justify-between hover:bg-gray-50">
-                                <i class="fa-solid fa-user-plus"></i>
-                                <p>S'inscrire</p>
-                            </a>
-                            <a name="authorize" href="/account" onclick="route()" class="hidden w-full flex-row p-1 items-center justify-between hover:bg-gray-50" >
-                                <div id="profile"><i class="fa-solid fa-user-plus"></i></div>
-                                <p>Account</p>
-                            </a>
-                            <button name="authorize" onclick="route()" class="logout hidden w-full p-1 flex-row items-center justify-between hover:bg-gray-50">
-                                <i class="fa-solid fa-user-plus"></i>
-                                <p>Me déconnecter</p>
-                            </button>
-                        </div>
-                    </div>
-
                 </ul>
                 <!-- Le humburger -->
 
@@ -119,14 +94,38 @@
                   </svg>
                   Processing...
             </div>
-            <div class="size-full xl:size-4/6 flex flex-col items-center min-h-svh"> 
+            <div class="relative size-full xl:size-4/6 flex flex-col items-center min-h-svh"> 
+                <div id="sMenu" class="absolute rounded-md right-0 w-fit border bg-white z-50 " style="display: none;">
+                    <div class="p-2 flex flex-col size-fit">
+                        <a href="/don" onclick="route()" class="w-full p-1 flex flex-row items-center justify-between hover:bg-gray-50">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <p class="pl-2"> Faire un don </p>
+                        </a>
+                        <a name="unauthorize" href="/login" onclick="route()" class="w-full p-1 flex flex-row items-center justify-between hover:bg-gray-50" >
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            <p> Login </p>
+                        </a>
+                        <a name="unauthorize"href="/signup" onclick="route()" class="w-full  p-1 flex flex-row items-center justify-between hover:bg-gray-50">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <p>S'inscrire</p>
+                        </a>
+                        <a name="authorize" href="/account" onclick="route()" class="hidden w-full flex-row p-1 items-center justify-between hover:bg-gray-50" >
+                            <div id="profile"><i class="fa-solid fa-user-plus"></i></div>
+                            <p>Account</p>
+                        </a>
+                        <button name="authorize" onclick="route()" class="logout hidden w-full p-1 flex-row items-center justify-between hover:bg-gray-50">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <p>Me déconnecter</p>
+                        </button>
+                    </div>
+                </div>
                 <div id="main-page" class="size-full border"></div>
                 <div id="main-footer" class="size-full border bottom-0 italic text-end" >By landry</div>
             </div>
         </section>
         <script type="module" src="/src/public/router.js" defer></script>
         <script src="https://kit.fontawesome.com/b8937a4147.js" crossorigin="anonymous"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAu0IdWviZ0LeZgYoJ1QSI1iB3kCx3tyr8&libraries=places"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmSelY9NfUQA3-fgl6XXf5Iexb48XcTjE&libraries=places&v=weekly" defer></script>
         <script src="https://smtpjs.com/v3/smtp.js"></script>
     </body>
 </html>

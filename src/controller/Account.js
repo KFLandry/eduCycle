@@ -2,7 +2,7 @@ import User from "../model/Factory/User.js";
 import ItemManager from "../model/Manager/ItemManager.js";
 import Controller from "./Controller.js";
 import {CustomRouter} from "../public/router.js"
-import { PORT } from "../public/ressource/secret.js";
+import {APITOKEN,DOMAINBACK,DOMAINFRONT,EMAILTEST } from "../public/ressource/secret.js";
 class Account extends Controller{
     // La page acceuuil a deux entrée un en pour l-utilisateur et l'autre pour les autres
     constructor(){
@@ -17,7 +17,7 @@ class Account extends Controller{
         this.emailStatut = document.querySelector("p#emailState")
         this.labelEmail = document.querySelector("p#labelEmail")
         this.memberSince = document.querySelector("span#labelSince")
-        this.residence =  document.querySelector('p#labelAdress')
+        this.residence =  document.querySelector('a#residence')
         this.nbAnnonce = document.querySelector("span#nbAnnonces")
         this.nbRecuperation = document.querySelector("span#ndRecuperations")
         this.linkUpdateProfile =  document.querySelector('a#updateProfile')
@@ -32,17 +32,14 @@ class Account extends Controller{
         this.cardRecuperations = null
         this.mesAnnonces = {}
         this.mesRecuperations = {}
+        this.myOwn = false
     }
     async fetchDatas(){
-        // Cards
-        const card =   await fetch("src/template/Component/card.html").then(response => response.text()).catch(e =>console.log())
-        const parser = new DOMParser()
-        this.cardAnnonce = parser.parseFromString(card,"text/html")
-        this.cardRecuperation =  parser.parseFromString(card,"text/html")
         // Datas
-        const Datas  =await this.itemManager.fetch('item','GET',this.userData.id)
-        this.mesAnnonces = Datas.filter(item => item.statut !== "Validé")
-        this.mesRecuperations = Datas.filter(item => item.statut === "Validé")
+        let MyOwnAds  = await this.itemManager.fetch('items','GET',this.userData.id)
+        let myOwnRecover = await this.itemManager.fetch('files','GET',this.userData.id)
+        this.mesAnnonces =  (MyOwnAds instanceof Array) ? MyOwnAds : [MyOwnAds]
+        this.mesRecuperations = (myOwnRecover instanceof Array) ?  myOwnRecover.filter(item => item.statut === "Validé") : [myOwnRecover]
         this.userData['nbAnnonces'] =  this.mesAnnonces.length || 0
         this.userData['nbRecuperations'] =  this.mesRecuperations.length  || 0
     }
@@ -51,34 +48,35 @@ class Account extends Controller{
         // les Controlles qui nécessite un authentification de l'utilisateur
         let userControllers = document.querySelectorAll("[name='authorize']")
         for(const control of userControllers){
-            control.style.display =    display ? "flex" : "none"
+            control.classList.toggle(display ? 'flex' :  'hidden' )
         }
-        
         userControllers = this.cardAnnonce.querySelectorAll("[name='authorize']")
         for(const control of userControllers){
-            control.style.display =  display ? "flex" : "none"   
+            control.classList.toggle(display ? 'flex' :  'flex' )
         }
         // les Controlles qui ne nécessite pas un authentification de l'utilisateur
         userControllers = document.querySelectorAll("[name='unauthorize']")
         for(const control of userControllers){
-            control.style.display =  display ? "none" : "flex"       
+            control.classList.toggle(display ? 'hidden' :  'flex' )    
         }
         userControllers = this.cardAnnonce.querySelectorAll("[name='unauthorize']")
         for(const control of userControllers){
-            control.style.display =  display ? "none" : "flex"  
+            control.classList.toggle(display ? 'flex' :  'flex' )
         }
     }
     fillUser(){
         // Les controlles   
         const user =  this.userData
         if (user.hasOwnProperty('medias')){
-            this.imgProlile.src = user.medias.location || ""
+            this.imgProlile.src = user.medias.location || "src/public/ressource/image/defaultProfile.jpeg"
         }
         this.labelNames[1].textContent = user.firstName + " " + user.lastName
         this.lablePhone.textContent = user.phone
         if (user.emailVerified){
             this.emailStatut.textContent = "Email verifié"
             this.emailStatut.className =  "rounded-md p-1 bg-green-400"
+            this.btnEmailVerification.disabled = true
+            this.btnEmailVerification.classList.add('cursor-not-allowed')
         }else{
             this.emailStatut.textContent = "Email Non verifié"
             this.emailStatut.className =  "rounded-md p-1 bg-yellow-400"
@@ -86,7 +84,8 @@ class Account extends Controller{
         this.emailStatut.textContent = user.emailVerified ? "Email verifié" : "Email Non verifié"
         this.labelEmail.textContent =user.email
         this.memberSince.textContent =user.dateCreation
-        this.residence.textContent =user.residence
+        this.residence.textContent =user.residence.name
+        this.residence.href =  user.residence.url
         this.nbAnnonce.textContent =user.nbAnnonces
         this.nbRecuperation.textContent =user.nbRecuperations
         this.linkUpdateProfile.href = `/signup?id=${user.id}`        
@@ -98,11 +97,11 @@ class Account extends Controller{
             card =  this.cardAnnonce.querySelector("li#item")
             this.listAnnonces.innerHTML = ""
             //  On retire les controlles et ajoute la mise en favoris
-        }else if(this.listRecuperations.style.display === "flex"){
+        }else if(this.myOwn){
             card =  this.cardRecuperation.querySelector("li#item")
             this.listRecuperations.innerHTML = ""
         }
-        const listFavoris= []
+        let listFavoris= []
         if (localStorage.getItem('favoris')){
             listFavoris = JSON.parse(localStorage.getItem('favoris'))
         }
@@ -131,7 +130,8 @@ class Account extends Controller{
             worth.textContent =  item.worth
             state.textContent = item.state
             publishedDate.textContent =  item.publishedDate
-            residenceName.textContent =  item.residence
+            residenceName.textContent =  item.residence.name
+            residenceName.href =  item.residence.url
             linkAccount.textContent = item.publisher.name
             linkAccount.href =  `/account?idAccount=${item.publisher.id}`
             linkItem.href =  `/item?idItem=${item.id}`
@@ -140,12 +140,12 @@ class Account extends Controller{
                 labelStatut.textContent =  item.statut
                 iconStatut.classList.remove('hidden')
                 if(item.statut === "En attente de validation"){
-                    iconStatut.classList.add("bg-orange-400")
+                    iconStatut.style = "background-color: orange"
                 }else if(item.statut === "Validé"){
-                    iconStatut.classList.add("bg-green-400")
+                    iconStatut.style = "background-color: green"
                 }else if(item.statut === "En attente de récupéraion"){
-                    iconStatut.classList.add("bg-yellow-400")
-                }
+                    iconStatut.style = "background-color: yellow"
+                }else{ iconStatut.classList.add('hidden')}
             }
             // 
             let found = listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(item))
@@ -169,9 +169,9 @@ class Account extends Controller{
                     }
                 }
             })
-            btnDelete.addEventListener('click',(event) => {
+            btnDelete.addEventListener('click',async (event) => {
                 if (confirm("Est-ce que t'es sûr sûr de vouloir supprimer cette annonce le S??")){
-                    const result = this.itemManager.fetch('item','DELETE',item.id)
+                    const result = await this.itemManager.fetch('item','DELETE',item.id)
                     if (result.statut ===1){
                         const liToRemove =  event.target.closest('li')
                         this.listAnnonces.removeChild(liToRemove)
@@ -188,52 +188,82 @@ class Account extends Controller{
             }
         }
     }
-    setControls(id){
+    setControls(){
         // Upload profile 
-        this.inputChangeProfile.addEventListener('change', () =>{
-            const reader = new FileReader()
-            reader.onload = (event)=>{ 
-                this.imgProlile.src = event.target.result
-            }
-            reader.readAsDataURL(this.inputChangeProfile.files[0])
-            const form =  document.querySelector('form[name="profile"]')
+        this.inputChangeProfile.addEventListener('change',async () =>{
+            const form =  document.querySelector('form[name="authorize"]')
             const formData = new FormData(form)
-            formData.append('idUser', id)
-            formData.append('name','profile')
+            let result = ""
             debugger
-            this.uniqueInstance.uploadProfile(formData)
+            if ((this.imgProlile.src !==`${DOMAINFRONT}/src/public/ressource/image/defaultProfile.jpeg` &&  this.imgProlile.src !== this.userData.medias.location) || !this.userData.medias ){
+                formData.append('idUser', this.userData.id)
+                formData.append('name','profile')
+                result = await this.uniqueInstance.uploadProfile(formData)
+            }else{
+                formData.append('id', this.userData.medias.id)
+                formData.append('name','profile')
+                result = await this.uniqueInstance.uploadProfile(formData,"mediaUpdate")
+            }
+            debugger
+            if (result.statut === 1){
+                const reader = new FileReader()
+                reader.onload = (event)=>{ 
+                    this.imgProlile.src = event.target.result
+                }
+                reader.readAsDataURL(this.inputChangeProfile.files[0])
+                if (this.userData.medias){
+                    this.userData.medias.location = `${DOMAINBACK}/ressources/images/${this.inputChangeProfile.files[0].name}`
+                }else{
+                    this.userData.medias = { loaciton : `${DOMAINBACK}/ressources/images/${this.inputChangeProfile.files[0].name}`}
+                }
+                sessionStorage.removeItem('currentUser')
+                sessionStorage.setItem('currentUser',JSON.stringify(this.userData))
+
+            }else{
+                alert(JSON.stringify(result.message))
+            }
         })
         // Deconnexion
         this.btnDeconnexion.addEventListener('click', () => {
             debugger
             if(confirm("Etes-vous sûr de vouloir nous quitter???")){
-                alert("Vous allez etre rediriger vers la page d'acceuil")
+                alert("Vous allez être rediriger vers la page d'acceuil")
                 window.location.href = "/"          
             }
         } ) 
         // Suppression du compte
-        this.btnDelete.addEventListener('click', () => {
+        this.btnDelete.addEventListener('click', async () => {
             if (confirm("Etes-vous sur ne plus vouloir faire partir de la commnunauté des etudiants d'EduCyle??")){
                 alert("Nous sommes navrés de vous voir nous quitter 😩.Mais sachez que vous étes et serait toujours le/la bienvenu(e)!")
-                this.uniqueInstance.delete('acccount',id)
-                window.location.href('/')
+                const result = await this.itemManager.fetch('user','DELETE',this.uniqueInstance.getId())
+                if (result.statut == 1){
+                    alert("Votre compte a été supprimer avec succés!Vous allez être redirigé vers la page d'accueil!")
+                    window.location.href('/')
+                    CustomRouter.handleLocation()
+                }else{
+                    alert(result.message)
+                }
             }
         })
         // 
-        this.linkUpdateProfile.href = `/signup?idUser=${id}`
+        this.linkUpdateProfile.href = `/signup?idUser=${this.userData.id}`
         // 
-        this.btnEmailVerification.addEventListener('click', () => {
-            debugger
-            // Le server SMT
+        this.btnEmailVerification.addEventListener('click',async () => {
+            // On fetch et remplie le body du mail
+            const StringEmail = await fetch('src/template/Component/email.html').then( resp => resp.text()).catch( e => console.log(e))
+            const parser= new DOMParser()
+            const DOMEmail =  parser.parseFromString(StringEmail,'text/html')
+            DOMEmail.querySelector('a#verify').href = `${DOMAINBACK}/accountVerification/${this.userData.id}`
             Email.send({
-                SecureToken :APITOKEN,
-                To : 'kankeulandry26@gmail.com',
-                From : "kankeulandry26@gmail.com",
-                Subject : "Mail de Verification",
-                Body : `link : http://localhost:${PORT}/accountVerification?id=${id}`
+                SecureToken : APITOKEN,
+                To : `${decodeURIComponent(this.userData.email)}`,
+                From : EMAILTEST,
+                Subject : "Verification de Compte EduCyle",
+                Body : DOMEmail.documentElement.outerHTML
             })
             .then(response => {
                 if (response=="OK"){
+                    sessionStorage.removeItem('currentUser')
                     alert('Un mail de verification a été envoyé sur votre mail 📧')
                 }else{
                     alert(response)
@@ -245,36 +275,34 @@ class Account extends Controller{
     }
    async initialisePage(){        
         this.urlParameters =  new URLSearchParams(window.location.search)
-        await this.fetchDatas()
         // Cette page a trois entrées 2 pour les comptes et 1 pour la verification
-        if (this.urlParameters.has('idAccount') && this.urlParameters.get('idAccount')>0){
-            if (this.uniqueInstance.isAuthenticated() && this.urlParameters.get('idAccount')==this.uniqueInstance.getId()){
+        // Exceptionnellemnt les cards se chargent ici
+        const card =   await fetch("src/template/Component/card.html").then(response => response.text()).catch(e =>console.log())
+        const parser = new DOMParser()
+        this.cardAnnonce = parser.parseFromString(card,"text/html")
+        this.cardRecuperation =  parser.parseFromString(card,"text/html")
+        // 
+        if ((this.urlParameters.has('idAccount') && this.urlParameters.get('idAccount')>0 ) || this.uniqueInstance.isAuthenticated()){
+            if ((this.uniqueInstance.isAuthenticated() && this.urlParameters.get('idAccount')==this.uniqueInstance.getId()) || (this.uniqueInstance.isAuthenticated() && !this.urlParameters.has('idAccount')) ){
+                this.userData = this.uniqueInstance.datas()
+                window.history.pushState({},"","/account")
                 this.enableUserControls(true)
-                this.userData = await  this.uniqueInstance.datas(this.userData.id)
-                window.history.pushState({},"","/account")
+                this.myOwn = true
             }else{
-                this.enableUserControls(false)  
                 this.userData  = await this.uniqueInstance.getUser(this.urlParameters.get('idAccount'))
-            }
-        }else if(this.uniqueInstance.isAuthenticated() && !this.urlParameters.has('idAccount')){
-            this.enableUserControls(true)
-            this.userData = await  this.uniqueInstance.datas(this.userData.id)
-        }else if (window.location.pathname =="accountVerification"){
-            //  La verificatrion de compte en question
-            const body ={ id :this.urlParameters.has('id'), emailVerified  : 1}
-            const result = await this.itemManager.fetch('user',"PATCH","",JSON.stringify(body))
-            if (result.statut === 1){
-                sessionStorage.clear()
-                alert("Ton compte est desormais verifié! Ca fait toujours plaisir de travailler avec des vrais le S!✨👌")
-                window.history.pushState({},"","/account")
-                CustomRouter.handleLocation() 
-            }else{
-                alert(result.message)
+                this.enableUserControls(false)
+                if (!this.userData){
+                    alert("Aucune compte n'est lié à cette reference!! Vous allez être redirigé")
+                    window.location.href =  "/"
+                    CustomRouter.handleLocation()
+                }
             }
         }else {
             alert("Aucune reference à un compte n'a été trouvée!")
             window.location.href =  "/"
+            CustomRouter.handleLocation()
         }
+        await this.fetchDatas()
         this.fillUser()
         this.fillList('annonce',this.mesAnnonces)
         this.fillList('recuperation',this.mesRecuperations)

@@ -1,6 +1,7 @@
 import ItemManager from "../model/Manager/ItemManager.js";
 import Controller from "./Controller.js";
 import User from '../model/Factory/User.js'
+import { CustomRouter } from "../public/router.js";
 
 class File extends Controller{
     constructor(){
@@ -12,6 +13,7 @@ class File extends Controller{
         this.listDatas =  document.querySelector('ul#file')
         this.divComment =  document.querySelector('.comment')
         this.btnClear = document.querySelector('button.clear')
+        this.note = 1
     }
     async fetchDatas(){
         const stringCard = await fetch('src/template/Component/card.html').then(resp => resp.text()).catch(e => console.log(e))
@@ -20,16 +22,27 @@ class File extends Controller{
         const controls = this.card.querySelector('#file')
         controls.classList.add('flex')
         controls.classList.remove('hidden')
-        // 
+        let userControllers = this.card.querySelectorAll("[name='authorize']")
+        for(const control of userControllers){
+            control.classList.add('hidden')
+            control.classList.remove('flex')
+        }
+        userControllers = this.card.querySelectorAll("[name='unauthorize']")
+        for(const control of userControllers){
+            control.classList.add('hidden')
+            control.classList.remove('flex')
+        }
+        // Le formulaire de commentarre
         this.divComment.innerHTML = await fetch('src/template/Component/formComment.html').then(resp => resp.text()).catch(e => console.log(e))
         // 
-        this.datas = await this.itemManager.getFileDatas(this.user.getId()) || []
+        const datas = await this.itemManager.fetch('files','GET',this.user.getId())
+        this.datas =( datas instanceof Array) ? datas : [datas]
 
     }
    async setControls(){
         this.btnClear.addEventListener('click', async () => {
             if (confirm("Est-ce que t'es sûr sûr de vouloir  entierement vider ta file" )){
-                for (item of this.datas){
+                for (const item of this.datas){
                     const body =  {id : item.id, statut :  'normal'} 
                     const result = await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
                     if (result.statut !== 1 ){
@@ -37,17 +50,18 @@ class File extends Controller{
                         break;
                     }
                 }
+                // Et on vide la file
+                this.listDatas.innerHTML = ""
             }
         })
-        this.listDatas.innerHTML = ""
     }
-    setControlsForms(){
+    setControlsForms(idItem,idTarget){
         // On defini le controlle des etoiles pour l'evaluation
         const stars =  document.querySelectorAll("#stars svg")
         stars.forEach( (star,index1) => {
             star.addEventListener('click', ()=>{
-                document.querySelector('input[name="note"]').textContent =  index1
                 stars.forEach( (star,index2) => {
+                    this.note =  index1+1
                     star.style = index1 >= index2 ? "color: #FFD43B;" : "color: #E6E9EF;"
                 })
             })
@@ -55,21 +69,26 @@ class File extends Controller{
         // Les controlles du forms   
         const btnSubmit = document.querySelector('button#submit') 
         const btnCancel = document.querySelector('button#cancel') 
-        btnSubmit.addEventListener('click', ()=> {
+        btnSubmit.addEventListener('click',async (event)=> {
+            debugger
+            event.preventDefault()
             const form =  document.querySelector('.formComment')
-            const formDatas =  new FormData(formComment)
-            formDatas.append('idItem', this.datas.id)
-            formDatas.append('idSender',this.user.getId())
-            const result =this.itemManager.fetch("comment",'POST','',formDatas)
+            debugger
+            const formDatas =  new FormData(form)
+            formDatas.append('note', this.note )
+            formDatas.append('idItem', idItem)
+            formDatas.append('idTarget',idTarget)
+            formDatas.append('idHunter',this.user.getId())
+            const result = await this.itemManager.fetch("comment",'POST','',formDatas)
             if (result.statut === 1){
                 alert("La communauté te souhaite de profiter de la deuxieme u truc que t'a recuperé!Et n'oublie pas 😌 chaque action compte✨😉")
-                this.divComment.innerHTML = ""
-            }
+                CustomRouter.handleLocation()
+            }else{ alert(JSON.stringify(result))}
         })
 
-        btnCancel.addEventListener('click', ()=> {
-            this.divComment.innerHTML = ""
-            this.divComment.style.display ="hidden"
+        btnCancel.addEventListener('click', (event)=> {
+            this.divComment.classList.toggle('invisible')
+            CustomRouter.handleLocation()
         })
     }
     fillList(){
@@ -83,7 +102,6 @@ class File extends Controller{
             const publishedDate =  card.querySelector('span#itemPublisherDate')
             const residenceName =  card.querySelector('#itemLocation')
             const linkAccount =  card.querySelector('a#account')
-            const linkEdit =  card.querySelector("a#edit")
             const labelStatut = card.querySelector("p#statut")
             const iconStatut = card.querySelector('i#statut')
             const btnAccept =  card.querySelector("button#accept")
@@ -97,11 +115,11 @@ class File extends Controller{
             worth.textContent =  item.worth
             state.textContent = item.state
             publishedDate.textContent =  item.publishedDate
-            residenceName.textContent =  item.residence
+            residenceName.textContent =  item.residence.name
+            residenceName.href =  item.residence.url
             linkAccount.textContent = item.publisher.name
             linkAccount.href =  `/account?idAccount=${item.publisher.id}`
-            linkItem.href =  `/item?idItem=${item.id}`
-            linkEdit.href =  `/don?idItem=${item.id}`
+            linkItem.href =  `/item?idItem=${item.id}`  
             labelStatut.textContent =  item.statut
             if(item.statut === "En attente de validation"){
                 iconStatut.classList.add("bg-orange-400")
@@ -112,13 +130,13 @@ class File extends Controller{
             }
             // On defini les events 
             btnAccept.addEventListener('click',async (event) =>{
-                const body =  {id : item.id, statut :  'En attente de récupération'}
+                const body =  {id : item.id, statut :  'Validé'}
                 const result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
                 if (result.statut === 1 ){
-                    this.divComment.innerHTML = await fetch('src/template/Component/formComment.html').then(resp => resp.text()).catch(e => console.log(e))
-                    this.divComment.style.display ="flex"
-                    const liToRemove = event.target.closest('li')
-                    this.listDatas.removeChild(liToRemove)
+                    // this.divComment.innerHTML = await fetch('src/template/Component/formComment.html').then(resp => resp.text()).catch(e => console.log(e))
+                    this.setControlsForms(item.id, item.publisher.id)
+                    this.divComment.classList.add("flex")
+                    this.divComment.classList.remove("hidden")
                 }
             })
             btnDeny.addEventListener('click',async (event) =>{
@@ -129,8 +147,7 @@ class File extends Controller{
                     let favoris = JSON.parse(localStorage.getItem('favoris')) || []
                     favoris.push(item)
                     localStorage.setItem('favoris',JSON.stringify(item))
-                    const liToRemove = event.target.closest('li')
-                    this.listDatas.removeChild(liToRemove)
+                    CustomRouter.handleLocation()
                 }
             })
             btnDelete.addEventListener('click', async (event) =>{
@@ -149,7 +166,6 @@ class File extends Controller{
          await this.fetchDatas()
         this.fillList()
         this.setControls()
-        this.setControlsForms()
     }
 }
 export default File;

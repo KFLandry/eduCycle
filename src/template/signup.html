@@ -10,45 +10,44 @@
                 </div>
                 <div>
                     <label for="firstName" class="block mb-2 text-sm font-medium" >FirstName</label>
-                    <input type="text" name="firstName" id="firstName" autocomplete="username"  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="">
+                    <input type="text" name="firstName" id="firstName" autocomplete="username"  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="required">
                 </div>
                 <div>
                     <label for="lastName" class="block mb-2 text-sm font-medium" >Lastname</label>
-                    <input type="text" name="lastName" id="lastName" autocomplete="username"  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="">
+                    <input type="text" name="lastName" id="lastName" autocomplete="username"  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="required">
                 </div>
                 <div>
                     <label for="email" class="block mb-2 text-sm font-medium" >Your email</label>
-                    <input type="email" name="email" id="email" autocomplete="username"  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="name@company.com" required=""      >
+                    <input type="email" name="email" id="email" autocomplete="username"  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="name@company.com" required="required"      >
                 </div>
                 <div>
                     <label for="phone" class="block mb-2 text-sm font-medium" >Phone</label>
-                    <input type="number" name="phone" id="phone" autocomplete=""  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="">
+                    <input type="number" name="phone" id="phone" autocomplete=""  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="required">
                 </div>
-                <div>
-                    <label for="address" class="block mb-2 text-sm font-medium" >Votre residence</label>
-                    <input type="text" name="address" id="address"  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="">
+                <div class="">
+                    <label for="residence" class="block mb-2 text-sm font-medium" >Votre residence <br>Pour l'instant la recherche se limite aux residences situées à 30km max de Nice</label>
+                    <label for="residence" class="rounded-md border h-10 flex flex-row items-center space-x-1">
+                    <i class="fa-solid fa-street-view px-1"></i>
+                    <input type="text" class="size-full focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1" id="residence" title="residence" name="residence" />
+                </label>
                 </div>
                 <div>
                     <label for="birthday" class="block mb-2 text-sm font-medium" >Birthday</label>
-                    <input type="date" name="birthday" id="birthday" autocomplete=""  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required=""      >
+                    <input type="date" name="birthday" id="birthday" autocomplete=""  class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="" required="required"      >
                 </div>
                 <div>
                     <label for="password" class="block mb-2 text-sm font-medium">Password</label>
-                    <input type="password" name="password" id="password" autocomplete="current-password" placeholder="••••••••" class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" required="">
+                    <input type="password" name="password" id="password" autocomplete="current-password" placeholder="••••••••" class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" required="required">
                 </div>
                 <div>
                     <label for="password" class="block mb-2 text-sm font-medium">Confirm  your password</label>
-                    <input type="password" name="password" id="password" autocomplete="current-password" placeholder="••••••••" class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" required="">
+                    <input type="password" id="verified" autocomplete="current-password" placeholder="••••••••" class="rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" onchange="" required="required">
                 </div>
                 <div id="signup" class="space-y-2">   
                     <div class="rounded-md p-1 flex flex-col justify-start border">
                         <div class="flex space-x-3 items-center">
-                            <input id="terms" aria-describedby="terms" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800">
+                            <input id="terms" aria-describedby="terms" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required="required">
                             <label for="terms" class="text-gray-500 dark:text-gray-300">Accept Terms</label>  
-                        </div>
-                        <div class="flex space-x-3 items-center"> 
-                            <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800">
-                            <label for="remember" class="text-gray-500 dark:text-gray-300">Remember me</label>
                         </div>
                     </div>
                     <button type="submit" id="submit" onclick="route()"  class="w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center border"  >Sign in</button>

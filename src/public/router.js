@@ -142,13 +142,13 @@ export class CustomRouter {
         let btnMenu =  document.querySelector("button[name='menu']");
         let btnSMenu =  document.querySelector("button#sMenu");
         const menu = document.querySelector("#menu")
-        const sMenu = document.querySelector("#sMenu")
+        const sMenu = document.querySelector("div#sMenu")
         menu.popover = 'auto'
-        sMenu.popover = 'auto'
-        btnMenu.popoverTargetElement  = sMenu 
         btnSMenu.popoverTargetElement  =  menu
-        btnMenu.popoverTargetAction  = "toggle"
         btnSMenu.popoverTargetAction  = "toggle"
+        btnMenu.addEventListener('click', ()=>{
+            sMenu.style.display = sMenu.style.display ==="none" ? 'block' : "none"
+        })
     }
     logout(){
         for( const btn of this.btnLogout){
@@ -166,7 +166,6 @@ export class CustomRouter {
         window.onload = this.onload()
         window.onpopstate = CustomRouter.handleLocation()
         window.route = this.route
-
         //Changement de la page principale
         CustomRouter.handleLocation();
     }
