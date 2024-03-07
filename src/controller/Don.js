@@ -34,11 +34,20 @@ export class Don extends Controller {
         this.residence ={}
     }
     async addPhoto() {
+        // On verifie la taille des fichiers
         this.listPhotos.innerHTML = "";
         const cardString = await fetch("src/template/Component/cardImage.html").then(response => response.text()).catch(e => console.log(e));
         const parser = new DOMParser();
         this.card = parser.parseFromString(cardString, "text/html");
-        this.inputPhotos.addEventListener("change", () => {
+        this.inputPhotos.addEventListener("change", () => {            
+            let sizes = 0
+            for (const image of this.inputPhotos.files){
+                sizes += image.size
+            }
+            if (sizes > (16*1024*1024)){
+                alert('La taille des images uploadées est au dessus de 16mo')
+                this.inputPhotos.value = null
+            }
             for (const image of this.inputPhotos.files) {
                 const cardImage = this.card.querySelector("li").cloneNode(true);
                 cardImage.id = image.name;
@@ -89,18 +98,6 @@ export class Don extends Controller {
             console.log(JSON.stringify(this.residence))
         });    
       }
-    uploadImage() {
-        try{
-            debugger
-            const data = new FormData(this.formFile)
-            // L'id utilisateur
-            data.append('idUser',this.uniqueUser.getId())
-            const headers  =  this.uniqueUser.getHeaders()
-            this.itemManager.uploadImages("", data);
-        }catch(e){
-            throw new TypeError(`L'insertion a echoué : Détails : ${e} `);
-        }
-    }
     async publishedAd() {
         // On récupere ,trie et  sécurisé les datas avant l'insertion sur le serveur
         const formData = new FormData(this.form);
@@ -117,6 +114,7 @@ export class Don extends Controller {
         });
         formData.append('category',category)
         for( const file of this.inputPhotos.files){
+            debugger
             formData.append('files[]', file)
         }
         try{
