@@ -34,9 +34,10 @@ class File extends Controller{
         }
         // Le formulaire de commentarre
         this.divComment.innerHTML = await fetch('src/template/Component/formComment.html').then(resp => resp.text()).catch(e => console.log(e))
-        // 
+        // Les results sont soit false/un objet litteral ou un tableau d'objet litteraux
         const datas = await this.itemManager.fetch('files','GET',this.user.getId())
-        this.datas =( datas instanceof Array) ? datas : [datas]
+        this.datas =( datas instanceof Array) ? datas : datas ? [datas] : []
+        this.datas = this.datas.filter( item => {return item.statut === "En attente de récupération"})
 
     }
    async setControls(){
@@ -121,10 +122,12 @@ class File extends Controller{
             linkAccount.href =  `/account?idAccount=${item.publisher.id}`
             linkItem.href =  `/item?idItem=${item.id}`  
             labelStatut.textContent =  item.statut
+            debugger
             if(item.statut === "En attente de validation"){
                 iconStatut.classList.add("bg-orange-400")
             }else if(item.statut === "Validé"){
                 iconStatut.classList.add("bg-green-400")
+                iconStatut.classList.remove("bg-yellow-400")
             }else{
                 iconStatut.classList.add("bg-yellow-400")
             }
@@ -133,17 +136,20 @@ class File extends Controller{
                 const body =  {id : item.id, statut :  'Validé'}
                 const result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
                 if (result.statut === 1 ){
-                    // this.divComment.innerHTML = await fetch('src/template/Component/formComment.html').then(resp => resp.text()).catch(e => console.log(e))
                     this.setControlsForms(item.id, item.publisher.id)
                     this.divComment.classList.add("flex")
                     this.divComment.classList.remove("hidden")
                 }
             })
+            // Pour chaque annulation je change le statut de l'annonce et je supprime la donation
             btnDeny.addEventListener('click',async (event) =>{
                 const body =  {id : item.id, statut :  'normal'} 
-                const result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
+                let result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
+                debugger
                 if (result.statut === 1 ){
                     alert("Pas de souci mec.✨😉")
+                    result = await this.itemManager.fetch('donation','DELETE',item.idDonation) 
+                    if (result.statut !== 1){ alert( result.message)}
                     let favoris = JSON.parse(localStorage.getItem('favoris')) || []
                     favoris.push(item)
                     localStorage.setItem('favoris',JSON.stringify(item))
@@ -154,6 +160,8 @@ class File extends Controller{
                 const body =  {id : item.id, statut :  'normal'} 
                 const result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
                 if (result.statut === 1 ){
+                    result = await this.itemManager.fetch('donation','DELETE',item.idDonation) 
+                    if (result.statut !== 1){ alert( result.message)}
                     alert("Pas de souci mec✨😉")
                     const liToRemove = event.target.closest('li')
                     this.listDatas.removeChild(liToRemove)

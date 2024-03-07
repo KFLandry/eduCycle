@@ -28,8 +28,7 @@ export class Don extends Controller {
         this.itemManager = new ItemManager();
         this.inputPhotos = document.querySelector('input[name="photos"]');
         this.listPhotos = document.querySelector('ul#listPhotos');
-        this.form = document.querySelector(`form`);
-        this.formFile = document.querySelector('form#formFile')
+        this.form = document.querySelector('form#formAds');
         this.btnPublished = document.querySelector('button[name="submit"]');
         this.card = {}
         this.residence ={}
@@ -149,7 +148,6 @@ export class Don extends Controller {
     }
     setControls(){
         this.btnPublished.addEventListener('click',async (event) =>{
-            event.preventDefault()
             await this.publishedAd()
         });
     }

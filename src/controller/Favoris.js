@@ -46,6 +46,8 @@ class Favoris extends Controller{
                const linkAccount =  card.querySelector('a#account')
                const linkRecover = card.querySelector("a#recover")
                const btnDelete = card.querySelector("button#delete_favor")
+               debugger
+               card.querySelector("[title='statut']").style.display =  'none'
                // On les remplie...
                if (ad.hasOwnProperty('medias')){
                    image.src = ad.medias.length>0 ? ad.medias[0].location : ""

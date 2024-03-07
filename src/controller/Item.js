@@ -36,8 +36,10 @@ class Item extends Controller{
             img.src = image.location
             this.listImages.appendChild(card)
         }
-        document.querySelector('a#publisher').textContent =  this.ItemDatas.publisher.name
-        document.querySelector('a#publisher').href =  `/account?idAccount=${this.ItemDatas.publisher.id}`
+        document.querySelectorAll('a#publisher').forEach( link => {
+            link.textContent =  this.ItemDatas.publisher.name
+            link.href =  `/account?idAccount=${this.ItemDatas.publisher.id}`
+        })
         document.querySelector('#publisherSince').textContent = this.ItemDatas.publisher.dateCreation
         document.querySelector('#publisherProfil').src =  this.ItemDatas.publisher.medias.location || "src/public/ressource/image/defaultProfile.jpeg"
         document.querySelectorAll('a#itemResidence').forEach( a => {
@@ -48,19 +50,6 @@ class Item extends Controller{
         let found = this.listFavoris.some( ad => JSON.stringify(ad) === JSON.stringify(this.ItemDatas))
         if (found){
             this.btnFavoris.classList.add("bg-yellow-400")
-        }
-        // On verifie s'il existe dans la file de l'utlisateur
-        const fileDatas = await this.itemManager.getFileDatas(this.user.getId())
-        if (fileDatas){
-            found =fileDatas.some( ad => {
-                ad === this.ItemDatas})
-            if (found){
-                this.btnRecover.classList.add("bg-green-300")
-                this.btnRecover.classList.add("cursor-not-allowed")
-                this.btnFavoris.addEventListener('click',() =>{
-                    alert('Vous avez déjà lancé la récupération de cette fourniture')
-                })
-            }
         }
     }
     async notifyTarget(){
@@ -91,6 +80,15 @@ class Item extends Controller{
         this.urlParameters =  new URLSearchParams(window.location.search)
         if(this.urlParameters.has('idItem') && this.urlParameters.get('idItem')){
             this.ItemDatas  = await this.itemManager.fetch('item','GET',this.urlParameters.get('idItem'))
+            // Un utilisateur ne peut pas récupérer sa propre annonce et une annonce de ne peut etre récupérer par deux utilisateurs
+            debugger
+            if (this.ItemDatas.publisher.id === this.user.getId() || this.ItemDatas.hasOwnProperty('idDonation')){
+                this.btnRecover.disabled =  true
+                this.btnFavoris.disabled = true
+                this.btnFavoris.classList.add('cursor-not-allowed')
+                this.btnRecover.classList.add('cursor-not-allowed')
+                document.querySelector("#recoverLabel").textContent =  "Vous étes l'auteur de cette annonce ou elle a déjà été recuperée"
+            }
         }else{
             window.history.pushState({}, "", "/");
             CustomRouter.handleLocation()
@@ -122,6 +120,7 @@ class Item extends Controller{
                     alert("Yeehaw ! 🎉 Tu l'as fait ! Ta demande de récup', c'est dans la boîte ! 🚀 Checke vite ta file pour voir ce qui se passe ! 🎆 Big up à toi pour ce moment funky ! ✨")
                     // On notifie la cible par mail
                     this.notifyTarget()
+                    debugger
                     this.recoverForm.classList.remove("flex")
                     this.recoverForm.classList.add("hidden")
                     this.btnRecover.classList.add("bg-green-300")

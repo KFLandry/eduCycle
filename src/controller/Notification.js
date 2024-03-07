@@ -66,10 +66,13 @@ class Notification extends Controller{
                     btnDeny.disabled =  true
                 }
             })
+            // refuser et supprimer se font tous deux en deux étapes :  changer le statut de l'annonce et supprimer la notif
             btnDeny.addEventListener('click', async () =>{
                 const body =  {id : notif.idItem, statut :'normal'}
-                const result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
+                let result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
                 if (result.statut === 1 ){
+                    result = await this.itemManager.fetch('donation','DELETE',notif.id) 
+                    if (result.statut !== 1){ alert( result.message)}
                     alert("Pas de souci mec.Merci quand même d'avoir envisager de partager\n Toute action nous avancé ver sun monde plus cool✨😉")
                     btnDeny.classList.add("bg-red-600")
                     btnAccept.disabled = true
@@ -77,10 +80,14 @@ class Notification extends Controller{
             })
             btnDelete.addEventListener('click',async (event) =>{
                 if (confirm("Es-tu sûr de vouloir supprimer cette notifs???")){
-                    const result =  await this.itemManager.fetch('donation',"DELETE",notif.id)
+                    let result =  await this.itemManager.fetch('donation',"DELETE",notif.id)
                     if (result.statut === 1 ){
-                        const liToRemove = event.target.closest('li')
-                        this.listNotifs.removeChild(liToRemove)
+                        const body =  {id : notif.idItem, statut :'normal'}
+                        let result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
+                        if (result.statut  ===1){
+                            const liToRemove = event.target.closest('li')
+                            this.listNotifs.removeChild(liToRemove)
+                        }else{alert(result.message)}
                     }else{
                         alert(result.message)
                     }

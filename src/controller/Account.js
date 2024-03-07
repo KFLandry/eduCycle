@@ -45,23 +45,23 @@ class Account extends Controller{
     }
     enableUserControls(display){
         //On des/active les controls
-        // les Controlles qui nécessite un authentification de l'utilisateur
         let userControllers = document.querySelectorAll("[name='authorize']")
         for(const control of userControllers){
-            control.classList.toggle(display ? 'flex' :  'hidden' )
+            control.style.display =    display ? "flex" : "none"
         }
+        
         userControllers = this.cardAnnonce.querySelectorAll("[name='authorize']")
         for(const control of userControllers){
-            control.classList.toggle(display ? 'flex' :  'flex' )
+            control.style.display =  display ? "flex" : "none"   
         }
         // les Controlles qui ne nécessite pas un authentification de l'utilisateur
         userControllers = document.querySelectorAll("[name='unauthorize']")
         for(const control of userControllers){
-            control.classList.toggle(display ? 'hidden' :  'flex' )    
+            control.style.display =  display ? "none" : "flex"       
         }
         userControllers = this.cardAnnonce.querySelectorAll("[name='unauthorize']")
         for(const control of userControllers){
-            control.classList.toggle(display ? 'flex' :  'flex' )
+            control.style.display =  display ? "none" : "flex"  
         }
     }
     fillUser(){
@@ -291,7 +291,7 @@ class Account extends Controller{
             }else{
                 this.userData  = await this.uniqueInstance.getUser(this.urlParameters.get('idAccount'))
                 this.enableUserControls(false)
-                if (!this.userData){
+                if ((!this.userData) || (this.userData.length === 0)){
                     alert("Aucune compte n'est lié à cette reference!! Vous allez être redirigé")
                     window.location.href =  "/"
                     CustomRouter.handleLocation()

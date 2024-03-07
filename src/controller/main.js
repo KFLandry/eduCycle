@@ -30,18 +30,8 @@ class Main extends Controller{
         this.card =  parser.parseFromString(cardString,"text/html")
         // On active les controlles
         const controls =  this.card.querySelector("#main")
-        controls.classList.add("flex")
         controls.classList.remove("hidden")
-        let userControllers = this.card.querySelectorAll("[name='authorize']")
-        for(const control of userControllers){
-            control.classList.add('hidden')
-            control.classList.remove('flex')
-        }
-        userControllers = this.card.querySelectorAll("[name='unauthorize']")
-        for(const control of userControllers){
-            control.classList.add('hidden')
-            control.classList.remove('flex')
-        }
+        controls.classList.add("flex")
     }
     searchItems(){
         this.btnSearch.addEventListener("input",(event) =>{
