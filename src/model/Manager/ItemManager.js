@@ -1,5 +1,4 @@
-import { DOMAINBACK } from "../../public/ressource/secret.js"
-
+import { DOMAINBACK } from "../../public/ressource/secret.js";
 class ItemManager {
     constructor(){
         this.AllDatas =  []

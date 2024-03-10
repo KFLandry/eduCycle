@@ -1,5 +1,4 @@
 import { DOMAINBACK } from "../../public/ressource/secret.js";
-
 class User {
   // On implemente le singleton pattern
   constructor() {
@@ -23,6 +22,7 @@ class User {
     User.uniqueInstance = this;
   }
   async login(data){
+    try {
       const req  =  await fetch(`${DOMAINBACK}/login`,{
         method :'POST',
         body : JSON.stringify(data),
@@ -36,27 +36,39 @@ class User {
           'Authorization' : `Bearer ${this.data.token}`,
         }
       }
-      return response
+      this.data = response
+    }catch(e){
+        this.data =  {statut : 3, message :e}
+    }finally{
+      return this.data
+    }
   }
   async signup(data){
-    let result  = await fetch(`${DOMAINBACK}/signup`,{
-      method :'POST',
-      body : JSON.stringify(data)
-    })
-    const response =  await result.json()
-    //Si la connexion reussi on set l'utilisateur à "connected" avec ses données et on recupere son token d'autorisation qu'on stocke dans le SessionStorage
-    if(response.statut === 1){
-      this.connected = true;
-      this.data =  response.data
-      debugger
-      if (this.datas.hasOwnProperty("medias")){
-        this.data.medias.location =`${DOMAINBACK}/${this.data.medias.location}`
+    try{
+      let result  = await fetch(`${DOMAINBACK}/signup`,{
+        method :'POST',
+        body : JSON.stringify(data)
+      })
+      const response =  await result.json()
+      //Si la connexion reussi on set l'utilisateur à "connected" avec ses données et on recupere son token d'autorisation qu'on stocke dans le SessionStorage
+      if(response.statut === 1){
+        this.connected = true;
+        this.data =  response.data
+        debugger
+        if (this.datas.hasOwnProperty("medias")){
+          this.data.medias.location =`${DOMAINBACK}/${this.data.medias.location}`
+        }
+        this.headers ={
+          'Authorization' : `Bearer ${this.data.token}`,
+        }
       }
-      this.headers ={
-        'Authorization' : `Bearer ${this.data.token}`,
+      this.data = response
       }
-    }
-    return response
+    catch(e){
+      this.data =  {statut : 3, message :e}
+    }finally{
+    return this.data
+  }
   }
   async getUser(id){
     try{

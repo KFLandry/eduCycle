@@ -12,6 +12,16 @@
   },
   "dependencies": {
     "@googleapis/docs": "^3.0.0",
+    "dotenv": "^16.4.5",
     "googleapis": "^133.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KFLandry/eduCycle.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KFLandry/eduCycle/issues"
+  },
+  "homepage": "https://github.com/KFLandry/eduCycle#readme"
 }
