@@ -21,31 +21,6 @@ class ItemManager {
             this.datas = { statut :  3, message : e}
         }
         finally{
-            if (this.datas.hasOwnProperty("publisher")){ 
-                if (this.datas.publisher.medias){
-                    this.datas.publisher.medias.location = `${DOMAINBACK}/${this.datas.publisher.medias.location}`}
-                }
-            if (this.datas instanceof Array){
-                this.datas.forEach( row => {
-                    if (row.hasOwnProperty("sender")){ 
-                        if (row.sender.medias){
-                            row.sender.medias.location = `${DOMAINBACK}/${row.sender.medias.location}`
-                        }
-                    }
-                    if(row.hasOwnProperty("medias")){
-                        row.medias.forEach(file =>{
-                            if (!file.location.startsWith("http")){
-                                file.location =`${DOMAINBACK}/${file.location}`}
-                        })
-                    }  
-                })
-            }
-            if(this.datas.hasOwnProperty("medias")){
-                this.datas.medias.forEach(file =>{
-                    if (!file.location.startsWith("http")){
-                        file.location =`${DOMAINBACK}/${file.location}`}
-                })
-            }  
             return this.datas
         }
      }

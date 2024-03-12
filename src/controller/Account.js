@@ -64,9 +64,9 @@ class Account extends Controller{
             control.style.display =  display ? "none" : "flex"  
         }
     }
-    fillUser(){
-        // Les controlles   
-        const user =  this.userData
+    async fillUser(){
+        // Les controlles  
+        const user = this.userData
         if (user.hasOwnProperty('medias')){
             this.imgProlile.src = user.medias.location || "src/public/ressource/image/defaultProfile.jpeg"
         }
@@ -194,8 +194,7 @@ class Account extends Controller{
             const form =  document.querySelector('form[name="authorize"]')
             const formData = new FormData(form)
             let result = ""
-            debugger
-            if ((this.imgProlile.src !==`${DOMAINFRONT}/src/public/ressource/image/defaultProfile.jpeg` &&  this.imgProlile.src !== this.userData.medias.location) || !this.userData.medias ){
+            if ((this.imgProlile.src ===`${DOMAINFRONT}/src/public/ressource/image/defaultProfile.jpeg`) || !this.userData.medias ){
                 formData.append('idUser', this.userData.id)
                 formData.append('name','profile')
                 result = await this.uniqueInstance.uploadProfile(formData)
@@ -204,17 +203,12 @@ class Account extends Controller{
                 formData.append('name','profile')
                 result = await this.uniqueInstance.uploadProfile(formData,"mediaUpdate")
             }
-            debugger
             if (result.statut === 1){
-                const reader = new FileReader()
-                reader.onload = (event)=>{ 
-                    this.imgProlile.src = event.target.result
-                }
-                reader.readAsDataURL(this.inputChangeProfile.files[0])
+                this.imgProlile.src = result.data.newUrl
                 if (this.userData.medias){
-                    this.userData.medias.location = `${DOMAINBACK}/ressources/images/${this.inputChangeProfile.files[0].name}`
+                    this.userData.medias.location = result.data.newUrl
                 }else{
-                    this.userData.medias = { loaciton : `${DOMAINBACK}/ressources/images/${this.inputChangeProfile.files[0].name}`}
+                    this.userData.medias = { loaciton : result.data.newUrl}
                 }
                 sessionStorage.removeItem('currentUser')
                 sessionStorage.setItem('currentUser',JSON.stringify(this.userData))
@@ -230,7 +224,7 @@ class Account extends Controller{
                 alert("Vous allez être rediriger vers la page d'acceuil")
                 window.location.href = "/"          
             }
-        } ) 
+        } )
         // Suppression du compte
         this.btnDelete.addEventListener('click', async () => {
             if (confirm("Etes-vous sur ne plus vouloir faire partir de la commnunauté des etudiants d'EduCyle??")){
@@ -303,7 +297,7 @@ class Account extends Controller{
             CustomRouter.handleLocation()
         }
         await this.fetchDatas()
-        this.fillUser()
+        await this.fillUser()
         this.fillList('annonce',this.mesAnnonces)
         this.fillList('recuperation',this.mesRecuperations)
         this.setControls(this.userData.id)

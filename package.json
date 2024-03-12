@@ -4,15 +4,21 @@
   "description": "Frontend...",
   "main": "router.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "live-server"
   },
   "author": "landry kankeu",
   "devDependencies": {
+    "live-server": "^1.2.2",
     "tailwindcss": "^3.4.1"
+  },
+  "engines": {
+    "node": "21.x"
   },
   "dependencies": {
     "@googleapis/docs": "^3.0.0",
     "dotenv": "^16.4.5",
+    "express": "^4.18.3",
     "googleapis": "^133.0.0"
   },
   "repository": {

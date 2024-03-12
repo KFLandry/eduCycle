@@ -31,7 +31,6 @@ class User {
       if(response.statut === 1){
         this.connected = true;
         this.data =  response.data
-        if (this.data.medias){this.data.medias.location =`${DOMAINBACK}/${this.data.medias.location}`;}
         this.headers ={
           'Authorization' : `Bearer ${this.data.token}`,
         }
@@ -54,10 +53,6 @@ class User {
       if(response.statut === 1){
         this.connected = true;
         this.data =  response.data
-        debugger
-        if (this.datas.hasOwnProperty("medias")){
-          this.data.medias.location =`${DOMAINBACK}/${this.data.medias.location}`
-        }
         this.headers ={
           'Authorization' : `Bearer ${this.data.token}`,
         }
@@ -81,9 +76,6 @@ class User {
     }catch(e){
       this.data = {statut :  3, message : e}
     }finally{
-      if (this.result.medias){
-        this.result.medias.location =`${DOMAINBACK}/${this.result.medias.location}`
-      }
       return this.result
     } 
   }

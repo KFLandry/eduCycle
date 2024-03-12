@@ -119,12 +119,13 @@ export class CustomRouter {
      static updateDisplay(){
         const authorizeControls =  document.querySelectorAll('[name="authorize"]')
         const unauthorizeControls =  document.querySelectorAll('[name="unauthorize"]')
-        let profile = document.querySelector("#profile")
+        let profile = document.querySelector("#profile img")
         let userName =  document.querySelector("p#labelName") 
         // On recupere les données du model
-        const data =  CustomRouter.user.datas()
-        if (data.media){
-            profile.style.backgroundImage= data.media.location  
+        let data = CustomRouter.user.datas()
+        data =  data instanceof Array ? data[0] : data
+        if (data.medias){
+            // profile.src = data.medias.location;  
         }
         userName.textContent = `${data.firstName}`
         // On active les controls

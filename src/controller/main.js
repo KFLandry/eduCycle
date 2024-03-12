@@ -20,7 +20,7 @@ class Main extends Controller{
     async fetchDatas(){
         this.datas = await this.ItemsManager.getMainDatas()
         if (!(this.datas instanceof Array)){
-            alert(JSON.stringify(this.datas))
+            // alert(JSON.stringify(this.datas))
             this.datas =  []
         }
         this.filtedDatas = this.datas.slice() 
