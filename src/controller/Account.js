@@ -39,7 +39,7 @@ class Account extends Controller{
         let MyOwnAds  = await this.itemManager.fetch('items','GET',this.userData.id)
         let myOwnRecover = await this.itemManager.fetch('files','GET',this.userData.id)
         this.mesAnnonces =  (MyOwnAds instanceof Array) ? MyOwnAds : [MyOwnAds]
-        this.mesRecuperations = (myOwnRecover instanceof Array) ?  myOwnRecover.filter(item => item.statut === "Validé") : [myOwnRecover]
+        this.mesRecuperations = (myOwnRecover instanceof Array) ?  myOwnRecover.filter(item => item.statut === "Validé") : myOwnRecover ? [myOwnRecover] :  []
         this.userData['nbAnnonces'] =  this.mesAnnonces.length || 0
         this.userData['nbRecuperations'] =  this.mesRecuperations.length  || 0
     }
@@ -219,9 +219,9 @@ class Account extends Controller{
         })
         // Deconnexion
         this.btnDeconnexion.addEventListener('click', () => {
-            debugger
             if(confirm("Etes-vous sûr de vouloir nous quitter???")){
                 alert("Vous allez être rediriger vers la page d'acceuil")
+                sessionStorage.removeItem('currentUser');
                 window.location.href = "/"          
             }
         } )
@@ -232,8 +232,8 @@ class Account extends Controller{
                 const result = await this.itemManager.fetch('user','DELETE',this.uniqueInstance.getId())
                 if (result.statut == 1){
                     alert("Votre compte a été supprimer avec succés!Vous allez être redirigé vers la page d'accueil!")
-                    window.location.href('/')
-                    CustomRouter.handleLocation()
+                    sessionStorage.removeItem('currentUser');
+                    window.location.href = '/'
                 }else{
                     alert(result.message)
                 }

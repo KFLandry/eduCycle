@@ -107,14 +107,13 @@ export class Don extends Controller {
             if (input.checked) {
                 if (input.id === "other") {
                     const inputOther = document.querySelector('input[name="otherSerie"]');
-                    category.push(encodeURIComponent(inputOther.value));
+                    category.push(inputOther.value);
                 }
                 category.push(input.value);
             }
         });
         formData.append('category',category)
         for( const file of this.inputPhotos.files){
-            debugger
             formData.append('files[]', file)
         }
         try{

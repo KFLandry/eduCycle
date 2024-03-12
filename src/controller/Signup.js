@@ -96,7 +96,7 @@ class Signup extends Controller{
             let secureData = {}
             secureData["role"] =  "USER";
             this.formData.forEach((value,key) => { 
-                secureData[key] = encodeURIComponent(value);
+                secureData[key] = value;
             });
             secureData['residence'] =  this.residence
             let response =  await  this.User.signup(secureData)

@@ -81,8 +81,7 @@ class Item extends Controller{
         if(this.urlParameters.has('idItem') && this.urlParameters.get('idItem')){
             this.ItemDatas  = await this.itemManager.fetch('item','GET',this.urlParameters.get('idItem'))
             // Un utilisateur ne peut pas récupérer sa propre annonce et une annonce de ne peut etre récupérer par deux utilisateurs
-            debugger
-            if (this.ItemDatas.publisher.id === this.user.getId() || this.ItemDatas.hasOwnProperty('idDonation')){
+            if (this.ItemDatas.publisher.id === this.user.getId() || this.ItemDatas.idDonation){
                 this.btnRecover.disabled =  true
                 this.btnFavoris.disabled = true
                 this.btnFavoris.classList.add('cursor-not-allowed')

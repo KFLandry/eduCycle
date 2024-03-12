@@ -24,7 +24,7 @@ class Login extends Controller{
         txtErreur.textContent = ""
         let login =  document.querySelector("#email")
         let password =  document.querySelector("#password")
-        let data = {"login" : encodeURIComponent(login.value), "password" : encodeURIComponent(password.value)}
+        let data = {"login" : login.value, "password" : password.value}
         let response =  await  this.User.login(data)    
         // Si connexion réussie on met à jour l'affichage et redirection vers la page principale
         if (response.statut === 1){           
