@@ -3,10 +3,10 @@ export const GOOGLE_APPLICATION_CREDENTIALS = "AIzaSyCmSelY9NfUQA3-fgl6XXf5Iexb4
 export const APITOKEN = "9a708c77-7e1f-4c44-b06a-2a67abee80e7"
 export const EMAILTEST = 'kankeulandry26@gmail.com'
 // 
-// export const DOMAINFRONT = "http://127.0.0.1:5501"
-// export const DOMAINBACK = "http://localhost:58119"
-export const DOMAINBACK = "https://educycle-d5986f362a7b.herokuapp.com/index.php"
-export const DOMAINFRONT = "https://educyclefront-07f9d84796fd.herokuapp.com"
+export const DOMAINFRONT = "http://127.0.0.1:5502"
+export const DOMAINBACK = "http://localhost:52371"
+// export const DOMAINBACK = "https://educycle-d5986f362a7b.herokuapp.com/index.php"
+// export const DOMAINFRONT = "https://educyclefront-07f9d84796fd.herokuapp.com"
 // Aire de Recherche
 export const LATITTUDE = 43.4211
 export const LONGITUDE = 7.1557

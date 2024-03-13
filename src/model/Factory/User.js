@@ -35,11 +35,9 @@ class User {
           'Authorization' : `Bearer ${this.data.token}`,
         }
       }
-      this.data = response
+      return {statut : 1 }
     }catch(e){
-        this.data =  {statut : 3, message :e}
-    }finally{
-      return this.data
+      return {statut : 3, message :e}
     }
   }
   async signup(data){
