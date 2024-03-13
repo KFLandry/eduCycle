@@ -58,22 +58,20 @@ class Item extends Controller{
         const parser= new DOMParser()
         const DOMEmail =  parser.parseFromString(StringEmail,'text/html')
         DOMEmail.querySelector('a#go').href = `${DOMAINFRONT}/login`
-        Email.send({
-            SecureToken : APITOKEN,
-            To : `${decodeURIComponent(this.ItemDatas.publisher.email)}`,
-            From : EMAILTEST,
-            Subject : "Nouvelles notifications dans ton espace eduCycle 🎉",
-            Body : DOMEmail.documentElement.outerHTML
-        })
-        .then(response => {
-            if (response=="OK"){
-                sessionStorage.removeItem('currentUser')
-                alert(`${this.ItemDatas.publisher.name} a été notifié par mail📧`)
-            }else{
-                alert(response)
-            }
-        })        
-        .catch(e => alert(e)) 
+        // EmailJS
+        var templateParams = {
+            to_email : this.userData.email,
+            link :  `${DOMAINFRONT}/login`
+          };
+          emailjs.send('service_v4093qe', 'template_01kdgjc', templateParams)
+                 .then(
+                    (response) => {
+                        alert(`${this.ItemDatas.publisher.name} a été notifié par mail📧`)
+                    },
+                    (error) => {
+                        alert(JSON.stringify(error))
+                    },
+          );
     }
     async fetchDatas(){
         // On resoud l'url

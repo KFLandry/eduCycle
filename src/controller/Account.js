@@ -36,12 +36,17 @@ class Account extends Controller{
     }
     async fetchDatas(){
         // Datas
-        let MyOwnAds  = await this.itemManager.fetch('items','GET',this.userData.id)
-        let myOwnRecover = await this.itemManager.fetch('files','GET',this.userData.id)
-        this.mesAnnonces =  (MyOwnAds instanceof Array) ? MyOwnAds : [MyOwnAds]
-        this.mesRecuperations = (myOwnRecover instanceof Array) ?  myOwnRecover.filter(item => item.statut === "Validé") : myOwnRecover ? [myOwnRecover] :  []
-        this.userData['nbAnnonces'] =  this.mesAnnonces.length || 0
-        this.userData['nbRecuperations'] =  this.mesRecuperations.length  || 0
+        if (this.userData.id){
+            let MyOwnAds  = await this.itemManager.fetch('items','GET',this.userData.id)
+            let myOwnRecover = await this.itemManager.fetch('files','GET',this.userData.id)
+            this.mesAnnonces =  (MyOwnAds instanceof Array) ? MyOwnAds : [MyOwnAds]
+            this.mesRecuperations = (myOwnRecover instanceof Array) ?  myOwnRecover.filter(item => item.statut === "Validé") : myOwnRecover ? [myOwnRecover] :  []
+            this.userData['nbAnnonces'] =  this.mesAnnonces.length || 0
+            this.userData['nbRecuperations'] =  this.mesRecuperations.length  || 0
+            //Chargement
+            this.fillList('annonce',this.mesAnnonces)
+            this.fillList('recuperation',this.mesRecuperations)
+        }
     }
     enableUserControls(display){
         //On des/active les controls
@@ -248,22 +253,21 @@ class Account extends Controller{
             const parser= new DOMParser()
             const DOMEmail =  parser.parseFromString(StringEmail,'text/html')
             DOMEmail.querySelector('a#verify').href = `${DOMAINBACK}/accountVerification/${this.userData.id}`
-            Email.send({
-                SecureToken : APITOKEN,
-                To : `${decodeURIComponent(this.userData.email)}`,
-                From : EMAILTEST,
-                Subject : "Verification de Compte EduCyle",
-                Body : DOMEmail.documentElement.outerHTML
-            })
-            .then(response => {
-                if (response=="OK"){
-                    sessionStorage.removeItem('currentUser')
-                    alert('Un mail de verification a été envoyé sur votre mail 📧')
-                }else{
-                    alert(response)
-                }
-            })        
-            .catch(e => alert(e)) 
+            // EmailJS...
+            var templateParams = {
+                name: this.userData.firstName,
+                to_email : this.userData.email,
+                link :  `${DOMAINBACK}/accountVerification/${this.userData.id}`
+              };
+              emailjs.send('service_v4093qe', 'template_obp98c8', templateParams)
+                     .then(
+                         (response) => {
+                             alert('Un mail de verification a été envoyé sur votre mail 📧')
+                        },
+                        (error) => {
+                            alert(JSON.stringify(error))
+                        },
+              );
         })
         
     }
@@ -298,8 +302,6 @@ class Account extends Controller{
         }
         await this.fetchDatas()
         await this.fillUser()
-        this.fillList('annonce',this.mesAnnonces)
-        this.fillList('recuperation',this.mesRecuperations)
         this.setControls(this.userData.id)
     }
 }

@@ -29,7 +29,7 @@ class Login extends Controller{
         // Si connexion réussie on met à jour l'affichage et redirection vers la page principale
         if (response.statut === 1){           
             // Session Storage
-            sessionStorage.setItem('currentUser', JSON.stringify(response.data))
+            sessionStorage.setItem('currentUser', JSON.stringify(this.User.datas()))
             // Redirection
             window.history.pushState({}, "", "/"); // Modifier l'URL sans recharger la page
             CustomRouter.handleLocation()

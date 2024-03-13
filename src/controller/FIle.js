@@ -71,7 +71,6 @@ class File extends Controller{
         const btnSubmit = document.querySelector('button#submit') 
         const btnCancel = document.querySelector('button#cancel') 
         btnSubmit.addEventListener('click',async (event)=> {
-            debugger
             event.preventDefault()
             const form =  document.querySelector('.formComment')
             debugger
