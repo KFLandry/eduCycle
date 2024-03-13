@@ -15,6 +15,7 @@ class Main extends Controller{
         this.filterResidence = document.querySelector('select[name="residence"]')
         this.listItems =   document.querySelector("ul#listItems");
         this.btnDeleteFilters =  document.querySelector('button#deleteFilters')
+        this.inputSearch =  document.querySelector('input[name="search"]')
         this.card =  ""
     }
     async fetchDatas(){
@@ -32,22 +33,6 @@ class Main extends Controller{
         const controls =  this.card.querySelector("#main")
         controls.classList.remove("hidden")
         controls.classList.add("flex")
-    }
-    searchItems(){
-        this.btnSearch.addEventListener("input",(event) =>{
-            event.preventDefault()
-            // On recherche fullText
-            this.fillItems()
-        })
-    }
-    deleteFilters(){
-        this.btnDeleteFilters.addEventListener("click", () => {
-            this.filterResidence.selectedIndex =  0
-            this.filtertSerie.selectedIndex =  0
-            this.filterWorth.selectedIndex =  0
-            this.inputSort.selectedIndex =  0
-            this.fillItems(this.datas)
-        })
     }
     // La methode qui remplie les items
     async fillItems(datas){
@@ -118,7 +103,7 @@ class Main extends Controller{
             this.listItems.appendChild(card)
         }
     }
-    sort(){
+    setControls(){
         this.inputSort.addEventListener("input",() =>{
             const sortedDatas =  this.datas.slice()
             // On range
@@ -137,8 +122,6 @@ class Main extends Controller{
             // On met a jour l'affichage avec le tableau rangé
             this.fillItems(sortedDatas)
         }) 
-    }
-    filter(){
         const listFilters =  document.querySelectorAll("div#filter select")
         for( const filter of listFilters){
             // Le select #sort est géré differement
@@ -154,7 +137,7 @@ class Main extends Controller{
                         case this.filterWorth : 
                             this.filtedDatas =  this.filtedDatas.filter(item => {
                                 return item.worth >= filter.value
-                                 });
+                                    });
                             break
                         case this.filterResidence :  
                             this.filtedDatas =  this.filtedDatas.filter(item => {
@@ -166,15 +149,34 @@ class Main extends Controller{
                 })
             }
         }
+        // La recherche
+        this.inputSearch.addEventListener('input',()=> {
+            const datas = this.datas.slice()
+            let searchResults =  datas.filter( item => {
+                const subjet =  item.name+" "+item.description+" "+item.category
+                return subjet.includes(this.inputSearch.value)
+            })
+            this.fillItems(searchResults);
+        })
+        this.inputSearch.addEventListener('submit', async() => {
+            let datas = await this.ItemsManager.fetch('fullSearch','GET',this.inputSearch.value)
+            datas =  (datas instanceof Array) ? datas : [datas];
+            this.fillItems(datas)
+        })
+        // Supprimer les filtres
+        this.btnDeleteFilters.addEventListener("click", () => {
+            this.filterResidence.selectedIndex =  0
+            this.filtertSerie.selectedIndex =  0
+            this.filterWorth.selectedIndex =  0
+            this.inputSort.selectedIndex =  0
+            this.fillItems(this.datas)
+        })
     }
     async initialisePage(){
         // On checks le sessionStorage
         await this.fetchDatas()
         this.fillItems(this.datas)
-        this.sort()
-        this.filter()
-        this.deleteFilters()
-        this.searchItems()
+        this.setControls()
     }
 }
 export default Main;
