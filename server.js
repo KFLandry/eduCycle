@@ -5,7 +5,11 @@ const PORT = process.env.PORT || 3000;
 
 // Définir le dossier des fichiers statiques
 app.use(express.static(path.join(__dirname)));
-
+// Configuration spécifique pour les fichiers JavaScript
+app.get('*.js', function(req, res, next) {
+  res.contentType('application/javascript');
+  next();
+});
 // Route pour gérer les requêtes GET vers la racine
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
