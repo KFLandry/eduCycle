@@ -95,7 +95,6 @@ export class Don extends Controller {
         autocomplete.addListener("place_changed", () => {
             const result =  autocomplete.getPlace()
             this.residence ={name  : result.name, url :  result.url , website :  result.website}
-            console.log(JSON.stringify(this.residence))
         });    
       }
     async publishedAd() {
@@ -105,10 +104,6 @@ export class Don extends Controller {
         const checkBoxValues = document.querySelectorAll('input[type="checkbox"]');
         checkBoxValues.forEach(input => {
             if (input.checked) {
-                if (input.id === "other") {
-                    const inputOther = document.querySelector('input[name="otherSerie"]');
-                    category.push(inputOther.value);
-                }
                 category.push(input.value);
             }
         });
@@ -132,25 +127,32 @@ export class Don extends Controller {
             throw new TypeError(e)
         }
     }
-    addOtherSerie() {
-        const checkOther = document.querySelector("input#other");
-        checkOther.addEventListener('change', () => {
-            const inputOther = document.querySelector('input#otherSerie');
-            if (inputOther.display === "none") {
-                inputOther.display = 'block';
-            } else {
-                inputOther.display = 'none';
-            }
-        });
-    }
     setControls(){
         this.btnPublished.addEventListener('click',async (event) =>{
+            let icon = document.querySelector('#icon')
+            let iconContent =  icon.innerHTML
+            icon.textContent ="..."
+            event.preventDefault()
+                // Valider les champs requis
+            const requiredInputs = document.querySelectorAll('input[required]');
+            let allFieldsValid = true;
+
+            requiredInputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    allFieldsValid = false;
+                }
+            });
+
+            if (!allFieldsValid) {
+                alert("Veuillez remplir tous les champs obligatoires.");
+                return;
+            }
             await this.publishedAd()
+            icon.innerHTML=iconContent
         });
     }
     initialisePage() {
         this.addPhoto();
-        this.addOtherSerie();
         this.setControls()
         this.initMap()
     }  

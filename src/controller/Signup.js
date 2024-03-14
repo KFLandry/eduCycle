@@ -47,19 +47,50 @@ class Signup extends Controller{
         const autocomplete = new google.maps.places.Autocomplete(document.querySelector('input#residence'), options);
         autocomplete.addListener("place_changed", () => {
             const result =  autocomplete.getPlace()
-            console.log(result)
             this.residence ={name  : result.name, url :  result.url , website :  result.website}
         });    
       }
     setControls(){
         const btnSignUp  =  document.querySelector("#submit")
-        btnSignUp.addEventListener('click', (event) =>{
+        btnSignUp.addEventListener('click',async (event) =>{
             event.preventDefault()
-            this.signup()
+            btnSignUp.textContent =  'Sign up...'
+            // Valider les champs requis
+            const requiredInputs = document.querySelectorAll('input[required]');
+            let allFieldsValid = true;
+
+            requiredInputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    allFieldsValid = false;
+                }
+            });
+
+            if (!allFieldsValid) {
+                alert("Veuillez remplir tous les champs obligatoires.");
+                return;
+            }
+            await this.signup()
+            btnSignUp.textContent =  'Sign up...'
         })
         // La mise à jour 
-        document.querySelector("button#update").addEventListener('click', (event)=> {
+        document.querySelector("button#update").addEventListener('click', async (event)=> {
             event.preventDefault()
+            document.querySelector("button#update").value = "Update..."
+            // Valider les champs requis
+
+            const requiredInputs = document.querySelectorAll('input[required]');
+            let allFieldsValid = true;
+
+            requiredInputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    allFieldsValid = false;
+                }
+            });
+
+            if (!allFieldsValid) {
+                alert("Veuillez remplir tous les champs obligatoires.");
+                return;
+            }
             // Pour la mise à jour aucun champ n'est obligatoire et les champrs vides conceveront leur valeur
             const inputs = document.querySelectorAll('form input')
             const formData =  new FormData(document.querySelector("#SignupForm"))
@@ -69,14 +100,15 @@ class Signup extends Controller{
                 }
             }
             formData.append('id',this.urlParameters.get('idUser'))
-            formData.append('residence', this.residence)
-            const result = this.User.fetch("user","PATCH","",formData)
+            formData.append('residence', JSON.stringify(this.residence))
+            const result = await this.User.fetch("userUpdate","POST","",formData)
             if (result.statut === 1){
                 alert('Mise à jour reussie!')
                 sessionStorage.removeItem('currentUser')
                 window.history.pushState({},"","/account")
-                CustomRouter.handleLocation
+                CustomRouter.handleLocation()
             }
+            document.querySelector("button#update").value = "Update..."
         })
         // Verification la confirmation de mot de passe 
         this.inputPasswordVerified.addEventListener('input', () => {
@@ -102,14 +134,14 @@ class Signup extends Controller{
             let response =  await  this.User.signup(secureData)
             if (response.statut === 1){
                 // Si connexion reussie,On maj l'affichage et on stocke l'utilisateur dans le sessionStorage
+                alert("La communauté d'educycle te souhaite  :  Bienvenu(e) ✨🥳🎉")
                 sessionStorage.setItem('currentUser', JSON.stringify(response.data))
-                window.history.pushState({},"","/account")
-                CustomRouter.handleLocation()
+                window.location.href = "/account";
             }else{
                 let txtErreur =  document.querySelector('#erreur')
                 txtErreur.innerHTML = response.message;
             }
-        }
+        }else{alert("Vous devez accepter les conditions d'utilisation de l'application!")}
     } 
     initialisePage(){
         this.setControls()

@@ -8,6 +8,7 @@ import Account from "../controller/Account.js";
 import Favoris from "../controller/Favoris.js";
 import Don from "../controller/Don.js";
 import Item from "../controller/Item.js";
+import { DOMAINFRONT } from "./ressource/secret.js";
 
 // On définit la fonction de routage et on crée l'unique instance de l'utilisateur
 export class CustomRouter {
@@ -56,7 +57,12 @@ export class CustomRouter {
     }
     handleLink(event){
         if (event.target.matches('a[href]')) {
-            this.route(event); // Appeler la fonction de routage lorsqu'un lien est cliqué
+            if (event.target.origin !== DOMAINFRONT){
+                const url =  new URL(event.target.getAttribute('href'))
+                window.open(url,'_self')
+            }else{
+                this.route(event); // Appeler la fonction de routage lorsqu'un lien est cliqué
+            }
         }
     }
     // Fonction pour gérer la localisation actuelle et initialiser les controlleurs correspondants

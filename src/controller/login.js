@@ -13,9 +13,27 @@ class Login extends Controller{
             // 
         }else{
             this.btnSubmit =  document.querySelector("#submit")
-            this.btnSubmit.addEventListener('click',(event) => {
+            this.btnSubmit.addEventListener('click',async (event) => {
+                this.btnSubmit.textContent ='Sign up...'
                 event.preventDefault()
-                this.login()
+                // Valider les champs requis
+                const requiredInputs = document.querySelectorAll('input[required]');
+                let allFieldsValid = true;
+
+                requiredInputs.forEach(input => {
+                    if (input.value.trim() === '') {
+                        allFieldsValid = false;
+                        // Vous pouvez personnaliser le message d'erreur ou le style de l'input ici si nécessaire
+                    }
+                });
+
+                if (!allFieldsValid) {
+                    // Si au moins un champ requis est vide, ne poursuivez pas avec la soumission
+                    alert("Veuillez remplir tous les champs obligatoires.");
+                    return;
+                }
+                await this.login()
+                this.btnSubmit.textContent ='Sign up'
             })
         }
     }

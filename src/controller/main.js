@@ -105,9 +105,9 @@ class Main extends Controller{
     }
     setControls(){
         this.inputSort.addEventListener("input",() =>{
-            const sortedDatas =  this.datas.slice()
+            let sortedDatas =  this.datas.slice()
             // On range
-            sortedDatas.sort( (a,b) => {
+            sortedDatas = sortedDatas.sort( (a,b) => {
                 switch (this.inputSort.value){
                     case "de A à Z" :
                         return a.name.localeCompare(b.name)
@@ -130,19 +130,14 @@ class Main extends Controller{
                     switch (filter){
                         case this.filtertSerie : 
                             this.filtedDatas =  this.filtedDatas.filter(item => {
-                                category = item.category.split(",")
-                                return category.include(filter.value)
+                                let category = item.category.split(",")
+                                return category.includes(filter.value)
                             });
                             break
                         case this.filterWorth : 
                             this.filtedDatas =  this.filtedDatas.filter(item => {
-                                return item.worth >= filter.value
+                                return item.worth <= filter.value
                                     });
-                            break
-                        case this.filterResidence :  
-                            this.filtedDatas =  this.filtedDatas.filter(item => {
-                                return item.residence === filter.value
-                            });
                             break
                     }
                     this.fillItems(this.filtedDatas)
@@ -165,7 +160,6 @@ class Main extends Controller{
         })
         // Supprimer les filtres
         this.btnDeleteFilters.addEventListener("click", () => {
-            this.filterResidence.selectedIndex =  0
             this.filtertSerie.selectedIndex =  0
             this.filterWorth.selectedIndex =  0
             this.inputSort.selectedIndex =  0
