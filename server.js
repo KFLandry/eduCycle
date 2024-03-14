@@ -10,6 +10,11 @@ app.get('*.js', function(req, res, next) {
   res.contentType('application/javascript');
   next();
 });
+// Configuration spécifique pour les fichiers CSS
+app.get('*.css', function(req, res, next) {
+  res.contentType('text/css');
+  next();
+});
 // Route pour gérer les requêtes GET vers la racine
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));

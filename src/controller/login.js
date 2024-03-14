@@ -1,6 +1,6 @@
 
 import UserFactory from "../model/Factory/UserFactory.js"
-import { CustomRouter } from "src/public/router.js"
+import { CustomRouter } from "../public/router.js";
 import Controller from "./Controller.js"
 
 class Login extends Controller{
