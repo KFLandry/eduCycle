@@ -36,9 +36,9 @@ Technologies, Approche et Architecure de l'application
  
    L'approche mis en avant dans le developpement de d'educycle est le Client Side Rendering avant :  
     *  Front-End  :  SPA (Single Page Application) en Vanilla Javascript
-       url  :  
+       url  :  https://github.com/KFLandry/eduCycle.git
     *  Back-end :  API REST en php natif 
-       url  :  
+       url  :  https://github.com/KFLandry/ProjetWeb.git
     Leux deux parties communniquent grâce à l'API Fetch
  
  -Architecture
