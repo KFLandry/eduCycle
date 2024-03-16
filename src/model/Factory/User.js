@@ -34,8 +34,8 @@ class User {
         this.headers ={
           'Authorization' : `Bearer ${this.data.token}`,
         }
-      }
-      return {statut : 1 }
+        return {statut : 1 }
+      }else{return response}
     }catch(e){
       return {statut : 3, message :e}
     }
