@@ -46,7 +46,6 @@ class Favoris extends Controller{
                const linkAccount =  card.querySelector('a#account')
                const linkRecover = card.querySelector("a#recover")
                const btnDelete = card.querySelector("button#delete_favor")
-               debugger
                card.querySelector("[title='statut']").style.display =  'none'
                // On les remplie...
                if (ad.hasOwnProperty('medias')){
@@ -56,7 +55,8 @@ class Favoris extends Controller{
                worth.textContent =  ad.worth
                state.textContent = ad.state
                publishedDate.textContent =  ad.publishedDate
-               residenceName.textContent =  ad.residence
+               residenceName.textContent =  ad.residence.name
+               residenceName.href =  ad.residence.url
                linkAccount.textContent = ad.publisher.name
                linkAccount.href =  `/account?idAccount=${ad.publisher.id}`
                linkItem.href =  `/item?idItem=${ad.id}`

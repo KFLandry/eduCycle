@@ -33,7 +33,7 @@ class File extends Controller{
             control.classList.remove('flex')
         }
         // Le formulaire de commentarre
-        this.divComment.innerHTML = await fetch('src/template/Component/formComment.html').then(resp => resp.text()).catch(e => console.log(e))
+        this.divComment.innerHTML = await fetch('src/template/Component/formComment.html').then(resp => resp.text()).catch(e => console.log(e)) 
         // Les results sont soit false/un objet litteral ou un tableau d'objet litteraux
         const datas = await this.itemManager.fetch('files','GET',this.user.getId())
         this.datas =( datas instanceof Array) ? datas : datas ? [datas] : []
@@ -121,7 +121,6 @@ class File extends Controller{
             linkAccount.href =  `/account?idAccount=${item.publisher.id}`
             linkItem.href =  `/item?idItem=${item.id}`  
             labelStatut.textContent =  item.statut
-            debugger
             if(item.statut === "En attente de validation"){
                 iconStatut.classList.add("bg-orange-400")
             }else if(item.statut === "Validé"){
@@ -144,7 +143,6 @@ class File extends Controller{
             btnDeny.addEventListener('click',async (event) =>{
                 const body =  {id : item.id, statut :  'normal'} 
                 let result =await this.itemManager.fetch('item',"PATCH","",JSON.stringify(body))
-                debugger
                 if (result.statut === 1 ){
                     alert("Pas de souci mec.✨😉")
                     result = await this.itemManager.fetch('donation','DELETE',item.idDonation) 

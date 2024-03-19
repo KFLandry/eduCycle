@@ -60,7 +60,7 @@ class Item extends Controller{
         DOMEmail.querySelector('a#go').href = `${DOMAINFRONT}/login`
         // EmailJS
         var templateParams = {
-            to_email : this.userData.email,
+            to_email : this.user.datas().email,
             link :  `${DOMAINFRONT}/login`
           };
           emailjs.send('service_v4093qe', 'template_01kdgjc', templateParams)
@@ -116,8 +116,7 @@ class Item extends Controller{
                 if (result.statut === 1){
                     alert("Yeehaw ! 🎉 Tu l'as fait ! Ta demande de récup', c'est dans la boîte ! 🚀 Checke vite ta file pour voir ce qui se passe ! 🎆 Big up à toi pour ce moment funky ! ✨")
                     // On notifie la cible par mail
-                    this.notifyTarget()
-                    debugger
+                    await this.notifyTarget()
                     this.recoverForm.classList.remove("flex")
                     this.recoverForm.classList.add("hidden")
                     this.btnRecover.classList.add("bg-green-300")
