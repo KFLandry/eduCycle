@@ -16,11 +16,10 @@ app.get('*.css', function(req, res, next) {
   next();
 });
 // Route pour gérer les requêtes GET vers la racine
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+app.get('*', (req, res) => {res.sendFile(path.join(__dirname, 'index.html'));});
 
 // Démarrer le serveur
-app.listen(PORT, () => {
-  console.log(`Serveur démarré sur le port ${PORT}`);
-});
+app.listen(PORT, () => {console.log(`Serveur démarré sur le port ${PORT}`);});
+
+
+
