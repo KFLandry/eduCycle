@@ -1,5 +1,5 @@
 # The name of the app. Must be unique within a project.
-name: educycle
+name: app
 
 # The type of the application to build
 type: 'nodejs:16'
@@ -11,3 +11,5 @@ disk: 512
 web:
     commands:
         start: NODE_ENV=production npm run start
+hooks:
+    build: npm run build
