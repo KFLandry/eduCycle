@@ -1,5 +1,5 @@
 # eduCycle Front-End
-Description du projet
+Description du projet ...
 
 EduCycle est une application web centrée sur une communauté d'etudiants de Nice vivant en residence Universitaire. Que vous ayez besoin de cahiers, de stylos, de livres ou de matériel informatique, vous pouvez trouver ce qu'il vous faut sur EduCycle. Vous pouvez aussi faire un geste solidaire en offrant les fournitures dont vous n'avez plus l'usage à d'autres étudiants qui en ont besoin. EduCycle est une plateforme simple, rapide et sécurisée qui vous met en relation avec les membres de votre communauté éducative. Rejoignez EduCycle et participez à une économie circulaire et responsable !
 
