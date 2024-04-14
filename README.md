@@ -45,4 +45,8 @@ Technologies, Approche et Architecure de l'application
   Educycle est code full Object-Oriented en suivant une architecture MVC(Model-View-Controller) pour le Front-end et MV (Model-    
   Controller) pour le Back-end.
   
+**Documentation**
+
+https://github.com/KFLandry/ProjetWeb/tree/bebde28f5094533647dbaf5e8c54942431a6e5c8/ressources/
+Document%20Projet
  
