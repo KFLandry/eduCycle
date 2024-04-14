@@ -25,14 +25,14 @@ Le projet est sujet à evolution et pour l'instant les fonctionnalités qui sont
 
 **Technologies, Approche et Architecure de l'application**
 
-** -Technologies**
+**-Technologies**
   educycle est codé en Vanila Javascript et en php Natif
   La base de donnée est gérée avec Mysql
   Les Services ajoutés : 
     * EmailJS :  Ce service est utlisé pour envoyer des mails automatiques sur educycle
     * Cloud Storage  de Google: Ce service est utlisé pour stocker l'ensemble des images qui sont uploader sur la plateforme
     * Place API de google : Cette api est utilisé pour l'auto-completion des champs adresses dans les formulaires de la plateforme
-** -Approche de developpement**
+**-Approche de developpement**
  
    L'approche mis en avant dans le developpement de d'educycle est le Client Side Rendering avant :  
     *  Front-End  :  SPA (Single Page Application) en Vanilla Javascript
@@ -41,7 +41,7 @@ Le projet est sujet à evolution et pour l'instant les fonctionnalités qui sont
        url  :  https://github.com/KFLandry/ProjetWeb.git
     Leux deux parties communniquent grâce à l'API Fetch
  
-** -Architecture**
+**-Architecture**
   Educycle est code full Object-Oriented en suivant une architecture MVC(Model-View-Controller) pour le Front-end et MV (Model-    
   Controller) pour le Back-end.
   
