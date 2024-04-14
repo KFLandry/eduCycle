@@ -6,14 +6,14 @@ EduCycle est une application web centrée sur une communauté d'etudiants de Nic
 **Fonctionnalité du projet**
 
 Le projet est sujet à evolution et pour l'instant les fonctionnalités qui sont stables et fonctionnelles sont :
- **-Authentification : Les etudiants peuvent s'inscrire à la plateforme grauitement et s'y conncter regulierement.
- **-Gestion de comptes :  Les etudiants peuvent facilement gérer leur compte
- **-Verification d'email : Afin de fiabiliser les comptes auprès de la communauté les etudiants peuvent verifier leur adresse mail.
- **-Consultation et annonces : Educycle laissr ouvert la consultation d'annonce à tous les utilisateurs même anonyme.
- **-Creer d'annonce :  Educycle donne la possiblité aux etudiants membres de publier de nouvelles annonces
- **-Recuperation d'annonce : Les etudiants membre ont la possiblité de recuperer des annonces disponibles à travers une mecanique 
+ **-Authentification : Les etudiants peuvent s'inscrire à la plateforme grauitement et s'y conncter regulierement.**
+ **-Gestion de comptes :  Les etudiants peuvent facilement gérer leur compte**
+ **-Verification d'email : Afin de fiabiliser les comptes auprès de la communauté les etudiants peuvent verifier leur adresse mail.**
+ **-Consultation et annonces : Educycle laissr ouvert la consultation d'annonce à tous les utilisateurs même anonyme.**
+ **-Creer d'annonce :  Educycle donne la possiblité aux etudiants membres de publier de nouvelles annonces**
+ **-Recuperation d'annonce : Les etudiants membre ont la possiblité de recuperer des annonces disponibles à travers une mecanique**
    qui consiste en 5 petites etapes :  
-   **1 - Un etudiant est interesse par une annonce et manifeste son souhait de vouloir le recuperer par un message.
+   **1 - Un etudiant est interesse par une annonce et manifeste son souhait de vouloir le recuperer par un message.**
    **2 - L'auteur de l'annonce est notifié par mail qu'il a une nouvelle notification
    **3 - L'auteur se connecte à son espace et consulte ses notifications et pour chacune d'entre elles il peut soit accepter ou    
        refuser la recupération.
