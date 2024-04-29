@@ -9,30 +9,30 @@
                     <div class="flex justify-center">
                         <p id="erreur" class="text-center text-red-500"></p>
                     </div>
-                    <div class="" id="login">
+                    <div class="hidden flex-col justify-between" id="login">
                         <div>
-                            <label for="email" class="login block mb-2 text-sm font-medium" >Your email</label>
+                            <label for="email" class="login block mb-2 text-sm font-medium" >Email</label>
                             <input type="email" name="email" id="email" autocomplete="username"  class="login rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="name@company.com" required>
                         </div>
                         <div>
-                            <label for="password" class="login block mb-2 text-sm font-medium">Password</label>
+                            <label for="password" class="login block mb-2 text-sm font-medium">Mot de passe</label>
                             <input type="password" name="password" id="password" autocomplete="current-password" placeholder="••••••••" class="update rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" required>
                         </div>
                         <br>
                         <button type="submit" id="submit" class="w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center border"  >Se connecter</button>
+                        <a  id="passwordForgot" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer">Mot de passe oublié??</a>
                     </div>
-                    <div class="" id="updatePassword" hidden>
+                    <div class="hidden flex-col justify-between" id="updatePassword" >
                         <div class="">
                         </div>
-                        <label for="password" class="update block mb-2 text-sm font-medium">Password</label>
-                        <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" class="udpate rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" required>
+                        <label for="password" class="update block mb-2 text-sm font-medium">Mot de passe</label>
+                        <input type="password" id="passwordUpdated" autocomplete="current-password" placeholder="••••••••" class="udpate rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" required>
                         </br>
-                        <label for="password" class="block mb-2 text-sm font-medium">Confirm</label>
+                        <label for="password" class="block mb-2 text-sm font-medium">Confirmation</label>
                         <input type="password" id="confirm" autocomplete="current-password" placeholder="••••••••" class="update rounded-full size-full placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" required>
                         <br>
                         <button type="submit" id="update" class="w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center border"  >Changer de mot de pase</button>
                     </div> 
-                    <a  id="passwordForgot" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer">Mot de passe oublié??</a>
                     <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                         Vous n'avez pas encore de compte? <a href="/signup" onclick="route()" class="font-medium text-primary-600 hover:underline dark:text-primary-500">S'inscrire</a>
                     </p>

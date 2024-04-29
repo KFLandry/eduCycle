@@ -261,6 +261,7 @@ class Account extends Controller{
                 to_email : this.userData.email,
                 link :  `${DOMAINBACK}/accountVerification/${this.userData.id}`
               };
+            //  Le template de vérification d'email
               emailjs.send('service_v4093qe', 'template_obp98c8', templateParams)
                      .then(
                          (response) => {

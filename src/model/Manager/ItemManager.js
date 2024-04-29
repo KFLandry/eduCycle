@@ -15,8 +15,7 @@ class ItemManager {
     // Retour  => JSON        
      async fetch (ressource, method, param="", body=null){
         try{
-
-            const promise = method ==='GET' ? param instanceof String ? await fetch(`${DOMAINBACK}/${ressource}/${param}`) : await fetch(`${DOMAINBACK}/${ressource}?id=${param}`) : await fetch(`${DOMAINBACK}/${ressource}?id=${param }`,{
+            const promise = method ==='GET' ? !(param instanceof String || param)  ? await fetch(`${DOMAINBACK}/${ressource}/${param}`) : await fetch(`${DOMAINBACK}/${ressource}?id=${param}`) : await fetch(`${DOMAINBACK}/${ressource}?id=${param }`,{
                 method : `${method}`,
                 body :  body
             })
