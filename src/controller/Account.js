@@ -249,12 +249,7 @@ class Account extends Controller{
         // 
         this.btnEmailVerification.addEventListener('click',async () => {
             let xLoading =  this.btnEmailVerification.textContent
-            this.btnEmailVerification.textContent += "..."
-            // On fetch et remplie le body du mail
-            const StringEmail = await fetch('src/template/Component/email.html').then( resp => resp.text()).catch( e => console.log(e))
-            const parser= new DOMParser()
-            const DOMEmail =  parser.parseFromString(StringEmail,'text/html')
-            DOMEmail.querySelector('a#verify').href = `${DOMAINBACK}/accountVerification/${this.userData.id}`
+            this.btnEmailVerification.textContent += "..."            
             // EmailJS...
             var templateParams = {
                 name: this.userData.firstName,
