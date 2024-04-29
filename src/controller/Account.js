@@ -248,6 +248,8 @@ class Account extends Controller{
         this.linkUpdateProfile.href = `/signup?idUser=${this.userData.id}`
         // 
         this.btnEmailVerification.addEventListener('click',async () => {
+            let xLoading =  this.btnEmailVerification.textContent
+            this.btnEmailVerification.textContent += "..."
             // On fetch et remplie le body du mail
             const StringEmail = await fetch('src/template/Component/email.html').then( resp => resp.text()).catch( e => console.log(e))
             const parser= new DOMParser()
@@ -268,6 +270,7 @@ class Account extends Controller{
                             alert(JSON.stringify(error))
                         },
               );
+            this.btnEmailVerification.textContent =  xLoading
         })
         
     }

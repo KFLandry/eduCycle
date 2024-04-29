@@ -149,6 +149,8 @@ class Item extends Controller{
             }else{
                 if (confirm("Whoa là-bas, cowboy ! Pour mettre la main sur cette pépite, tu dois d'abord faire le grand saut et te connecter ! \n 🤠 Si tu n'as pas encore de compte, t'inquiète pas, c'est l'occasion parfaite pour t'inscrire et rejoindre la fête ! 🎉")){
                     window.location.href = "/login"
+                }else{
+                    this.btnRecover.popoverTargetAction  = "hide"
                 }
             }
         })

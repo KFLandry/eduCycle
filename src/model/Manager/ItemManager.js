@@ -6,9 +6,17 @@ class ItemManager {
         this.data ={}
     }
     // Cette methode recupère toutes les annonces de la base de données
+    // Cette methode se charge de requete le serveur
+    // Parametre =>   
+    // ressource  :  nom de la ressource à requeter(user, item, comment,...)
+    // method  : verbe de la requête (GET, POST , PUT, DELETE)
+    // param (optionel) : paramètre de la requete (id, email)
+    // body  (optionel):  corps de la requête (JSON, Objet FormData)
+    // Retour  => JSON        
      async fetch (ressource, method, param="", body=null){
         try{
-            const promise = method ==='GET' ? await fetch(`${DOMAINBACK}/${ressource}/${param}`) : await fetch(`${DOMAINBACK}/${ressource}/${param }`,{
+
+            const promise = method ==='GET' ? param instanceof String ? await fetch(`${DOMAINBACK}/${ressource}/${param}`) : await fetch(`${DOMAINBACK}/${ressource}?id=${param}`) : await fetch(`${DOMAINBACK}/${ressource}?id=${param }`,{
                 method : `${method}`,
                 body :  body
             })

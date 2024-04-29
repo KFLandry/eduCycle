@@ -44,7 +44,7 @@
                             <div id="profile" class="rounded-full h-5 w-5 p-5 flex justify-center items-center">
                                 <i class="fa-regular fa-user"></i>
                             </div>
-                            <p id="labelName">Account</p>
+                            <p id="labelName">Compte</p>
                         </button>
                     </li>
                 </ul>
@@ -73,7 +73,7 @@
                         </li>
                         <li name="unauthorize"  class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
                             <i class="fa-regular fa-user"></i>                                
-                            <a id="userName"href="/login" onclick="route()">Login</a>
+                            <a id="userName"href="/login" onclick="route()">Se Connecter</a>
                         </li>
                         <li name="unauthorize" class="w-full flex flex-row justify-between items-center hover:bg-gray-50 cursor-pointer">
                             <i class="fa-solid fa-arrow-right-to-bracket"></i>
@@ -81,11 +81,11 @@
                         </li>
                         <li name="authorize" class="hidden w-full flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
                             <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                            <a href="/account"  onclick="route()">Account</a>
+                            <a href="/account"  onclick="route()">Compte</a>
                         </li>
                         <li name="authorize" class="hidden w-full flex-row justify-between items-center hover:bg-gray-50 cursor-pointer" >
                             <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                            <button class="logout">Deconnexion</button>
+                            <button class="logout">Se connecter</button>
                         </li>
                     </ul>
                 </div>
@@ -108,7 +108,7 @@
                         </a>
                         <a name="unauthorize" href="/login" onclick="route()" class="w-full p-1 flex flex-row items-center justify-between hover:bg-gray-50" >
                             <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                            <p> Login </p>
+                            <p> Se connecter </p>
                         </a>
                         <a name="unauthorize"href="/signup" onclick="route()" class="w-full  p-1 flex flex-row items-center justify-between hover:bg-gray-50">
                             <i class="fa-solid fa-user-plus"></i>
@@ -116,7 +116,7 @@
                         </a>
                         <a name="authorize" href="/account" onclick="route()" class="hidden w-full flex-row p-1 items-center justify-between hover:bg-gray-50" >
                             <div id="profile"><i class="fa-solid fa-user-plus"></i></div>
-                            <p>Account</p>
+                            <p>Compte</p>
                         </a>
                         <button name="authorize" onclick="route()" class="logout hidden w-full p-1 flex-row items-center justify-between hover:bg-gray-50">
                             <i class="fa-solid fa-user-plus"></i>
@@ -130,6 +130,7 @@
         </section>
         <script type="module" src="/src/public/router.js" defer></script>
         <script src="https://kit.fontawesome.com/b8937a4147.js" crossorigin="anonymous"></script>
+        <script src="https://smtpjs.com/v3/smtp.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAr2TfqhPmoBefC23qY6OU1QUt00apCAGI&libraries=places&v=weekly" defer></script>
         <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
