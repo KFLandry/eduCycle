@@ -1,5 +1,3 @@
-
-
 import UserFactory from "../model/Factory/UserFactory.js";
 import ItemManager from "../model/Manager/ItemManager.js";
 // import Email from "../model/Service/CustomEmail.js";
@@ -18,17 +16,21 @@ class Login extends Controller{
         this.divUpdate  = document.querySelector('#updatePassword')
         this.btnSubmit =  document.querySelector("#submit")
         this.btnUpdate =  document.querySelector("#update")
-        this.inputPassword = document.querySelector("#passwordUpdated")
+        this.inputUpdatedPassword = document.querySelector("#passwordUpdated")
+        this.inputPassword =  document.querySelector("#password")
+        this.inputEmail =  document.querySelector("#email")
         this.inputConfirm = document.querySelector("#confirm")
         this.label  = document.querySelector("#text")
         this.currentTest =  ""
         // On defini le template correspondant
         this.urlParameters =  new URLSearchParams(window.location.search)
+        this.idUser=""
         if (!this.urlParameters.has("id")) {
             this.label.textContent = "Connexion"
             this.divLogin.classList.remove("hidden")
             this.divLogin.classList.add("flex")
         }else{
+            this.idUser =  this.urlParameters.get('id')
             this.label.textContent = "Changer de mot de passe \n"
             this.divUpdate.classList.remove("hidden")
             this.divUpdate.classList.add("flex")
@@ -41,10 +43,8 @@ class Login extends Controller{
             this.btnSubmit.textContent ='Sign up...'
             event.preventDefault()
             // Valider les champs requis
-            let iEmail = document.querySelector("#email")
-            let iPassword = document.querySelector("#password")
-            if (iPassword.value && iEmail.value){
-                let data = {"login" : iEmail.value, "password" : iPassword.value}
+            if (this.inputPassword.value && this.inputEmail.value){
+                let data = {"login" : this.inputEmail.value, "password" : this.inputPassword.value}
                 let response =  await  this.User.login(data)    
                 // Si connexion réussie on met à jour l'affichage et redirection vers la page principale
                 if (response.statut === 1){           
@@ -68,12 +68,11 @@ class Login extends Controller{
             // Envoi de l'email de verificaiton à l'utilisateur
             this.LinkPasswordForgot.addEventListener("click", async ()=>{
                 this.txtErreur.textContent =""
-                let inputEmail  =  document.querySelector("#email")
-                if (inputEmail.value){
+                if (this.inputEmail.value){
                     // On verifie l'existance du compte dans la base
-                    let user = await this.manager.fetch("user","GET",inputEmail.value)
+                    let user = await this.manager.fetch("user","GET",this.inputEmail.value)
                     if (!(user instanceof Array)){
-                        await  this.sendEmail("PasswordVerif", inputEmail.value, `${DOMAINFRONT}/login?id=${user.id}`, JSON.stringify({password : user.email}))
+                        await  this.sendEmail("PasswordVerif", this.inputEmail.value, `${DOMAINFRONT}/login?id=${user.id}`, JSON.stringify({password : user.email}))
                     }else{
                         this.txtErreur.textContent ="Aucun compte n'est crée avec cette adresse email!"    
                     }
@@ -84,31 +83,36 @@ class Login extends Controller{
             // Valider les champs requis
          
             
-            this.inputPassword.addEventListener('input', () => {
+            this.inputUpdatedPassword.addEventListener('input', () => {
                 this.currentTest = ""
                 // Vérification de mot de passe
-                this.currentTest +=!(new RegExp("[A-Z]").test(this.inputPassword.value)) ? "=> Contenir au moins une majuscule\n": ""
-                this.currentTest +=!(new RegExp("[a-z]").test(this.inputPassword.value)) ? "=> Contenir au moins une minuscule\n": ""
-                this.currentTest +=!(new RegExp("\\d").test(this.inputPassword.value)) ? "=> Contenir au moins un chiffre\n": ""
-                this.currentTest +=!(new RegExp("\\W").test(this.inputPassword.value)) ? "=> Contenir au moins un caractére special\n": ""
-                this.currentTest +=(this.inputPassword.value.length < 8) ? "=> Contenir au moins 8 caractéres\n": ""
+                this.currentTest +=!(new RegExp("[A-Z]").test(this.inputUpdatedPassword.value)) ? "=> Contenir au moins une majuscule\n": ""
+                this.currentTest +=!(new RegExp("[a-z]").test(this.inputUpdatedPassword.value)) ? "=> Contenir au moins une minuscule\n": ""
+                this.currentTest +=!(new RegExp("\\d").test(this.inputUpdatedPassword.value)) ? "=> Contenir au moins un chiffre\n": ""
+                this.currentTest +=!(new RegExp("\\W").test(this.inputUpdatedPassword.value)) ? "=> Contenir au moins un caractére special\n": ""
+                this.currentTest +=(this.inputUpdatedPassword.value.length < 8) ? "=> Contenir au moins 8 caractéres\n": ""
                 if (this.currentTest){
                     this.currentTest = "Votre mot de passe doit :  \n"+this.currentTest
-                    this.inputPassword.setAttribute("title", this.currentTest)
+                    this.inputUpdatedPassword.setAttribute("title", this.currentTest)
+                }else{
+                    this.inputUpdatedPassword.setAttribute("title", "")
                 }
                 })
                 this.inputConfirm.addEventListener('input', () => {
-                    if (this.inputConfirm.value!=this.inputPassword.value){
-                        this.currentTest = "Les deux champs doivent correspondres"
+                    if (this.inputConfirm.value!==this.inputUpdatedPassword.value){
+                        this.currentTest = "\n Les deux champs doivent correspondres"
                         this.inputConfirm.setAttribute("title",this.currentTest)
+                    }else{
+                        this.inputConfirm.setAttribute("title", "")
+                        this.currentTest=""
                     }
                 })
                 //Bouton de MAJ
             this.btnUpdate.addEventListener("click",async (e) => {
                 e.preventDefault()
-                if (this.inputConfirm.value && this.inputPassword.value){
+                if (this.inputConfirm.value && this.inputUpdatedPassword.value){
                     if (!this.currentTest){
-                        let result =await this.manager.fetch("user","PATCH",this.urlParameters.get("id"),JSON.stringify({password : this.inputConfirm.value}))
+                        let result =await this.manager.fetch("user","PATCH",this.urlParameters.get("id"),JSON.stringify({id: this.idUser,password : this.inputConfirm.value}))
                         if(result.statut=1){
                             alert("Opération réussie 👌 \n Vous allez être redidrigé à la page de connexion!")
                             window.history.pushState({}, "", "/"); // Modifier l'URL sans recharger la page
