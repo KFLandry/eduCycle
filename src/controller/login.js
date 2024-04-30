@@ -71,10 +71,14 @@ class Login extends Controller{
                 if (this.inputEmail.value){
                     // On verifie l'existance du compte dans la base
                     let user = await this.manager.fetch("user","GET",this.inputEmail.value)
-                    if (!(user instanceof Array)){
-                        await  this.sendEmail("PasswordVerif", this.inputEmail.value, `${DOMAINFRONT}/login?id=${user.id}`, JSON.stringify({password : user.email}))
+                    if (user instanceof Array || user.hasOwnProperty('id')){
+                        if (user.hasOwnProperty('id')){
+                            await this.sendEmail("PasswordVerif", this.inputEmail.value, `${DOMAINFRONT}/login?id=${user.id}`, JSON.stringify({password : user.email}))
+                        }else{
+                            this.txtErreur.textContent ="Aucun compte n'est crée avec cette adresse email!"
+                        }    
                     }else{
-                        this.txtErreur.textContent ="Aucun compte n'est crée avec cette adresse email!"    
+                        this.txtErreur.textContent ="Problème de connexion au serveur \Details :\n"+user.message
                     }
                 }else{
                     this.txtErreur.textContent =  "Veuillez entrer votre email"
