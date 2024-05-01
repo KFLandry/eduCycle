@@ -209,11 +209,11 @@ class Account extends Controller{
                 result = await this.uniqueInstance.uploadProfile(formData,"mediaUpdate")
             }
             if (result.statut === 1){
-                this.imgProlile.src = result.data.newUrl
+                this.imgProlile.src = result.data.newURL
                 if (this.userData.medias){
-                    this.userData.medias.location = result.data.newUrl
+                    this.userData.medias.location = result.data.newURL
                 }else{
-                    this.userData.medias = { loaciton : result.data.newUrl}
+                    this.userData.medias = { loaciton : result.data.newURL}
                 }
                 sessionStorage.removeItem('currentUser')
                 sessionStorage.setItem('currentUser',JSON.stringify(this.userData))

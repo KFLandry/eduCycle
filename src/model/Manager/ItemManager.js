@@ -15,12 +15,12 @@ class ItemManager {
     // Retour  => JSON        
      async fetch (ressource, method, param="", body=null){
         try{
-            const promise = method ==='GET' ? !(param instanceof String || param)  ? await fetch(`${DOMAINBACK}/${ressource}/${param}`) : await fetch(`${DOMAINBACK}/${ressource}?id=${param}`) : await fetch(`${DOMAINBACK}/${ressource}?id=${param }`,{
+            const promise = method ==='GET' ? await fetch(`${DOMAINBACK}/${ressource}${(typeof param==="number" || !param ) ? "/" : "?id="}${param}`) : await fetch(`${DOMAINBACK}/${ressource}/${param }`,{
                 method : `${method}`,
                 body :  body
             })
             if (!promise.ok){
-                this.data = {statut :  3, message : "Requete échouée"}
+                this.data = {statut :  3, message : "Requête échouée"}
             }
             this.datas = await promise.json()
         }

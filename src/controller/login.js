@@ -40,7 +40,7 @@ class Login extends Controller{
         // 
         // Connexion
         this.btnSubmit.addEventListener('click',async (event) => {
-            this.btnSubmit.textContent ='Sign up...'
+            this.btnSubmit.textContent ='Se connecter...'
             event.preventDefault()
             // Valider les champs requis
             if (this.inputPassword.value && this.inputEmail.value){
@@ -59,7 +59,7 @@ class Login extends Controller{
             }else {
                 alert("Veuillez remplir tous les champs obligatoires.");
             }
-            this.btnSubmit.textContent ='Sign up'
+            this.btnSubmit.textContent ='Se connecter'
             })
             // Section de mise à jour du mot de passe
             // 
