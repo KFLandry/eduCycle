@@ -1,3 +1,8 @@
+import UserFactory from "../model/Factory/UserFactory.js";
+import ItemManager from "../model/Manager/ItemManager.js";
+import { APITOKEN, DOMAINFRONT, EMAILTEST } from "../public/ressource/secret.js";
+import { CustomRouter } from "../public/router.js";
+import Controller from "./Controller.js";
 
 import UserFactory from "../model/Factory/UserFactory.js"
 import { CustomRouter } from "../public/router.js";
